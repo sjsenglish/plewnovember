@@ -3,10 +3,10 @@ import { createClient } from '@/lib/supabase/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { packId: string } }
+  { params }: { params: Promise<{ packId: string }> }
 ) {
   try {
-    const { packId } = params
+    const { packId } = await params
 
     if (!packId) {
       return NextResponse.json(
@@ -16,7 +16,7 @@ export async function GET(
     }
 
     // Fetch pack from Supabase
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data: pack, error } = await supabase
       .from('packs')
       .select('*')

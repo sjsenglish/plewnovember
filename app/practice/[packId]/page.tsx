@@ -13,7 +13,8 @@ interface Pack {
 }
 
 export default function Practice() {
-  const { packId } = useParams()
+  const params = useParams()
+  const packId = params.packId as string
   const [pack, setPack] = useState<Pack | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [loading, setLoading] = useState(true)

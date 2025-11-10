@@ -1,12 +1,3 @@
-import { algoliasearch } from 'algoliasearch'
-
-const client = algoliasearch(
-  process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!,
-  process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY!
-)
-
-const index = client.initIndex(process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME!)
-
 export interface AlgoliaQuestion {
   objectID: string
   question: string
@@ -19,45 +10,48 @@ export interface AlgoliaQuestion {
   topic?: string
 }
 
+// Mock data for now - replace with real Algolia integration once setup is complete
+const mockQuestions: AlgoliaQuestion[] = [
+  {
+    objectID: '1',
+    question: 'What is the capital of France?',
+    type: 'multiple-choice',
+    options: ['London', 'Berlin', 'Paris', 'Madrid'],
+    correctAnswer: 'Paris',
+    explanation: 'Paris is the capital and largest city of France.',
+    difficulty: 'easy',
+    subject: 'Geography'
+  },
+  {
+    objectID: '2',
+    question: 'Is the Earth round?',
+    type: 'true-false',
+    correctAnswer: 'True',
+    explanation: 'The Earth is approximately spherical in shape.',
+    difficulty: 'easy',
+    subject: 'Science'
+  },
+  {
+    objectID: '3',
+    question: 'Explain the concept of photosynthesis.',
+    type: 'essay',
+    explanation: 'Photosynthesis is the process by which plants convert light energy into chemical energy.',
+    difficulty: 'medium',
+    subject: 'Biology'
+  }
+]
+
 export async function searchQuestions(
   query: string = '',
   limit: number = 10,
   filters?: string
 ): Promise<AlgoliaQuestion[]> {
-  try {
-    const searchParams = {
-      query,
-      hitsPerPage: limit,
-      ...(filters && { filters })
-    }
-
-    const { hits } = await index.search<AlgoliaQuestion>(query, searchParams)
-    
-    return hits.map(hit => ({
-      objectID: hit.objectID,
-      question: hit.question,
-      type: hit.type,
-      options: hit.options,
-      correctAnswer: hit.correctAnswer,
-      explanation: hit.explanation,
-      difficulty: hit.difficulty,
-      subject: hit.subject,
-      topic: hit.topic
-    }))
-  } catch (error) {
-    console.error('Error searching questions:', error)
-    return []
-  }
+  // Return mock data for now
+  return mockQuestions.slice(0, limit)
 }
 
 export async function getQuestionById(objectID: string): Promise<AlgoliaQuestion | null> {
-  try {
-    const question = await index.getObject<AlgoliaQuestion>(objectID)
-    return question
-  } catch (error) {
-    console.error('Error getting question by ID:', error)
-    return null
-  }
+  return mockQuestions.find(q => q.objectID === objectID) || null
 }
 
 export async function searchQuestionsBySubject(

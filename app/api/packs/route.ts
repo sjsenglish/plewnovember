@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create pack in Supabase
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data: pack, error } = await supabase
       .from('packs')
       .insert([
