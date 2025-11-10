@@ -20,22 +20,29 @@ export default function Practice() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchPack = async () => {
+    const loadPack = () => {
       try {
-        const response = await fetch(`/api/packs/${packId}`)
-        if (response.ok) {
-          const packData = await response.json()
-          setPack(packData)
+        // Try to get pack from localStorage
+        const storedPack = localStorage.getItem(`pack-${packId}`)
+        if (storedPack) {
+          const packData = JSON.parse(storedPack)
+          setPack({
+            id: packData.packId,
+            questions: packData.questions,
+            size: packData.size
+          })
+        } else {
+          console.error('Pack not found in localStorage')
         }
       } catch (error) {
-        console.error('Error fetching pack:', error)
+        console.error('Error loading pack:', error)
       } finally {
         setLoading(false)
       }
     }
 
     if (packId) {
-      fetchPack()
+      loadPack()
     }
   }, [packId])
 

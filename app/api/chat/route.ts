@@ -13,6 +13,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Check if Anthropic API key is configured
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return NextResponse.json(
+        {
+          response: "⚠️ Chat is not configured yet. Please add your ANTHROPIC_API_KEY to Vercel environment variables.\n\nFor now, practice answering the questions on your own! The chat will work once the API key is added.",
+          timestamp: new Date().toISOString()
+        }
+      )
+    }
+
     // Build conversation context
     const systemPrompt = plewPrompt(question)
     

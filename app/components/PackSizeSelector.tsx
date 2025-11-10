@@ -34,7 +34,10 @@ export default function PackSizeSelector() {
       }
 
       const data = await response.json()
-      
+
+      // Store pack data in localStorage for client-side retrieval
+      localStorage.setItem(`pack-${data.packId}`, JSON.stringify(data))
+
       // Navigate to the practice page
       router.push(`/practice/${data.packId}`)
     } catch (error) {
