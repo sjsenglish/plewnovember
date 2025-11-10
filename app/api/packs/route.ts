@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { searchQuestions } from '@/lib/algolia'
 
 export async function POST(request: NextRequest) {
@@ -13,7 +12,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Search for questions using Algolia
+    // Search for questions using Algolia (returns mock data)
     const questions = await searchQuestions('', size)
 
     if (questions.length === 0) {
@@ -23,32 +22,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create pack in Supabase
-    const supabase = await createClient()
-    const { data: pack, error } = await supabase
-      .from('packs')
-      .insert([
-        {
-          size: questions.length,
-          questions: questions,
-          created_at: new Date().toISOString(),
-        }
-      ])
-      .select()
-      .single()
+    // Generate a simple pack ID (timestamp-based)
+    const packId = `pack-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 
-    if (error) {
-      console.error('Error creating pack:', error)
-      return NextResponse.json(
-        { error: 'Failed to create pack' },
-        { status: 500 }
-      )
-    }
-
+    // Return pack data (client will handle storage)
     return NextResponse.json({
-      packId: pack.id,
-      size: pack.size,
-      questions: pack.questions
+      packId: packId,
+      size: questions.length,
+      questions: questions,
+      createdAt: new Date().toISOString()
     })
 
   } catch (error) {

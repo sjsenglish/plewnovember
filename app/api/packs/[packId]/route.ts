@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 
 export async function GET(
   request: NextRequest,
@@ -15,27 +14,11 @@ export async function GET(
       )
     }
 
-    // Fetch pack from Supabase
-    const supabase = await createClient()
-    const { data: pack, error } = await supabase
-      .from('packs')
-      .select('*')
-      .eq('id', packId)
-      .single()
-
-    if (error) {
-      console.error('Error fetching pack:', error)
-      return NextResponse.json(
-        { error: 'Pack not found' },
-        { status: 404 }
-      )
-    }
-
+    // Return instructions for client-side pack retrieval
+    // The client should use localStorage to get the pack data
     return NextResponse.json({
-      id: pack.id,
-      size: pack.size,
-      questions: pack.questions,
-      createdAt: pack.created_at
+      packId,
+      message: 'Pack data should be retrieved from client storage'
     })
 
   } catch (error) {

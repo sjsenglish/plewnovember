@@ -13,6 +13,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Check if Anthropic API key is configured
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return NextResponse.json(
+        {
+          response: "⚠️ Chat is not configured yet. Please add your ANTHROPIC_API_KEY to Vercel environment variables.\n\nFor now, practice answering the questions on your own! The chat will work once the API key is added.",
+          timestamp: new Date().toISOString()
+        }
+      )
+    }
+
     // Build conversation context
     const systemPrompt = plewPrompt(question)
     
@@ -29,10 +39,10 @@ export async function POST(request: NextRequest) {
       messages.unshift(...chatHistory)
     }
 
-    // Call Anthropic Claude API
+    // Call Anthropic Claude API with latest model
     const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2048,
       system: systemPrompt,
       messages: messages
     })

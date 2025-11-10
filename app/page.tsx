@@ -1,22 +1,32 @@
 import Link from 'next/link'
+import { BookOpen } from 'lucide-react'
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col justify-center items-center p-8">
       <div className="max-w-4xl w-full space-y-8 text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          PLEW - AI Tutor App
+          PLEW Method
         </h1>
         <p className="text-xl text-gray-600 mb-8">
-          Personalized Learning Experience with your AI buddy
+          Master Reading Comprehension with AI-Guided Analysis
         </p>
-        
-        <div className="mb-12">
-          <Link 
+
+        {/* Large clickable book icon */}
+        <div className="mb-12 flex justify-center">
+          <Link
             href="/pack-maker"
-            className="inline-block px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-lg rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl"
+            className="group"
           >
-            Start Learning Now
+            <div className="bg-white p-12 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
+              <BookOpen
+                className="w-32 h-32 text-blue-600 group-hover:text-purple-600 transition-colors duration-300"
+                strokeWidth={1.5}
+              />
+            </div>
+            <p className="mt-6 text-lg font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
+              Click to Start Practice
+            </p>
           </Link>
         </div>
 
