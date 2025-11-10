@@ -70,9 +70,9 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
   }
 
   return (
-    <div className="space-y-4 p-4 bg-white border-t border-gray-200">
-      <div className="space-y-3">
-        <p className="text-sm font-medium text-gray-700">Select your answer:</p>
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <p className="font-heading text-base text-gray-700 tracking-custom">Select your answer:</p>
         {question.answerOptions.map((option, index) => {
           const isSelected = selectedAnswer === option
           const isCorrect = showFeedback && option === question.correctAnswer
@@ -83,42 +83,42 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
               key={index}
               onClick={() => !showFeedback && setSelectedAnswer(option)}
               disabled={showFeedback || isSubmitting}
-              className={`w-full p-4 text-left border-2 rounded-lg transition-all ${
+              className={`w-full p-5 text-left border-2 rounded-xl transition-all shadow-container hover:shadow-container-lg font-body tracking-custom ${
                 isCorrect
                   ? 'border-green-500 bg-green-50 text-green-900'
                   : isIncorrect
                   ? 'border-red-500 bg-red-50 text-red-900'
                   : isSelected
-                  ? 'border-blue-500 bg-blue-50 text-blue-900'
-                  : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                  ? 'border-purple-500 bg-custom-purple text-purple-900'
+                  : 'border-custom-purple/30 hover:border-purple-400 hover:bg-custom-white'
               } ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-bold text-gray-600 mr-3">{index + 1}.</span>
-                  <span>{option}</span>
+                  <span className="font-heading text-gray-600 mr-4">{index + 1}.</span>
+                  <span className="font-body tracking-custom">{option}</span>
                 </div>
-                {isCorrect && <span className="text-green-600 font-semibold">✓ Correct</span>}
-                {isIncorrect && <span className="text-red-600 font-semibold">✗ Incorrect</span>}
+                {isCorrect && <span className="text-green-600 font-heading tracking-custom">✓ Correct</span>}
+                {isIncorrect && <span className="text-red-600 font-heading tracking-custom">✗ Incorrect</span>}
               </div>
             </button>
           )
         })}
       </div>
 
-      <div className="flex space-x-3">
+      <div className="flex space-x-4">
         {!showNextButton ? (
           <button
             onClick={handleSubmit}
             disabled={!selectedAnswer || showFeedback || isSubmitting}
-            className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="flex-1 py-4 px-6 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-heading rounded-xl hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-container-lg tracking-custom"
           >
             {isSubmitting ? 'Submitting...' : 'Submit Answer'}
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+            className="flex-1 py-4 px-6 bg-gradient-to-r from-green-600 to-green-700 text-white font-heading rounded-xl hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-container-lg tracking-custom"
           >
             Next Question →
           </button>
@@ -126,22 +126,22 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
       </div>
 
       {showFeedback && question.explanation && (
-        <div className={`mt-4 p-4 rounded-lg border ${
+        <div className={`mt-6 p-6 rounded-xl border-2 shadow-container ${
           selectedAnswer === question.correctAnswer
-            ? 'bg-green-50 border-green-200'
-            : 'bg-blue-50 border-blue-200'
+            ? 'bg-green-50 border-green-300'
+            : 'bg-custom-cyan border-cyan-300'
         }`}>
-          <h4 className={`font-semibold mb-2 ${
+          <h4 className={`font-heading mb-3 tracking-custom ${
             selectedAnswer === question.correctAnswer
               ? 'text-green-900'
-              : 'text-blue-900'
+              : 'text-gray-900'
           }`}>
             {selectedAnswer === question.correctAnswer ? '✓ Correct!' : 'Explanation:'}
           </h4>
-          <p className={`${
+          <p className={`font-body tracking-custom ${
             selectedAnswer === question.correctAnswer
               ? 'text-green-800'
-              : 'text-blue-800'
+              : 'text-gray-800'
           }`}>
             {question.explanation}
           </p>

@@ -107,31 +107,31 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4">
-        <h3 className="text-lg font-semibold">PLEW Buddy</h3>
-        <p className="text-purple-100 text-sm">Your AI tutor is here to help!</p>
+      <div className="bg-gradient-to-r from-custom-purple via-custom-pink to-custom-cyan text-gray-900 p-6 shadow-container">
+        <h3 className="font-heading text-xl tracking-custom">PLEW Buddy</h3>
+        <p className="font-body text-gray-700 text-sm tracking-custom">Your AI tutor is here to help!</p>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-custom-white">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[80%] p-3 rounded-lg ${
+              className={`max-w-[80%] p-4 rounded-xl shadow-container ${
                 message.role === 'user'
-                  ? 'bg-blue-600 text-white rounded-br-sm'
-                  : 'bg-gray-100 text-gray-900 rounded-bl-sm'
+                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-br-sm'
+                  : 'bg-white text-gray-900 rounded-bl-sm border-2 border-custom-purple/20'
               }`}
             >
-              <div className="whitespace-pre-wrap">{message.content}</div>
+              <div className="font-body whitespace-pre-wrap tracking-custom">{message.content}</div>
               <div
-                className={`text-xs mt-1 ${
-                  message.role === 'user' ? 'text-blue-100' : 'text-gray-500'
+                className={`font-body text-xs mt-2 tracking-custom ${
+                  message.role === 'user' ? 'text-purple-100' : 'text-gray-500'
                 }`}
               >
                 {new Date(message.timestamp).toLocaleTimeString()}
@@ -141,11 +141,11 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 text-gray-900 p-3 rounded-lg rounded-bl-sm">
+            <div className="bg-white text-gray-900 p-4 rounded-xl rounded-bl-sm border-2 border-custom-purple/20 shadow-container">
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
@@ -154,21 +154,21 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
       </div>
 
       {/* Input */}
-      <div className="border-t border-gray-200 p-4">
-        <div className="flex space-x-2">
+      <div className="border-t-2 border-custom-purple/20 p-6 bg-white">
+        <div className="flex space-x-3">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask your PLEW buddy for help..."
-            className="flex-1 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 p-4 border-2 border-custom-purple/30 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-body tracking-custom shadow-container"
             rows={3}
             disabled={isLoading}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed font-heading tracking-custom shadow-container-lg"
           >
             Send
           </button>

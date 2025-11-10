@@ -1,5 +1,19 @@
 import type { Metadata } from 'next'
+import { Madimi_One, Figtree } from 'next/font/google'
 import './globals.css'
+
+const madimiOne = Madimi_One({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-madimi',
+  display: 'swap',
+})
+
+const figtree = Figtree({
+  subsets: ['latin'],
+  variable: '--font-figtree',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'PLEW - Reading Comprehension Practice',
@@ -13,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">{children}</body>
+      <body className={`${madimiOne.variable} ${figtree.variable} font-figtree antialiased`}>{children}</body>
     </html>
   )
 }
