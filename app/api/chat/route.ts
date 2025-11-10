@@ -29,10 +29,10 @@ export async function POST(request: NextRequest) {
       messages.unshift(...chatHistory)
     }
 
-    // Call Anthropic Claude API
+    // Call Anthropic Claude API with latest model
     const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2048,
       system: systemPrompt,
       messages: messages
     })
