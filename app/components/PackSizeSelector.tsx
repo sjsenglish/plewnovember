@@ -50,26 +50,26 @@ export default function PackSizeSelector() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="grid gap-4 mb-8">
+      <div className="grid gap-6 mb-12">
         {packSizes.map(({ size, label, description }) => (
           <button
             key={size}
             onClick={() => setSelectedSize(size)}
             disabled={isCreating}
-            className={`p-6 text-left border-2 rounded-xl transition-all ${
+            className={`p-8 text-left border-2 rounded-2xl transition-all shadow-container hover:shadow-container-lg ${
               selectedSize === size
-                ? 'border-blue-500 bg-blue-50 shadow-md'
-                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                ? 'border-purple-500 bg-custom-purple'
+                : 'border-custom-purple/30 hover:border-purple-400 bg-white hover:bg-custom-white'
             } ${isCreating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
           >
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                <h3 className="font-heading text-xl text-gray-900 mb-2 tracking-custom">
                   {label}
                 </h3>
-                <p className="text-gray-600">{description}</p>
+                <p className="font-body text-gray-700 tracking-custom">{description}</p>
               </div>
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="font-heading text-4xl text-purple-600 tracking-custom">
                 {size}
               </div>
             </div>
@@ -78,11 +78,11 @@ export default function PackSizeSelector() {
       </div>
 
       {/* Custom size input */}
-      <div className="mb-8 p-6 border-2 border-dashed border-gray-300 rounded-xl">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">
+      <div className="mb-12 p-8 border-2 border-dashed border-custom-purple/50 rounded-2xl bg-custom-white shadow-container">
+        <h3 className="font-heading text-xl text-gray-900 mb-6 tracking-custom">
           Custom Size
         </h3>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-4">
           <input
             type="number"
             min="1"
@@ -95,9 +95,9 @@ export default function PackSizeSelector() {
               }
             }}
             disabled={isCreating}
-            className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 p-4 border-2 border-custom-purple/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-body tracking-custom shadow-container"
           />
-          <span className="text-gray-500">questions (max 50)</span>
+          <span className="font-body text-gray-600 tracking-custom">questions (max 50)</span>
         </div>
       </div>
 
@@ -106,7 +106,7 @@ export default function PackSizeSelector() {
         <button
           onClick={handleCreatePack}
           disabled={!selectedSize || isCreating}
-          className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="px-12 py-5 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-heading rounded-xl hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-container-lg tracking-custom text-lg"
         >
           {isCreating ? (
             <span className="flex items-center">
@@ -123,7 +123,7 @@ export default function PackSizeSelector() {
       </div>
 
       {selectedSize && (
-        <div className="mt-4 text-center text-sm text-gray-600">
+        <div className="mt-6 text-center font-body text-sm text-gray-600 tracking-custom">
           Estimated time: {Math.ceil(selectedSize * 1.5)} minutes
         </div>
       )}
