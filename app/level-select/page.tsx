@@ -1,5 +1,6 @@
+'use client'
+
 import Link from 'next/link'
-import Image from 'next/image'
 
 const levels = [
   {
@@ -24,20 +25,48 @@ const levels = [
 
 export default function LevelSelect() {
   return (
-    <div className="h-screen overflow-hidden bg-white flex flex-col justify-center items-center">
-      <div className="flex flex-col justify-center items-center -space-y-8">
-        {levels.map((level) => (
+    <div
+      style={{
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
+        backgroundColor: '#ffffff',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 0,
+        padding: 0
+      }}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {levels.map((level, index) => (
           <Link
             key={level.id}
             href={level.href}
-            className="group transition-all duration-300 transform hover:scale-110"
+            style={{
+              display: 'block',
+              marginTop: index === 0 ? '0' : '-60px',
+              transition: 'transform 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
           >
             <img
               src={level.iconUrl}
               alt={level.name}
               width={320}
               height={320}
-              className="w-80 h-80"
+              style={{
+                width: '320px',
+                height: '320px',
+                display: 'block'
+              }}
             />
           </Link>
         ))}
