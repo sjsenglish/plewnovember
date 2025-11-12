@@ -10,7 +10,6 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        border: "#e5e7eb",
         // Custom color palette
         'custom-cyan': '#DBF7F9',
         'custom-purple': '#D4D0FF',

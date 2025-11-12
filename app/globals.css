@@ -39,11 +39,6 @@ body {
 }
 
 @layer base {
-  /* Reset for consistent styling */
-  * {
-    @apply border-border;
-  }
-
   html {
     @apply antialiased;
   }
