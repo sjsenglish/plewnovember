@@ -17,10 +17,9 @@ module.exports = {
         'custom-white': '#F9F9FF',
       },
       fontFamily: {
-        'heading': ['var(--font-madimi)', 'system-ui', '-apple-system', 'sans-serif'],
-        'body': ['var(--font-figtree)', 'system-ui', '-apple-system', 'sans-serif'],
-        'figtree': ['var(--font-figtree)', 'system-ui', '-apple-system', 'sans-serif'],
-        'madimi': ['var(--font-madimi)', 'system-ui', '-apple-system', 'sans-serif'],
+        'heading': ['var(--font-inter)', 'system-ui', '-apple-system', 'sans-serif'],
+        'body': ['var(--font-inter)', 'system-ui', '-apple-system', 'sans-serif'],
+        'inter': ['var(--font-inter)', 'system-ui', '-apple-system', 'sans-serif'],
       },
       letterSpacing: {
         'custom': '0.04em',

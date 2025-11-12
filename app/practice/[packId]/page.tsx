@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation'
 import QuestionViewer from '@/app/components/QuestionViewer'
 import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
+import QuestionNavigation from '@/app/components/QuestionNavigation'
+import Timer from '@/app/components/Timer'
 
 interface Pack {
   id: string
@@ -76,53 +78,79 @@ export default function Practice() {
 
   const currentQuestion = pack.questions[currentQuestionIndex]
 
+  const handleQuestionNavigation = (index: number) => {
+    setCurrentQuestionIndex(index)
+  }
+
   return (
-    <div className="h-screen flex flex-col bg-custom-white">
-      {/* Top Progress Bar */}
-      <div className="bg-gradient-to-r from-custom-cyan via-custom-purple to-custom-pink shadow-container px-8 py-4">
-        <div className="flex items-center justify-between mb-3">
-          <h1 className="font-heading text-2xl text-gray-900 tracking-custom">PLEW Practice Session</h1>
-          <div className="font-body text-base text-gray-700 tracking-custom">
-            Question {currentQuestionIndex + 1} of {pack.questions.length}
+    <div className="h-screen flex flex-col bg-white">
+      {/* Top Navigation Bar */}
+      <div className="bg-white border-b border-gray-200 px-8 py-4">
+        <div className="flex items-start justify-between">
+          {/* Question Navigation - Top Left */}
+          <div className="flex-1">
+            <h3 className="font-inter font-semibold text-sm text-gray-600 mb-3">Questions</h3>
+            <QuestionNavigation
+              totalQuestions={pack.questions.length}
+              currentQuestion={currentQuestionIndex}
+              onQuestionClick={handleQuestionNavigation}
+            />
+          </div>
+
+          {/* Timer - Top Right */}
+          <div>
+            <Timer />
           </div>
         </div>
-        <div className="w-full bg-white/50 rounded-full h-3 shadow-sm">
+      </div>
+
+      {/* Progress Bar */}
+      <div className="px-8 py-3 bg-white">
+        <div className="w-full bg-gray-200 rounded-full h-2 shadow-sm">
           <div
-            className="bg-gradient-to-r from-purple-500 to-purple-700 h-3 rounded-full transition-all duration-300"
+            className="bg-gradient-to-r from-black to-[#2A3CDB] h-2 rounded-full transition-all duration-300"
             style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
           ></div>
         </div>
       </div>
 
-      {/* Main Content - Two Column Grid */}
-      <div className="flex-1 grid grid-cols-2 overflow-hidden gap-4 p-4">
-        {/* Left Column - Question Viewer */}
-        <div className="flex flex-col bg-white rounded-2xl shadow-container-lg overflow-hidden">
-          <div className="flex-1 overflow-y-auto p-6">
-            <QuestionViewer
-              question={currentQuestion}
-              questionNumber={currentQuestionIndex + 1}
-              totalQuestions={pack.questions.length}
-            />
+      {/* Main Content with Gradient Background */}
+      <div
+        className="flex-1 overflow-hidden p-6"
+        style={{
+          background: 'linear-gradient(135deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)'
+        }}
+      >
+        {/* Two Column Grid */}
+        <div className="h-full grid grid-cols-2 gap-6">
+          {/* Left Column - Question Viewer */}
+          <div className="flex flex-col bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="flex-1 overflow-y-auto p-6">
+              <QuestionViewer
+                question={currentQuestion}
+                questionNumber={currentQuestionIndex + 1}
+                totalQuestions={pack.questions.length}
+              />
+            </div>
+            {/* Answer Options at bottom of left column */}
+            <div className="border-t border-gray-200 p-6 bg-gray-50">
+              <AnswerOptions
+                question={currentQuestion}
+                packId={packId}
+                onAnswerSubmit={(isCorrect) => {
+                  console.log('Answer submitted, correct:', isCorrect)
+                }}
+              />
+            </div>
           </div>
-          {/* Answer Options at bottom of left column */}
-          <div className="border-t border-custom-purple/20 p-6">
-            <AnswerOptions
+
+          {/* Right Column - Chat Panel */}
+          <div className="flex flex-col bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <ChatPanel
               question={currentQuestion}
               packId={packId}
-              onAnswerSubmit={(isCorrect) => {
-                console.log('Answer submitted, correct:', isCorrect)
-              }}
             />
           </div>
-        </div>
-
-        {/* Right Column - Chat Panel */}
-        <div className="flex flex-col bg-white rounded-2xl shadow-container-lg overflow-hidden">
-          <ChatPanel
-            question={currentQuestion}
-            packId={packId}
-          />
         </div>
       </div>
     </div>
