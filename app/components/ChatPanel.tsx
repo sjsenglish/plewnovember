@@ -106,42 +106,52 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
     }
   }
 
+  // Helper function to format time without seconds
+  const formatTime = (timestamp: string) => {
+    const date = new Date(timestamp)
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    })
+  }
+
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col font-inter">
       {/* Header */}
-      <div className="bg-gradient-to-r from-custom-purple via-custom-pink to-custom-cyan text-gray-900 p-6 shadow-container">
-        <h3 className="font-heading text-xl tracking-custom">PLEW Buddy</h3>
-        <p className="font-body text-gray-700 text-sm tracking-custom">Your AI tutor is here to help!</p>
+      <div className="bg-white border-b border-gray-200 p-6">
+        <h3 className="text-xl font-semibold text-gray-900">PLEW Buddy</h3>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-custom-white">
+      <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-white">
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'}`}
           >
+            {/* Timestamp outside message */}
+            <div className="text-xs text-gray-500 mb-1 px-2">
+              {formatTime(message.timestamp)}
+            </div>
+            {/* Message bubble */}
             <div
-              className={`max-w-[80%] p-4 rounded-xl shadow-container ${
+              className={`max-w-[70%] px-5 py-3 rounded-xl ${
                 message.role === 'user'
-                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-br-sm'
-                  : 'bg-white text-gray-900 rounded-bl-sm border-2 border-custom-purple/20'
+                  ? 'bg-purple-600 text-white rounded-br-sm'
+                  : 'bg-gray-100 text-gray-900 rounded-bl-sm'
               }`}
             >
-              <div className="font-body whitespace-pre-wrap tracking-custom">{message.content}</div>
-              <div
-                className={`font-body text-xs mt-2 tracking-custom ${
-                  message.role === 'user' ? 'text-purple-100' : 'text-gray-500'
-                }`}
-              >
-                {new Date(message.timestamp).toLocaleTimeString()}
-              </div>
+              <div className="whitespace-pre-wrap">{message.content}</div>
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-white text-gray-900 p-4 rounded-xl rounded-bl-sm border-2 border-custom-purple/20 shadow-container">
+          <div className="flex flex-col items-start">
+            <div className="text-xs text-gray-500 mb-1 px-2">
+              {formatTime(new Date().toISOString())}
+            </div>
+            <div className="bg-gray-100 text-gray-900 px-5 py-3 rounded-xl rounded-bl-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -154,21 +164,21 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
       </div>
 
       {/* Input */}
-      <div className="border-t-2 border-custom-purple/20 p-6 bg-white">
+      <div className="border-t border-gray-200 p-6 bg-white">
         <div className="flex space-x-3">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask your PLEW buddy for help..."
-            className="flex-1 p-4 border-2 border-custom-purple/30 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-body tracking-custom shadow-container"
+            className="flex-1 p-4 border-2 border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             rows={3}
             disabled={isLoading}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed font-heading tracking-custom shadow-container-lg"
+            className="px-8 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             Send
           </button>

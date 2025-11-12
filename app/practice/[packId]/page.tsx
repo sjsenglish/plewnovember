@@ -48,10 +48,10 @@ export default function Practice() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-custom-cyan via-custom-purple to-custom-pink">
-        <div className="text-center bg-custom-white p-12 rounded-3xl shadow-container-lg">
+      <div className="min-h-screen flex items-center justify-center bg-white font-inter">
+        <div className="text-center bg-white p-12 rounded-3xl shadow-lg">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-6"></div>
-          <div className="font-body text-xl text-gray-700 tracking-custom">Loading your practice pack...</div>
+          <div className="text-xl text-gray-700">Loading your practice pack...</div>
         </div>
       </div>
     )
@@ -59,13 +59,13 @@ export default function Practice() {
 
   if (!pack || !pack.questions || pack.questions.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-custom-cyan via-custom-purple to-custom-pink">
-        <div className="text-center bg-custom-white p-12 rounded-3xl shadow-container-lg">
+      <div className="min-h-screen flex items-center justify-center bg-white font-inter">
+        <div className="text-center bg-white p-12 rounded-3xl shadow-lg">
           <div className="text-6xl mb-6">📚</div>
-          <div className="font-body text-xl text-red-600 mb-8 tracking-custom">Pack not found or empty</div>
+          <div className="text-xl text-red-600 mb-8">Pack not found or empty</div>
           <a
             href="/pack-maker"
-            className="font-body inline-block px-8 py-3 bg-custom-purple text-gray-900 rounded-xl hover:bg-purple-300 shadow-container transition-all duration-300 tracking-custom"
+            className="inline-block px-8 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 shadow-lg transition-all duration-300"
           >
             Create New Pack
           </a>
@@ -77,27 +77,49 @@ export default function Practice() {
   const currentQuestion = pack.questions[currentQuestionIndex]
 
   return (
-    <div className="h-screen flex flex-col bg-custom-white">
-      {/* Top Progress Bar */}
-      <div className="bg-gradient-to-r from-custom-cyan via-custom-purple to-custom-pink shadow-container px-8 py-4">
-        <div className="flex items-center justify-between mb-3">
-          <h1 className="font-heading text-2xl text-gray-900 tracking-custom">PLEW Practice Session</h1>
-          <div className="font-body text-base text-gray-700 tracking-custom">
-            Question {currentQuestionIndex + 1} of {pack.questions.length}
-          </div>
-        </div>
-        <div className="w-full bg-white/50 rounded-full h-3 shadow-sm">
-          <div
-            className="bg-gradient-to-r from-purple-500 to-purple-700 h-3 rounded-full transition-all duration-300"
-            style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
-          ></div>
+    <div className="h-screen flex flex-col bg-white font-inter">
+      {/* Top Header */}
+      <div className="bg-white px-8 py-6">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-4">PLEW Practice Session</h1>
+
+        {/* Gradient Divider Line */}
+        <div
+          className="h-1 w-full mb-6"
+          style={{
+            background: 'linear-gradient(to right, #A28BD6, #5F61DB)'
+          }}
+        ></div>
+
+        {/* Question Overview */}
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Question Overview</h2>
+
+        {/* Question Navigation Squares */}
+        <div className="flex flex-wrap gap-2">
+          {pack.questions.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentQuestionIndex(index)}
+              className="w-10 h-10 rounded flex items-center justify-center text-white font-medium transition-all"
+              style={{
+                backgroundColor: currentQuestionIndex === index ? '#4248DB' : '#000000'
+              }}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Main Content - Two Column Grid */}
-      <div className="flex-1 grid grid-cols-2 overflow-hidden gap-4 p-4">
-        {/* Left Column - Question Viewer */}
-        <div className="flex flex-col bg-white rounded-2xl shadow-container-lg overflow-hidden">
+      <div className="flex-1 grid grid-cols-2 overflow-hidden gap-6 px-8 pb-8">
+        {/* Left Column - Question Viewer with Outline Box */}
+        <div
+          className="flex flex-col rounded-2xl overflow-hidden"
+          style={{
+            border: '2px solid #9397ED',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+          }}
+        >
           <div className="flex-1 overflow-y-auto p-6">
             <QuestionViewer
               question={currentQuestion}
@@ -106,7 +128,7 @@ export default function Practice() {
             />
           </div>
           {/* Answer Options at bottom of left column */}
-          <div className="border-t border-custom-purple/20 p-6">
+          <div className="border-t border-gray-200 p-6">
             <AnswerOptions
               question={currentQuestion}
               packId={packId}
@@ -117,8 +139,14 @@ export default function Practice() {
           </div>
         </div>
 
-        {/* Right Column - Chat Panel */}
-        <div className="flex flex-col bg-white rounded-2xl shadow-container-lg overflow-hidden">
+        {/* Right Column - Chat Panel with Outline Box */}
+        <div
+          className="flex flex-col rounded-2xl overflow-hidden"
+          style={{
+            border: '2px solid #9397ED',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+          }}
+        >
           <ChatPanel
             question={currentQuestion}
             packId={packId}
