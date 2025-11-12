@@ -38,9 +38,26 @@ body {
   letter-spacing: 0.04em;
 }
 
+@layer base {
+  /* Reset for consistent styling */
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply antialiased;
+  }
+}
+
 @layer utilities {
+  /* Text utilities */
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Custom letter spacing utility */
+  .tracking-custom {
+    letter-spacing: 0.04em;
   }
 
   /* Drop shadow utilities */
@@ -50,5 +67,10 @@ body {
 
   .shadow-container-lg {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Transition utilities for consistent animations */
+  .transition-default {
+    @apply transition-all duration-300 ease-in-out;
   }
 }
