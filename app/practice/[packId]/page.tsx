@@ -48,10 +48,10 @@ export default function Practice() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-custom-cyan via-custom-purple to-custom-pink">
-        <div className="text-center bg-custom-white p-12 rounded-3xl shadow-container-lg">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-6"></div>
-          <div className="font-body text-xl text-gray-700 tracking-custom">Loading your practice pack...</div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-gray-900 mx-auto mb-4"></div>
+          <div className="font-body text-gray-600">Loading your practice pack...</div>
         </div>
       </div>
     )
@@ -59,13 +59,13 @@ export default function Practice() {
 
   if (!pack || !pack.questions || pack.questions.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-custom-cyan via-custom-purple to-custom-pink">
-        <div className="text-center bg-custom-white p-12 rounded-3xl shadow-container-lg">
-          <div className="text-6xl mb-6">📚</div>
-          <div className="font-body text-xl text-red-600 mb-8 tracking-custom">Pack not found or empty</div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="text-6xl mb-4">📚</div>
+          <div className="font-body text-xl text-gray-900 mb-6">Pack not found or empty</div>
           <a
             href="/pack-maker"
-            className="font-body inline-block px-8 py-3 bg-custom-purple text-gray-900 rounded-xl hover:bg-purple-300 shadow-container transition-all duration-300 tracking-custom"
+            className="font-body inline-block px-6 py-3 bg-gray-900 text-white rounded-2xl hover:bg-gray-800 transition-all duration-200"
           >
             Create New Pack
           </a>
@@ -77,52 +77,56 @@ export default function Practice() {
   const currentQuestion = pack.questions[currentQuestionIndex]
 
   return (
-    <div className="h-screen flex flex-col bg-custom-white">
+    <div className="h-screen flex flex-col bg-gray-50">
       {/* Top Progress Bar */}
-      <div className="bg-gradient-to-r from-custom-cyan via-custom-purple to-custom-pink shadow-container px-8 py-4">
-        <div className="flex items-center justify-between mb-3">
-          <h1 className="font-heading text-2xl text-gray-900 tracking-custom">PLEW Practice Session</h1>
-          <div className="font-body text-base text-gray-700 tracking-custom">
-            Question {currentQuestionIndex + 1} of {pack.questions.length}
+      <div className="bg-white border-b border-gray-100 px-12 py-6">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="font-heading text-xl text-gray-900">PLEW Practice Session</h1>
+            <div className="font-body text-sm text-gray-500">
+              Question {currentQuestionIndex + 1} of {pack.questions.length}
+            </div>
           </div>
-        </div>
-        <div className="w-full bg-white/50 rounded-full h-3 shadow-sm">
-          <div
-            className="bg-gradient-to-r from-purple-500 to-purple-700 h-3 rounded-full transition-all duration-300"
-            style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
-          ></div>
+          <div className="w-full bg-gray-100 rounded-full h-1.5">
+            <div
+              className="bg-gray-900 h-1.5 rounded-full transition-all duration-300"
+              style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
+            ></div>
+          </div>
         </div>
       </div>
 
       {/* Main Content - Two Column Grid */}
-      <div className="flex-1 grid grid-cols-2 overflow-hidden gap-4 p-4">
-        {/* Left Column - Question Viewer */}
-        <div className="flex flex-col bg-white rounded-2xl shadow-container-lg overflow-hidden">
-          <div className="flex-1 overflow-y-auto p-6">
-            <QuestionViewer
-              question={currentQuestion}
-              questionNumber={currentQuestionIndex + 1}
-              totalQuestions={pack.questions.length}
-            />
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full max-w-[1800px] mx-auto grid grid-cols-2 gap-px bg-gray-200">
+          {/* Left Column - Question Viewer */}
+          <div className="flex flex-col bg-white overflow-hidden">
+            <div className="flex-1 overflow-y-auto">
+              <QuestionViewer
+                question={currentQuestion}
+                questionNumber={currentQuestionIndex + 1}
+                totalQuestions={pack.questions.length}
+              />
+            </div>
+            {/* Answer Options at bottom of left column */}
+            <div className="border-t border-gray-100 px-12 py-8">
+              <AnswerOptions
+                question={currentQuestion}
+                packId={packId}
+                onAnswerSubmit={(isCorrect) => {
+                  console.log('Answer submitted, correct:', isCorrect)
+                }}
+              />
+            </div>
           </div>
-          {/* Answer Options at bottom of left column */}
-          <div className="border-t border-custom-purple/20 p-6">
-            <AnswerOptions
+
+          {/* Right Column - Chat Panel */}
+          <div className="flex flex-col bg-white overflow-hidden">
+            <ChatPanel
               question={currentQuestion}
               packId={packId}
-              onAnswerSubmit={(isCorrect) => {
-                console.log('Answer submitted, correct:', isCorrect)
-              }}
             />
           </div>
-        </div>
-
-        {/* Right Column - Chat Panel */}
-        <div className="flex flex-col bg-white rounded-2xl shadow-container-lg overflow-hidden">
-          <ChatPanel
-            question={currentQuestion}
-            packId={packId}
-          />
         </div>
       </div>
     </div>

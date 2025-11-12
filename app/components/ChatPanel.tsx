@@ -107,68 +107,72 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-white">
       {/* Header */}
-      <div className="bg-gradient-to-r from-custom-purple via-custom-pink to-custom-cyan text-gray-900 p-6 shadow-container">
-        <h3 className="font-heading text-xl tracking-custom">PLEW Buddy</h3>
-        <p className="font-body text-gray-700 text-sm tracking-custom">Your AI tutor is here to help!</p>
+      <div className="border-b border-gray-100 px-12 py-8">
+        <h3 className="font-heading text-2xl text-gray-900 mb-2">PLEW Buddy</h3>
+        <p className="font-body text-gray-500 text-sm">Your AI tutor is here to help</p>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-custom-white">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+      <div className="flex-1 overflow-y-auto px-12 py-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          {messages.map((message) => (
             <div
-              className={`max-w-[80%] p-4 rounded-xl shadow-container ${
-                message.role === 'user'
-                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-br-sm'
-                  : 'bg-white text-gray-900 rounded-bl-sm border-2 border-custom-purple/20'
-              }`}
+              key={message.id}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className="font-body whitespace-pre-wrap tracking-custom">{message.content}</div>
               <div
-                className={`font-body text-xs mt-2 tracking-custom ${
-                  message.role === 'user' ? 'text-purple-100' : 'text-gray-500'
-                }`}
+                className={`max-w-[85%] ${
+                  message.role === 'user'
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-gray-50 text-gray-900'
+                } px-6 py-5 rounded-3xl`}
               >
-                {new Date(message.timestamp).toLocaleTimeString()}
+                <div className="font-body whitespace-pre-wrap leading-relaxed text-[15px]">
+                  {message.content}
+                </div>
+                <div
+                  className={`font-body text-xs mt-3 ${
+                    message.role === 'user' ? 'text-gray-400' : 'text-gray-400'
+                  }`}
+                >
+                  {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-white text-gray-900 p-4 rounded-xl rounded-bl-sm border-2 border-custom-purple/20 shadow-container">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          ))}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-gray-50 px-6 py-5 rounded-3xl">
+                <div className="flex items-center space-x-1.5">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input */}
-      <div className="border-t-2 border-custom-purple/20 p-6 bg-white">
-        <div className="flex space-x-3">
+      <div className="border-t border-gray-100 px-12 py-6">
+        <div className="max-w-4xl mx-auto flex gap-3">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask your PLEW buddy for help..."
-            className="flex-1 p-4 border-2 border-custom-purple/30 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-body tracking-custom shadow-container"
-            rows={3}
+            placeholder="Ask a question..."
+            className="flex-1 px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl resize-none focus:outline-none focus:bg-white focus:border-gray-300 font-body text-[15px] placeholder:text-gray-400 transition-all duration-200"
+            rows={1}
             disabled={isLoading}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed font-heading tracking-custom shadow-container-lg"
+            className="px-8 py-4 bg-gray-900 text-white rounded-2xl hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 disabled:opacity-30 disabled:cursor-not-allowed font-medium text-[15px] transition-all duration-200"
           >
             Send
           </button>
