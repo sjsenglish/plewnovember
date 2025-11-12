@@ -79,7 +79,7 @@ export default function Practice() {
   return (
     <div className="h-screen flex flex-col bg-white font-inter">
       {/* Top Header */}
-      <div className="bg-white px-8 py-6">
+      <div className="bg-white px-12 py-6">
         <h1 className="text-2xl font-semibold text-gray-900 mb-4">PLEW Practice Session</h1>
 
         {/* Gradient Divider Line */}
@@ -110,47 +110,46 @@ export default function Practice() {
         </div>
       </div>
 
-      {/* Main Content - Two Column Grid */}
-      <div className="flex-1 grid grid-cols-2 overflow-hidden gap-6 px-8 pb-8">
-        {/* Left Column - Question Viewer with Outline Box */}
+      {/* Main Content - Single Large Container */}
+      <div className="flex-1 overflow-hidden px-12 pb-12">
         <div
-          className="flex flex-col rounded-2xl overflow-hidden"
+          className="h-full rounded-2xl overflow-hidden"
           style={{
             border: '2px solid #9397ED',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
           }}
         >
-          <div className="flex-1 overflow-y-auto p-6">
-            <QuestionViewer
-              question={currentQuestion}
-              questionNumber={currentQuestionIndex + 1}
-              totalQuestions={pack.questions.length}
-            />
-          </div>
-          {/* Answer Options at bottom of left column */}
-          <div className="border-t border-gray-200 p-6">
-            <AnswerOptions
-              question={currentQuestion}
-              packId={packId}
-              onAnswerSubmit={(isCorrect) => {
-                console.log('Answer submitted, correct:', isCorrect)
-              }}
-            />
-          </div>
-        </div>
+          {/* Two Column Grid Inside Container */}
+          <div className="h-full grid grid-cols-2">
+            {/* Left Column - Question Viewer */}
+            <div className="flex flex-col border-r border-gray-200">
+              <div className="flex-1 overflow-y-auto p-6">
+                <QuestionViewer
+                  question={currentQuestion}
+                  questionNumber={currentQuestionIndex + 1}
+                  totalQuestions={pack.questions.length}
+                />
+              </div>
+              {/* Answer Options at bottom of left column */}
+              <div className="border-t border-gray-200 p-6">
+                <AnswerOptions
+                  question={currentQuestion}
+                  packId={packId}
+                  onAnswerSubmit={(isCorrect) => {
+                    console.log('Answer submitted, correct:', isCorrect)
+                  }}
+                />
+              </div>
+            </div>
 
-        {/* Right Column - Chat Panel with Outline Box */}
-        <div
-          className="flex flex-col rounded-2xl overflow-hidden"
-          style={{
-            border: '2px solid #9397ED',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-          }}
-        >
-          <ChatPanel
-            question={currentQuestion}
-            packId={packId}
-          />
+            {/* Right Column - Chat Panel */}
+            <div className="flex flex-col">
+              <ChatPanel
+                question={currentQuestion}
+                packId={packId}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
