@@ -83,23 +83,37 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
               key={index}
               onClick={() => !showFeedback && setSelectedAnswer(option)}
               disabled={showFeedback || isSubmitting}
-              className={`w-full p-5 text-left border-2 rounded-xl transition-all shadow-container hover:shadow-container-lg font-body tracking-custom ${
-                isCorrect
-                  ? 'border-green-500 bg-green-50 text-green-900'
-                  : isIncorrect
-                  ? 'border-red-500 bg-red-50 text-red-900'
-                  : isSelected
-                  ? 'border-purple-500 bg-custom-purple text-purple-900'
-                  : 'border-custom-purple/30 hover:border-purple-400 hover:bg-custom-white'
-              } ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              className={`w-full relative rounded-xl transition-all ${
+                showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'
+              }`}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="font-heading text-gray-600 mr-4">{index + 1}.</span>
-                  <span className="font-body tracking-custom">{option}</span>
+              {/* Gradient border for non-feedback states, solid colors for feedback */}
+              {isCorrect ? (
+                <div className="absolute inset-0 bg-green-500 rounded-xl"></div>
+              ) : isIncorrect ? (
+                <div className="absolute inset-0 bg-red-500 rounded-xl"></div>
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-r from-custom-cyan via-custom-purple to-custom-pink rounded-xl"></div>
+              )}
+
+              {/* White fill inside */}
+              <div className={`relative m-[3px] p-5 text-left rounded-xl transition-all ${
+                isCorrect
+                  ? 'bg-green-50 text-green-900'
+                  : isIncorrect
+                  ? 'bg-red-50 text-red-900'
+                  : isSelected
+                  ? 'bg-purple-50 text-purple-900'
+                  : 'bg-white hover:bg-gray-50'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-heading text-gray-600 mr-4">{index + 1}.</span>
+                    <span className="font-body tracking-custom">{option}</span>
+                  </div>
+                  {isCorrect && <span className="text-green-600 font-heading tracking-custom">✓ Correct</span>}
+                  {isIncorrect && <span className="text-red-600 font-heading tracking-custom">✗ Incorrect</span>}
                 </div>
-                {isCorrect && <span className="text-green-600 font-heading tracking-custom">✓ Correct</span>}
-                {isIncorrect && <span className="text-red-600 font-heading tracking-custom">✗ Incorrect</span>}
               </div>
             </button>
           )
@@ -111,14 +125,14 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
           <button
             onClick={handleSubmit}
             disabled={!selectedAnswer || showFeedback || isSubmitting}
-            className="flex-1 py-4 px-6 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-heading rounded-xl hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-container-lg tracking-custom"
+            className="flex-1 py-4 px-6 bg-black text-white font-heading rounded-2xl hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg tracking-custom"
           >
             {isSubmitting ? 'Submitting...' : 'Submit Answer'}
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="flex-1 py-4 px-6 bg-gradient-to-r from-green-600 to-green-700 text-white font-heading rounded-xl hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-container-lg tracking-custom"
+            className="flex-1 py-4 px-6 bg-black text-white font-heading rounded-2xl hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all shadow-lg tracking-custom"
           >
             Next Question →
           </button>
