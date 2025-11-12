@@ -136,20 +136,21 @@ export default function Practice() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-hidden p-8 bg-white">
-        {/* SVG Background Container */}
+      <div className="flex-1 overflow-hidden px-12 py-8 bg-white">
+        {/* SVG Background Container - Increased size */}
         <div
-          className="h-full rounded-3xl bg-center bg-no-repeat p-8"
+          className="h-full w-full rounded-3xl bg-center bg-no-repeat"
           style={{
             backgroundImage: 'url(https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FRectangle%202130.svg?alt=media&token=9f9384aa-6a16-4302-b4fe-279ca9f95e0a)',
             backgroundSize: '100% 100%',
+            padding: '32px',
           }}
         >
-          {/* Two Column Grid with more spacing */}
-          <div className="h-full grid grid-cols-2 gap-10">
+          {/* Two Column Grid with spacing adjusted to fit inside SVG */}
+          <div className="h-full grid grid-cols-2 gap-8">
             {/* Left Column - Question Viewer */}
             <div className="flex flex-col bg-transparent rounded-2xl overflow-hidden">
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto pr-2">
                 <QuestionViewer
                   question={currentQuestion}
                   questionNumber={currentQuestionIndex + 1}
@@ -157,7 +158,7 @@ export default function Practice() {
                 />
               </div>
               {/* Answer Options at bottom */}
-              <div className="mt-6">
+              <div className="mt-4">
                 <AnswerOptions
                   question={currentQuestion}
                   packId={packId}
@@ -169,7 +170,7 @@ export default function Practice() {
             </div>
 
             {/* Right Column - Chat Panel */}
-            <div className="flex flex-col bg-transparent rounded-2xl overflow-hidden">
+            <div className="flex flex-col bg-transparent rounded-2xl overflow-hidden h-full">
               <ChatPanel
                 question={currentQuestion}
                 packId={packId}
