@@ -116,16 +116,16 @@ export default function Practice() {
 
       {/* Main Content Area */}
       <div className="flex-1 overflow-hidden p-8 bg-white">
-        {/* Gradient Border Container with Drop Shadow */}
+        {/* Gradient Border Container - gradient only on border line */}
         <div
           className="h-full rounded-3xl shadow-2xl"
           style={{
-            padding: '4px',
+            padding: '3px',
             background: 'linear-gradient(135deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)',
           }}
         >
-          {/* Inner white container */}
-          <div className="h-full bg-white rounded-3xl p-6">
+          {/* Inner white container - pure white fill */}
+          <div className="h-full bg-white rounded-[calc(1.5rem-3px)] p-6">
             {/* Two Column Grid */}
             <div className="h-full grid grid-cols-2 gap-6">
               {/* Left Column - Question Viewer */}
@@ -138,7 +138,7 @@ export default function Practice() {
                   />
                 </div>
                 {/* Answer Options at bottom of left column */}
-                <div className="border-t border-gray-200 p-6 bg-gray-50">
+                <div className="border-t border-gray-200 p-6 bg-white">
                   <AnswerOptions
                     question={currentQuestion}
                     packId={packId}
