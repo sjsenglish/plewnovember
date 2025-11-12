@@ -24,38 +24,21 @@ const levels = [
 
 export default function LevelSelect() {
   return (
-    <div
-      className="min-h-screen flex flex-col justify-center items-center p-8"
-      style={{ backgroundColor: '#010242' }}
-    >
-      <div className="text-center mb-16">
-        <h1 className="font-heading text-5xl text-white mb-4 tracking-custom">
-          Select Your Level
-        </h1>
-        <p className="font-body text-xl text-white/80 tracking-custom">
-          Choose the difficulty level for your practice session
-        </p>
-      </div>
-
-      <div className="flex flex-wrap justify-center items-center gap-12">
+    <div className="h-screen overflow-hidden bg-white flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center gap-16">
         {levels.map((level) => (
           <Link
             key={level.id}
             href={level.href}
-            className="group flex flex-col items-center space-y-6"
+            className="group transition-all duration-300 transform hover:scale-110"
           >
-            <div className="bg-white p-12 rounded-3xl shadow-2xl hover:shadow-[0_20px_60px_rgba(255,255,255,0.3)] transition-all duration-300 transform hover:scale-110">
-              <img
-                src={level.iconUrl}
-                alt={level.name}
-                width={160}
-                height={160}
-                className="w-40 h-40 transition-transform duration-300 group-hover:scale-110"
-              />
-            </div>
-            <p className="font-heading text-4xl tracking-custom text-white group-hover:text-purple-300 transition-colors duration-300">
-              {level.name}
-            </p>
+            <img
+              src={level.iconUrl}
+              alt={level.name}
+              width={320}
+              height={320}
+              className="w-80 h-80"
+            />
           </Link>
         ))}
       </div>
