@@ -80,7 +80,7 @@ export default function PackMakerLevel2() {
 
       {/* Content layer on top of video */}
       <div className="relative z-10 flex flex-col items-center">
-        <div className="grid grid-cols-2 gap-8 sm:gap-12">
+        <div className="flex flex-row gap-6 sm:gap-8 md:gap-12">
           {packOptions.map((pack) => (
             <button
               key={pack.id}
@@ -91,12 +91,12 @@ export default function PackMakerLevel2() {
               <Image
                 src={pack.iconUrl}
                 alt={pack.label}
-                width={200}
-                height={200}
-                className="w-40 h-40 sm:w-48 sm:h-48 transition-transform duration-300 group-hover:scale-105"
+                width={150}
+                height={150}
+                className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 transition-transform duration-300 group-hover:scale-105"
                 unoptimized
               />
-              <p className="font-heading text-2xl sm:text-3xl tracking-custom text-gray-900">
+              <p className="font-heading text-xl sm:text-2xl tracking-custom text-gray-900">
                 {pack.label}
               </p>
             </button>
