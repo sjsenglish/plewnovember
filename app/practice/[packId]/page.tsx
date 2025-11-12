@@ -114,42 +114,48 @@ export default function Practice() {
         </div>
       </div>
 
-      {/* Main Content with Gradient Background */}
-      <div
-        className="flex-1 overflow-hidden p-6"
-        style={{
-          background: 'linear-gradient(135deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)'
-        }}
-      >
-        {/* Two Column Grid */}
-        <div className="h-full grid grid-cols-2 gap-6">
-          {/* Left Column - Question Viewer */}
-          <div className="flex flex-col bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <div className="flex-1 overflow-y-auto p-6">
-              <QuestionViewer
-                question={currentQuestion}
-                questionNumber={currentQuestionIndex + 1}
-                totalQuestions={pack.questions.length}
-              />
-            </div>
-            {/* Answer Options at bottom of left column */}
-            <div className="border-t border-gray-200 p-6 bg-gray-50">
-              <AnswerOptions
-                question={currentQuestion}
-                packId={packId}
-                onAnswerSubmit={(isCorrect) => {
-                  console.log('Answer submitted, correct:', isCorrect)
-                }}
-              />
-            </div>
-          </div>
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-hidden p-6 bg-gray-100">
+        {/* Gradient Outline Container */}
+        <div
+          className="h-full p-1 rounded-3xl"
+          style={{
+            background: 'linear-gradient(135deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)'
+          }}
+        >
+          {/* Inner white container */}
+          <div className="h-full bg-white rounded-3xl p-6">
+            {/* Two Column Grid */}
+            <div className="h-full grid grid-cols-2 gap-6">
+              {/* Left Column - Question Viewer */}
+              <div className="flex flex-col bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+                <div className="flex-1 overflow-y-auto p-6">
+                  <QuestionViewer
+                    question={currentQuestion}
+                    questionNumber={currentQuestionIndex + 1}
+                    totalQuestions={pack.questions.length}
+                  />
+                </div>
+                {/* Answer Options at bottom of left column */}
+                <div className="border-t border-gray-200 p-6 bg-gray-50">
+                  <AnswerOptions
+                    question={currentQuestion}
+                    packId={packId}
+                    onAnswerSubmit={(isCorrect) => {
+                      console.log('Answer submitted, correct:', isCorrect)
+                    }}
+                  />
+                </div>
+              </div>
 
-          {/* Right Column - Chat Panel */}
-          <div className="flex flex-col bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <ChatPanel
-              question={currentQuestion}
-              packId={packId}
-            />
+              {/* Right Column - Chat Panel */}
+              <div className="flex flex-col bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+                <ChatPanel
+                  question={currentQuestion}
+                  packId={packId}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
