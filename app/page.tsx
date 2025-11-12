@@ -3,14 +3,14 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen overflow-hidden flex flex-col justify-center items-center p-4 sm:p-8">
+    <div className="fixed inset-0 w-screen h-screen overflow-hidden flex flex-col justify-center items-center p-4 sm:p-8 m-0">
       {/* Fullscreen video background */}
       <video
         autoPlay
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        className="fixed inset-0 w-screen h-screen object-cover"
       >
         <source
           src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fgradient%20bg.mp4?alt=media&token=582d9cfd-26d4-47ff-b6d3-bfaa84e606b0"
