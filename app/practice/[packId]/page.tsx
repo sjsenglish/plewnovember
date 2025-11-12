@@ -84,61 +84,83 @@ export default function Practice() {
 
   return (
     <div className="h-screen flex flex-col bg-white">
-      {/* Top Navigation Bar */}
-      <div className="bg-white border-b border-gray-200 px-8 py-4">
-        <div className="flex items-start justify-between">
-          {/* Question Navigation - Top Left */}
-          <div className="flex-1">
-            <h3 className="font-inter font-semibold text-sm text-gray-600 mb-3">Questions</h3>
-            <QuestionNavigation
-              totalQuestions={pack.questions.length}
-              currentQuestion={currentQuestionIndex}
-              onQuestionClick={handleQuestionNavigation}
-            />
-          </div>
-
-          {/* Timer - Top Right */}
-          <div>
-            <Timer />
-          </div>
-        </div>
+      {/* Top Title */}
+      <div className="px-8 py-4 bg-white">
+        <h1 className="font-inter font-bold text-2xl text-gray-900">PLEW Practice</h1>
       </div>
 
-      {/* Progress Bar */}
-      <div className="px-8 py-3 bg-white">
-        <div className="w-full bg-gray-200 rounded-full h-2 shadow-sm">
-          <div
-            className="bg-gradient-to-r from-black to-[#2A3CDB] h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
-          ></div>
+      {/* Gradient Divider Line */}
+      <div
+        className="h-[3px] mx-8"
+        style={{
+          background: 'linear-gradient(90deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)',
+        }}
+      ></div>
+
+      {/* Navigation and Timer Bar */}
+      <div className="bg-white px-8 py-4">
+        <div className="flex items-center justify-between">
+          {/* Question Navigation - Left */}
+          <div className="flex-1">
+            <div className="flex items-center gap-8">
+              <h3 className="font-inter font-semibold text-sm text-gray-600">Question Overview</h3>
+              <div className="flex items-center gap-2">
+                <span className="font-inter font-semibold text-sm text-gray-600 mr-2">Time</span>
+                <Timer />
+              </div>
+            </div>
+            <div className="mt-3">
+              <QuestionNavigation
+                totalQuestions={pack.questions.length}
+                currentQuestion={currentQuestionIndex}
+                onQuestionClick={handleQuestionNavigation}
+              />
+            </div>
+          </div>
+
+          {/* Progress Bar and Counter - Right */}
+          <div className="w-80">
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-gradient-to-r from-black to-[#2A3CDB] h-2 rounded-full transition-all duration-300"
+                style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
+              ></div>
+            </div>
+            <div className="text-right mt-1">
+              <span className="font-inter text-sm text-gray-600">
+                Question {currentQuestionIndex + 1} of {pack.questions.length}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Content Area */}
       <div className="flex-1 overflow-hidden p-8 bg-white">
-        {/* Gradient Border Container - gradient only on border line */}
+        {/* Gradient Border Container */}
         <div
-          className="h-full rounded-3xl shadow-2xl"
+          className="h-full rounded-3xl"
           style={{
             padding: '3px',
             background: 'linear-gradient(135deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
           }}
         >
-          {/* Inner white container - pure white fill */}
-          <div className="h-full bg-white rounded-[calc(1.5rem-3px)] p-6">
-            {/* Two Column Grid */}
-            <div className="h-full grid grid-cols-2 gap-6">
+          {/* Inner white container */}
+          <div className="h-full bg-white rounded-[calc(1.5rem-3px)] p-8">
+            {/* Two Column Grid with more spacing */}
+            <div className="h-full grid grid-cols-2 gap-10">
               {/* Left Column - Question Viewer */}
               <div className="flex flex-col bg-white rounded-2xl overflow-hidden">
-                <div className="flex-1 overflow-y-auto p-6">
+                <div className="flex-1 overflow-y-auto">
                   <QuestionViewer
                     question={currentQuestion}
                     questionNumber={currentQuestionIndex + 1}
                     totalQuestions={pack.questions.length}
                   />
                 </div>
-                {/* Answer Options at bottom of left column */}
-                <div className="border-t border-gray-200 p-6 bg-white">
+                {/* Answer Options at bottom */}
+                <div className="mt-6">
                   <AnswerOptions
                     question={currentQuestion}
                     packId={packId}

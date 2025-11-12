@@ -109,36 +109,36 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="bg-[#4248DB] text-white p-6">
+      <div className="bg-[#4248DB] text-white p-6 rounded-t-2xl">
         <h3 className="font-inter font-bold text-xl">PLEW Buddy</h3>
         <p className="font-inter text-white/90 text-sm">Your AI tutor is here to help!</p>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-5 bg-gray-50">
+      {/* Messages Container with rounded edges and larger size */}
+      <div className="flex-1 overflow-y-auto p-8 space-y-6 bg-gray-50 rounded-b-2xl">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'}`}
           >
             {/* Timestamp outside the bubble */}
-            <div className="font-inter text-xs text-gray-500 mb-1 px-1">
+            <div className="font-inter text-xs text-gray-500 mb-2 px-1">
               {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
-            {/* Message bubble */}
+            {/* Message bubble with more padding */}
             <div
-              className="max-w-[80%] p-4 rounded-xl bg-[#F3F3FF] border-2 border-[#4248DB]"
+              className="max-w-[85%] p-5 rounded-2xl bg-[#F3F3FF] border-2 border-[#4248DB]"
             >
-              <div className="font-inter whitespace-pre-wrap text-gray-900">{message.content}</div>
+              <div className="font-inter whitespace-pre-wrap text-gray-900 leading-relaxed">{message.content}</div>
             </div>
           </div>
         ))}
         {isLoading && (
           <div className="flex flex-col items-start">
-            <div className="font-inter text-xs text-gray-500 mb-1 px-1">
+            <div className="font-inter text-xs text-gray-500 mb-2 px-1">
               {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
-            <div className="bg-[#F3F3FF] border-2 border-[#4248DB] p-4 rounded-xl">
+            <div className="bg-[#F3F3FF] border-2 border-[#4248DB] p-5 rounded-2xl">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-[#4248DB] rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-[#4248DB] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -150,22 +150,22 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="border-t border-gray-200 p-4 bg-white">
-        <div className="flex space-x-3">
+      {/* Input Area - separated send button */}
+      <div className="border-t border-gray-200 p-6 bg-white rounded-b-2xl">
+        <div className="space-y-3">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask your PLEW buddy for help..."
-            className="flex-1 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#4248DB] focus:border-[#4248DB] font-inter"
-            rows={2}
+            className="w-full p-4 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-[#4248DB] focus:border-[#4248DB] font-inter text-base"
+            rows={4}
             disabled={isLoading}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="px-6 py-3 bg-[#4248DB] text-white rounded-lg hover:bg-[#3640c7] focus:outline-none focus:ring-2 focus:ring-[#4248DB] disabled:opacity-50 disabled:cursor-not-allowed font-inter font-semibold"
+            className="w-full py-4 px-6 bg-black text-white rounded-2xl hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed font-inter font-semibold text-base transition-all"
           >
             Send
           </button>

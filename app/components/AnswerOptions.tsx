@@ -71,7 +71,7 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
 
   return (
     <div className="space-y-4">
-      <div className="space-y-3">
+      <div className="space-y-4">
         <p className="font-inter font-semibold text-base text-gray-700">Select your answer:</p>
         {question.answerOptions.map((option, index) => {
           const isSelected = selectedAnswer === option
@@ -79,29 +79,39 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
           const isIncorrect = showFeedback && isSelected && option !== question.correctAnswer
 
           return (
-            <button
+            <div
               key={index}
-              onClick={() => !showFeedback && setSelectedAnswer(option)}
-              disabled={showFeedback || isSubmitting}
-              className={`w-full p-4 text-left border-2 rounded-lg transition-all font-inter ${
-                isCorrect
-                  ? 'border-green-500 bg-green-50 text-green-900'
+              style={{
+                padding: '3px',
+                background: isCorrect
+                  ? '#10B981'
                   : isIncorrect
-                  ? 'border-red-500 bg-red-50 text-red-900'
-                  : isSelected
-                  ? 'border-[#4248DB] bg-blue-50 text-gray-900'
-                  : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-              } ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  ? '#EF4444'
+                  : 'linear-gradient(135deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)',
+                borderRadius: '12px',
+              }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="font-inter font-semibold text-gray-600 mr-3">{index + 1}.</span>
-                  <span className="font-inter">{option}</span>
+              <button
+                onClick={() => !showFeedback && setSelectedAnswer(option)}
+                disabled={showFeedback || isSubmitting}
+                className={`w-full p-4 text-left rounded-[9px] transition-all font-inter ${
+                  isCorrect
+                    ? 'bg-green-50 text-green-900'
+                    : isIncorrect
+                    ? 'bg-red-50 text-red-900'
+                    : 'bg-white text-gray-900 hover:bg-gray-50'
+                } ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-inter font-semibold text-gray-600 mr-3">{index + 1}.</span>
+                    <span className="font-inter">{option}</span>
+                  </div>
+                  {isCorrect && <span className="text-green-600 font-inter font-semibold">✓ Correct</span>}
+                  {isIncorrect && <span className="text-red-600 font-inter font-semibold">✗ Incorrect</span>}
                 </div>
-                {isCorrect && <span className="text-green-600 font-inter font-semibold">✓ Correct</span>}
-                {isIncorrect && <span className="text-red-600 font-inter font-semibold">✗ Incorrect</span>}
-              </div>
-            </button>
+              </button>
+            </div>
           )
         })}
       </div>

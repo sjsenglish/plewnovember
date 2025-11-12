@@ -12,17 +12,17 @@ export default function QuestionNavigation({
   onQuestionClick
 }: QuestionNavigationProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-3">
       {Array.from({ length: totalQuestions }, (_, i) => i).map((index) => {
         const isActive = index === currentQuestion
         return (
           <button
             key={index}
             onClick={() => onQuestionClick(index)}
-            className={`w-10 h-10 rounded-lg font-inter font-semibold text-sm transition-all duration-200 ${
+            className={`w-14 h-14 rounded-xl font-inter font-bold text-base transition-all duration-200 shadow-md ${
               isActive
-                ? 'bg-[#4248DB] text-white shadow-md'
-                : 'bg-transparent text-black border-2 border-black hover:bg-gray-100'
+                ? 'bg-[#4248DB] text-white'
+                : 'bg-black text-white hover:bg-gray-800'
             }`}
           >
             {index + 1}
