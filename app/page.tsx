@@ -1,10 +1,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import Iridescence from './components/Iridescence'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-custom-cyan via-custom-purple to-custom-pink flex flex-col justify-center items-center p-8">
-      <div className="flex flex-col items-center space-y-12">
+    <div className="min-h-screen relative flex flex-col justify-center items-center p-8">
+      {/* Iridescent background */}
+      <div className="absolute inset-0 w-full h-full">
+        <Iridescence
+          color={[1, 1, 1]}
+          mouseReact={false}
+          amplitude={0.1}
+          speed={1.0}
+        />
+      </div>
+
+      {/* Content on top of background */}
+      <div className="relative z-10 flex flex-col items-center space-y-12">
         {/* Purple ghost icon - clickable to next page */}
         <Link
           href="/pack-maker"
