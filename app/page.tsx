@@ -7,7 +7,7 @@ export default function Home() {
       <div className="flex flex-col items-center space-y-12">
         {/* Purple ghost icon - clickable to next page */}
         <Link
-          href="/pack-maker"
+          href="/level-select"
           className="group flex flex-col items-center space-y-6"
         >
           <div className="bg-custom-white p-16 rounded-3xl shadow-container-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">

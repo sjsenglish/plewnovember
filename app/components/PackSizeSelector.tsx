@@ -10,7 +10,11 @@ const packSizes = [
   { size: 20, label: 'Full Practice', description: '20 questions - Complete practice session' },
 ]
 
-export default function PackSizeSelector() {
+interface PackSizeSelectorProps {
+  level?: number
+}
+
+export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null)
   const [isCreating, setIsCreating] = useState(false)
   const router = useRouter()
@@ -19,14 +23,14 @@ export default function PackSizeSelector() {
     if (!selectedSize) return
 
     setIsCreating(true)
-    
+
     try {
       const response = await fetch('/api/packs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ size: selectedSize })
+        body: JSON.stringify({ size: selectedSize, level })
       })
 
       if (!response.ok) {
