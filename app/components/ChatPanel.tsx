@@ -115,33 +115,30 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-6 space-y-5 bg-gray-50">
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'}`}
           >
+            {/* Timestamp outside the bubble */}
+            <div className="font-inter text-xs text-gray-500 mb-1 px-1">
+              {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            {/* Message bubble */}
             <div
-              className={`max-w-[80%] p-4 rounded-lg ${
-                message.role === 'user'
-                  ? 'bg-[#4248DB] text-white'
-                  : 'bg-white text-gray-900 border border-gray-200'
-              }`}
+              className="max-w-[80%] p-4 rounded-xl bg-[#F3F3FF] border-2 border-[#4248DB]"
             >
-              <div className="font-inter whitespace-pre-wrap">{message.content}</div>
-              <div
-                className={`font-inter text-xs mt-2 ${
-                  message.role === 'user' ? 'text-white/80' : 'text-gray-500'
-                }`}
-              >
-                {new Date(message.timestamp).toLocaleTimeString()}
-              </div>
+              <div className="font-inter whitespace-pre-wrap text-gray-900">{message.content}</div>
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-white text-gray-900 p-4 rounded-lg border border-gray-200">
+          <div className="flex flex-col items-start">
+            <div className="font-inter text-xs text-gray-500 mb-1 px-1">
+              {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            <div className="bg-[#F3F3FF] border-2 border-[#4248DB] p-4 rounded-xl">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-[#4248DB] rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-[#4248DB] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>

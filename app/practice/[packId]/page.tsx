@@ -115,12 +115,13 @@ export default function Practice() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-hidden p-6 bg-gray-100">
-        {/* Gradient Outline Container */}
+      <div className="flex-1 overflow-hidden p-8 bg-white">
+        {/* Gradient Border Container with Drop Shadow */}
         <div
-          className="h-full p-1 rounded-3xl"
+          className="h-full rounded-3xl shadow-2xl"
           style={{
-            background: 'linear-gradient(135deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)'
+            padding: '4px',
+            background: 'linear-gradient(135deg, #E4E7FF 0%, #9397ED 15%, #4248DB 35%, #5850D3 50%, #4E47B9 65%, #9391C3 85%, #EEEFFF 100%)',
           }}
         >
           {/* Inner white container */}
@@ -128,7 +129,7 @@ export default function Practice() {
             {/* Two Column Grid */}
             <div className="h-full grid grid-cols-2 gap-6">
               {/* Left Column - Question Viewer */}
-              <div className="flex flex-col bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+              <div className="flex flex-col bg-white rounded-2xl overflow-hidden">
                 <div className="flex-1 overflow-y-auto p-6">
                   <QuestionViewer
                     question={currentQuestion}
@@ -149,7 +150,7 @@ export default function Practice() {
               </div>
 
               {/* Right Column - Chat Panel */}
-              <div className="flex flex-col bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+              <div className="flex flex-col bg-white rounded-2xl overflow-hidden">
                 <ChatPanel
                   question={currentQuestion}
                   packId={packId}

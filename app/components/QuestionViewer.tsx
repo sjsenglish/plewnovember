@@ -58,27 +58,11 @@ export default function QuestionViewer({
           )}
 
           {/* English Passage (questionText) */}
-          <div className="bg-gray-50 border border-gray-200 p-6 rounded-xl">
+          <div className="p-6">
             <h4 className="font-inter font-semibold text-sm text-gray-600 mb-4 uppercase">Passage</h4>
             <div className="font-inter text-base text-gray-900 leading-relaxed whitespace-pre-wrap">
               {question.questionText}
             </div>
-          </div>
-
-          {/* Answer Options Display (for reference - actual selection in AnswerOptions component) */}
-          <div className="space-y-3">
-            <h4 className="font-inter font-semibold text-gray-700 mb-3">Answer Options:</h4>
-            {question.answerOptions.map((option, index) => (
-              <div
-                key={index}
-                className="p-4 border border-gray-200 rounded-lg bg-white hover:bg-gray-50 transition-all duration-200"
-              >
-                <span className="font-inter font-semibold text-gray-600 mr-3">
-                  {index + 1}.
-                </span>
-                <span className="font-inter">{option}</span>
-              </div>
-            ))}
           </div>
         </div>
       </div>
