@@ -25,7 +25,30 @@ module.exports = {
       letterSpacing: {
         'custom': '0.04em',
       },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+      },
+      transitionTimingFunction: {
+        'custom': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
     },
   },
   plugins: [],
+  // Safelist critical utility classes to prevent purging
+  safelist: [
+    'tracking-custom',
+    'shadow-container',
+    'shadow-container-lg',
+    'font-heading',
+    'font-body',
+    'bg-custom-cyan',
+    'bg-custom-purple',
+    'bg-custom-pink',
+    'bg-custom-white',
+    'from-custom-cyan',
+    'via-custom-purple',
+    'to-custom-pink',
+    'border-custom-purple',
+  ],
 }
