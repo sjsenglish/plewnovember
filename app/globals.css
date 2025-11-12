@@ -40,7 +40,8 @@ body {
 
 @layer base {
   html {
-    @apply antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -66,6 +67,8 @@ body {
 
   /* Transition utilities for consistent animations */
   .transition-default {
-    @apply transition-all duration-300 ease-in-out;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
   }
 }
