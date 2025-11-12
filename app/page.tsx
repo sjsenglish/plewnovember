@@ -3,8 +3,23 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-custom-cyan via-custom-purple to-custom-pink flex flex-col justify-center items-center p-4 sm:p-8">
-      <div className="flex flex-col items-center">
+    <div className="fixed inset-0 w-screen h-screen overflow-hidden flex flex-col justify-center items-center p-4 sm:p-8 m-0">
+      {/* Fullscreen video background */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="fixed inset-0 w-screen h-screen object-cover"
+      >
+        <source
+          src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fgradient%20bg.mp4?alt=media&token=582d9cfd-26d4-47ff-b6d3-bfaa84e606b0"
+          type="video/mp4"
+        />
+      </video>
+
+      {/* Content layer on top of video */}
+      <div className="relative z-10 flex flex-col items-center">
         {/* Purple ghost icon - clickable to next page */}
         <Link
           href="/level-select"
