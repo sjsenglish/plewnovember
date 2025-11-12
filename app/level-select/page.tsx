@@ -25,7 +25,7 @@ const levels = [
 export default function LevelSelect() {
   return (
     <div className="h-screen overflow-hidden bg-white flex flex-col justify-center items-center">
-      <div className="flex flex-col justify-center items-center gap-1">
+      <div className="flex flex-col justify-center items-center -space-y-8">
         {levels.map((level) => (
           <Link
             key={level.id}
