@@ -8,9 +8,18 @@ import Navbar from '@/app/components/Navbar'
 import { demoQuestion } from '@/lib/demo-question'
 import styles from '../practice/[packId]/practiceQuestions.module.css'
 
+interface QuestionState {
+  selectedAnswer: string
+  showFeedback: boolean
+}
+
 export default function Demo() {
   const [timer, setTimer] = useState(0)
   const [demoCompleted, setDemoCompleted] = useState(false)
+  const [questionState, setQuestionState] = useState<QuestionState>({
+    selectedAnswer: '',
+    showFeedback: false
+  })
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,6 +38,15 @@ export default function Demo() {
     // Mark demo as completed
     localStorage.setItem('demo-completed', 'true')
     setDemoCompleted(true)
+  }
+
+  const handleStateChange = (state: QuestionState) => {
+    setQuestionState(state)
+  }
+
+  const handleNext = () => {
+    // For demo, complete the demo when next is clicked
+    handleDemoCompletion()
   }
 
   if (demoCompleted) {
@@ -93,9 +111,14 @@ export default function Demo() {
                 <AnswerOptions
                   question={demoQuestion}
                   packId="demo"
+                  questionIndex={0}
+                  totalQuestions={1}
+                  questionState={questionState}
+                  onStateChange={handleStateChange}
                   onAnswerSubmit={(isCorrect) => {
                     console.log('Demo answer submitted, correct:', isCorrect)
                   }}
+                  onNext={handleNext}
                 />
               </div>
             </div>
