@@ -7,19 +7,19 @@ const levels = [
   {
     id: 1,
     name: 'Level 1',
-    iconUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2F%E1%84%80%E1%85%A91.svg?alt=media&token=4ebb6178-84ca-45b5-8849-d3afa3972aaa',
+    iconUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Flevel-1-button.svg?alt=media&token=11fba54b-8e64-4485-8f66-52395470b701',
     href: '/pack-maker-level1'
   },
   {
     id: 2,
     name: 'Level 2',
-    iconUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2F%E1%84%80%E1%85%A92.svg?alt=media&token=40ce42b3-455a-4514-8fee-3e56802fb984',
+    iconUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Flevel-2-button.svg?alt=media&token=dbe646a0-e048-4401-8817-51faf4cb6b39',
     href: '/pack-maker-level2'
   },
   {
     id: 3,
     name: 'Level 3',
-    iconUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2F%E1%84%80%E1%85%A93.svg?alt=media&token=b4e53c50-7615-4acf-91fa-e4563512b5c8',
+    iconUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Flevel-3-button.svg?alt=media&token=53a1662b-3abe-469f-8057-c4e0ff445960',
     href: '/pack-maker-level3'
   }
 ]
@@ -33,14 +33,12 @@ export default function LevelSelect() {
       }}
     >
       {/* Content layer */}
-      <div className="relative z-10 flex flex-col items-center">
-        {levels.map((level, index) => (
+      <div className="relative z-10 flex flex-row items-center gap-[20px]">
+        {levels.map((level) => (
           <Link
             key={level.id}
             href={level.href}
-            className={`block transition-transform duration-300 ease-in-out hover:scale-110 cursor-pointer ${
-              index === 0 ? 'mt-0' : '-mt-[120px]'
-            }`}
+            className="block transition-transform duration-300 ease-in-out hover:scale-110 cursor-pointer"
           >
             <Image
               src={level.iconUrl}
