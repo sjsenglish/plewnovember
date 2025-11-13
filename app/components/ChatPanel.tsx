@@ -111,7 +111,6 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
       {/* Header */}
       <div className="bg-gradient-to-r from-custom-purple via-custom-pink to-custom-cyan text-gray-900 p-6 shadow-container">
         <h3 className="font-heading text-xl tracking-custom">PLEW Buddy</h3>
-        <p className="font-body text-gray-700 text-sm tracking-custom">Your AI tutor is here to help!</p>
       </div>
 
       {/* Messages */}
@@ -124,16 +123,12 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
             <div
               className={`max-w-[80%] p-4 rounded-xl shadow-container ${
                 message.role === 'user'
-                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-br-sm'
-                  : 'bg-white text-gray-900 rounded-bl-sm border-2 border-custom-purple/20'
+                  ? 'bg-white/60 text-gray-900 rounded-br-sm'
+                  : 'bg-white/60 text-gray-900 rounded-bl-sm'
               }`}
             >
               <div className="font-body whitespace-pre-wrap tracking-custom">{message.content}</div>
-              <div
-                className={`font-body text-xs mt-2 tracking-custom ${
-                  message.role === 'user' ? 'text-purple-100' : 'text-gray-500'
-                }`}
-              >
+              <div className="font-body text-xs mt-2 tracking-custom text-gray-500">
                 {new Date(message.timestamp).toLocaleTimeString()}
               </div>
             </div>
@@ -141,7 +136,7 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-white text-gray-900 p-4 rounded-xl rounded-bl-sm border-2 border-custom-purple/20 shadow-container">
+            <div className="bg-white/60 text-gray-900 p-4 rounded-xl rounded-bl-sm shadow-container">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>

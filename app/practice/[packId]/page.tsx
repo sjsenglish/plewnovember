@@ -78,19 +78,23 @@ export default function Practice() {
 
   return (
     <div className="h-screen flex flex-col bg-custom-white overflow-hidden">
-      {/* Top Progress Bar */}
-      <div className="bg-gradient-to-r from-custom-cyan via-custom-purple to-custom-pink shadow-container px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-        <div className="flex items-center justify-between mb-2 sm:mb-3">
-          <h1 className="font-heading text-lg sm:text-xl lg:text-2xl text-gray-900 tracking-custom">PLEW Practice Session</h1>
-          <div className="font-body text-sm sm:text-base text-gray-700 tracking-custom">
-            Question {currentQuestionIndex + 1} of {pack.questions.length}
-          </div>
-        </div>
-        <div className="w-full bg-white/50 rounded-full h-2 sm:h-3 shadow-sm">
-          <div
-            className="bg-gradient-to-r from-purple-500 to-purple-700 h-2 sm:h-3 rounded-full transition-all duration-300"
-            style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
-          ></div>
+      {/* Question Overview */}
+      <div className="bg-gradient-to-r from-custom-cyan via-custom-purple to-custom-pink shadow-container px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <h1 className="font-heading text-xl sm:text-2xl lg:text-3xl text-gray-900 tracking-custom mb-4">Question Overview</h1>
+        <div className="flex flex-wrap gap-2 sm:gap-3">
+          {pack.questions.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentQuestionIndex(index)}
+              className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center font-heading text-sm sm:text-base rounded-lg transition-all duration-200 shadow-container ${
+                index === currentQuestionIndex
+                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white scale-110 shadow-container-lg'
+                  : 'bg-white/90 text-gray-700 hover:bg-white hover:scale-105'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
       </div>
 
