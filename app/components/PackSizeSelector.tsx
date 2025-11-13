@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import styles from './PackSizeSelector.module.css'
 
@@ -18,7 +18,14 @@ interface PackSizeSelectorProps {
 export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null)
   const [isCreating, setIsCreating] = useState(false)
+  const [isDemoCompleted, setIsDemoCompleted] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    // Check if demo is completed
+    const demoCompleted = localStorage.getItem('demo-completed')
+    setIsDemoCompleted(demoCompleted === 'true')
+  }, [])
 
   const handleCreatePack = async () => {
     if (!selectedSize) return
@@ -55,14 +62,42 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
 
   return (
     <div className={styles.container}>
+      {/* Demo Button Row */}
+      {!isDemoCompleted && (
+        <div className={styles.demoRow}>
+          <button
+            onClick={() => router.push('/demo')}
+            className={styles.demoButton}
+          >
+            <div className={styles.demoContent}>
+              <div className={styles.demoIcon}>🎓</div>
+              <div className={styles.demoInfo}>
+                <h3 className={styles.demoTitle}>Start Demo</h3>
+                <p className={styles.demoDescription}>
+                  Learn how to use PLEW buddy with a guided demo
+                </p>
+              </div>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {!isDemoCompleted && (
+        <div className={styles.lockNotice}>
+          <p className={styles.lockText}>
+            🔒 Complete the demo above to unlock practice packs
+          </p>
+        </div>
+      )}
+
       {/* Row 1: First 3 pack options */}
       <div className={styles.row1}>
         {packSizes.slice(0, 3).map(({ size, label, description }) => (
           <button
             key={size}
-            onClick={() => setSelectedSize(size)}
-            disabled={isCreating}
-            className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${isCreating ? styles.disabled : ''}`}
+            onClick={() => isDemoCompleted && setSelectedSize(size)}
+            disabled={isCreating || !isDemoCompleted}
+            className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${(isCreating || !isDemoCompleted) ? styles.disabled : ''}`}
           >
             <div className={styles.packContent}>
               <div className={styles.packInfo}>
@@ -85,9 +120,9 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         {packSizes.slice(3, 4).map(({ size, label, description }) => (
           <button
             key={size}
-            onClick={() => setSelectedSize(size)}
-            disabled={isCreating}
-            className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${isCreating ? styles.disabled : ''}`}
+            onClick={() => isDemoCompleted && setSelectedSize(size)}
+            disabled={isCreating || !isDemoCompleted}
+            className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${(isCreating || !isDemoCompleted) ? styles.disabled : ''}`}
           >
             <div className={styles.packContent}>
               <div className={styles.packInfo}>
@@ -116,11 +151,11 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
               placeholder="Enter number of questions"
               onChange={(e) => {
                 const value = parseInt(e.target.value)
-                if (value > 0 && value <= 50) {
+                if (isDemoCompleted && value > 0 && value <= 50) {
                   setSelectedSize(value)
                 }
               }}
-              disabled={isCreating}
+              disabled={isCreating || !isDemoCompleted}
               className={styles.customInput}
             />
             <span className={styles.customInputLabel}>questions (max 50)</span>
@@ -133,7 +168,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         <div className={styles.createButtonContainer}>
           <button
             onClick={handleCreatePack}
-            disabled={!selectedSize || isCreating}
+            disabled={!selectedSize || isCreating || !isDemoCompleted}
             className={styles.createButton}
           >
             {isCreating ? (
