@@ -57,6 +57,8 @@ module.exports = {
     'shadow-container-lg',
     'font-heading',
     'font-body',
+    'font-madimi',
+    'font-figtree',
     'bg-custom-cyan',
     'bg-custom-purple',
     'bg-custom-pink',
