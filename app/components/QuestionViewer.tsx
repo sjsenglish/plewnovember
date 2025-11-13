@@ -58,7 +58,7 @@ export default function QuestionViewer({
           )}
 
           {/* English Passage (questionText) */}
-          <div className="bg-custom-white border-2 border-custom-cyan p-5 rounded-2xl shadow-container">
+          <div className="bg-custom-white p-5 rounded-2xl shadow-container">
             <h4 className="font-heading text-[0.6125rem] text-gray-600 mb-4 uppercase tracking-custom">Passage</h4>
             <div className="font-body text-[0.7rem] text-gray-900 leading-relaxed whitespace-pre-wrap tracking-custom">
               {question.questionText}

@@ -6,7 +6,6 @@ import QuestionViewer from '@/app/components/QuestionViewer'
 import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
 import Navbar from '@/app/components/Navbar'
-import BackButton from '@/app/components/BackButton'
 import styles from './practiceQuestions.module.css'
 
 interface Pack {
@@ -67,7 +66,6 @@ export default function Practice() {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <BackButton />
         <div
           className="flex-1 flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat"
           style={{
@@ -87,7 +85,6 @@ export default function Practice() {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <BackButton />
         <div
           className="flex-1 flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat"
           style={{
@@ -115,7 +112,6 @@ export default function Practice() {
     <div className={styles.container}>
       <Navbar />
       <div className={styles.mainContent}>
-        <BackButton />
         {/* Question Number Bar */}
         <div className={styles.questionNumberBar}>
           <div className={styles.questionNumbersContainer}>

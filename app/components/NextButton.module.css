@@ -1,0 +1,27 @@
+.nextButton {
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 0.8rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #FFFFFF;
+  border: 2px solid #F3F2FF;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+  color: #F3F2FF;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .nextButton {
+    font-size: 0.9rem;
+  }
+}
+
+.nextButton:hover {
+  opacity: 0.8;
+}
+
+.nextButton:focus {
+  outline: none;
+}

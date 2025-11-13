@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import styles from './AnswerOptions.module.css'
+import CheckAnswerButton from './CheckAnswerButton'
+import NextButton from './NextButton'
 
 interface Question {
   objectID: string
@@ -107,23 +109,21 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
         })}
       </div>
 
-      <div className="flex space-x-3">
-        {!showNextButton ? (
-          <button
-            onClick={handleSubmit}
-            disabled={!selectedAnswer || showFeedback || isSubmitting}
-            className="flex-1 py-3 px-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white text-[0.7rem] font-heading rounded-lg hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-container-lg tracking-custom"
-          >
-            {isSubmitting ? 'Submitting...' : 'Submit Answer'}
-          </button>
-        ) : (
-          <button
-            onClick={handleNext}
-            className="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 text-white text-[0.7rem] font-heading rounded-lg hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-container-lg tracking-custom"
-          >
-            Next Question →
-          </button>
-        )}
+      <div className="flex justify-between items-center mt-6">
+        <div>
+          {!showFeedback && (
+            <CheckAnswerButton
+              onClick={handleSubmit}
+              disabled={!selectedAnswer || isSubmitting}
+              isSubmitting={isSubmitting}
+            />
+          )}
+        </div>
+        <div>
+          {showNextButton && (
+            <NextButton onClick={handleNext} />
+          )}
+        </div>
       </div>
 
       {showFeedback && question.explanation && (

@@ -37,25 +37,25 @@
 }
 
 .answerButton.selected {
-  background: linear-gradient(to right, #f3e8ff, #fae8ff);
+  background: #F3F3FF;
 }
 
 .answerButton.correct {
-  background: #f0fdf4;
-  border-color: #22c55e;
+  background: #DBF7F9;
+  border-color: #DBF7F9;
 }
 
 .answerButton.correct::before {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: #DBF7F9;
 }
 
 .answerButton.incorrect {
-  background: #fef2f2;
-  border-color: #ef4444;
+  background: #FADEE8;
+  border-color: #FADEE8;
 }
 
 .answerButton.incorrect::before {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: #FADEE8;
 }
 
 .answerButton:disabled {
