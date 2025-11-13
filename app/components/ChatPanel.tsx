@@ -130,10 +130,10 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
               {formatTime(message.timestamp)}
             </div>
             <div
-              className={`max-w-[80%] rounded-2xl shadow-container ${
+              className={`max-w-[90%] rounded-2xl shadow-container ${
                 message.role === 'user'
                   ? 'bg-[#F3F3FF] text-black p-5'
-                  : 'bg-[#F3F3FF] text-black p-8 border-2 border-black'
+                  : 'bg-[#F3F3FF] text-black p-10 border-2 border-black'
               }`}
             >
               <div className="font-body text-[0.9rem] whitespace-pre-wrap tracking-custom text-black">{message.content}</div>
@@ -155,8 +155,8 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
       </div>
 
       {/* Input */}
-      <div className="border-t-2 border-custom-purple/20 p-4 bg-white">
-        <div className="flex items-center gap-3">
+      <div className="border-t-2 border-custom-purple/20 p-6 bg-white">
+        <div className="flex items-stretch gap-4">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -170,7 +170,7 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="px-6 py-3 bg-white border-none rounded-xl hover:opacity-80 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-heading text-[1rem] tracking-custom shadow-[0_4px_8px_0_rgba(0,0,0,0.15)] transition-opacity text-black flex-shrink-0"
+            className="px-6 bg-white border-none rounded-xl hover:opacity-80 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-heading text-[1rem] tracking-custom shadow-[0_4px_8px_0_rgba(0,0,0,0.15)] transition-opacity text-black flex-shrink-0 self-stretch"
           >
             Send
           </button>

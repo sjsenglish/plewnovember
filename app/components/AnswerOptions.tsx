@@ -74,8 +74,8 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
 
   return (
     <div className="space-y-4">
-      <div className="space-y-3">
-        <p className="font-heading text-[0.9rem] text-black tracking-custom">Select your answer:</p>
+      <div className="space-y-5">
+        <p className="font-heading text-[0.9rem] text-black tracking-custom mb-2">Select your answer:</p>
         {question.answerOptions.map((option, index) => {
           const isSelected = selectedAnswer === option
           const isCorrect = showFeedback && option === question.correctAnswer
@@ -109,7 +109,7 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
         })}
       </div>
 
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex justify-between items-center mt-10">
         <div>
           {!showFeedback && (
             <CheckAnswerButton
