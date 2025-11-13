@@ -32,6 +32,21 @@ module.exports = {
       transitionTimingFunction: {
         'custom': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
+      keyframes: {
+        'bounce-slow': {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateY(-15px)',
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
+      },
+      animation: {
+        'bounce-slow': 'bounce-slow 2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],
