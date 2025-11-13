@@ -155,6 +155,7 @@ export default function Practice() {
                   question={currentQuestion}
                   packId={packId}
                   questionIndex={currentQuestionIndex}
+                  totalQuestions={pack.questions.length}
                   questionState={questionStates[currentQuestionIndex]}
                   onStateChange={(state) => {
                     setQuestionStates(prev => ({
@@ -164,6 +165,12 @@ export default function Practice() {
                   }}
                   onAnswerSubmit={(isCorrect) => {
                     console.log('Answer submitted, correct:', isCorrect)
+                  }}
+                  onNext={() => {
+                    // Move to next question or wrap to first question
+                    setCurrentQuestionIndex((prev) =>
+                      prev < pack.questions.length - 1 ? prev + 1 : 0
+                    )
                   }}
                 />
               </div>

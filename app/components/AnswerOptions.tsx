@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import styles from './AnswerOptions.module.css'
 import CheckAnswerButton from './CheckAnswerButton'
+import NextButton from './NextButton'
 
 interface Question {
   objectID: string
@@ -22,18 +23,22 @@ interface AnswerOptionsProps {
   question: Question
   packId: string
   questionIndex: number
+  totalQuestions: number
   questionState?: QuestionState
   onStateChange: (state: QuestionState) => void
   onAnswerSubmit?: (isCorrect: boolean) => void
+  onNext: () => void
 }
 
 export default function AnswerOptions({
   question,
   packId,
   questionIndex,
+  totalQuestions,
   questionState,
   onStateChange,
-  onAnswerSubmit
+  onAnswerSubmit,
+  onNext
 }: AnswerOptionsProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -136,6 +141,9 @@ export default function AnswerOptions({
               isSubmitting={isSubmitting}
             />
           )}
+        </div>
+        <div>
+          <NextButton onClick={onNext} />
         </div>
       </div>
     </div>
