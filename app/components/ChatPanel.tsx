@@ -51,7 +51,16 @@ export default function ChatPanel({ question, packId, isDemo = false, onDemoComp
 실제 연습에서는 제가 덜 설명하고 여러분이 더 많이 생각해야 해요. 하지만 데모에서는 제가 더 자세히 도와드릴게요!
 
 준비되셨나요? "준비됐어요" 또는 "시작"이라고 말씀해주세요!`
-        : `Hi! I'm your PLEW buddy. I'm here to help you understand this ${question.type} question. Feel free to ask me anything about it, and I'll guide you through the thinking process!`
+        : `안녕하세요! 👋
+
+3단계 방법으로 문제를 풀어봅시다:
+1단계: 단순화 & 번역
+2단계: PLEW 분석 (필요한 경우)
+3단계: 정답 찾기
+
+한 문장씩 차근차근 진행하겠습니다. 준비되셨나요?
+
+첫 번째 문장을 영어로 단순화해 보세요.`
 
       const welcomeMessage: Message = {
         id: `welcome-${question.id}`,
@@ -188,7 +197,7 @@ export default function ChatPanel({ question, packId, isDemo = false, onDemoComp
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask your PLEW buddy for help..."
+            placeholder=""
             className={styles.chatInput}
             rows={4}
             disabled={isLoading}
