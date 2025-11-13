@@ -1,0 +1,32 @@
+.finishButton {
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #4CAF50;
+  border: 2px solid #4CAF50;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .finishButton {
+    font-size: 1.1rem;
+  }
+}
+
+.finishButton:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.finishButton:focus {
+  outline: none;
+}
+
+.finishButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
