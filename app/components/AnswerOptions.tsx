@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import styles from './AnswerOptions.module.css'
 
 interface Question {
   objectID: string
@@ -83,20 +84,20 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
               key={index}
               onClick={() => !showFeedback && setSelectedAnswer(option)}
               disabled={showFeedback || isSubmitting}
-              className={`w-full p-5 text-left border-2 rounded-xl transition-all shadow-container hover:shadow-container-lg font-body tracking-custom ${
+              className={`${styles.answerButton} ${
                 isCorrect
-                  ? 'border-green-500 bg-green-50 text-green-900'
+                  ? styles.correct
                   : isIncorrect
-                  ? 'border-red-500 bg-red-50 text-red-900'
+                  ? styles.incorrect
                   : isSelected
-                  ? 'border-purple-500 bg-custom-purple text-purple-900'
-                  : 'border-custom-purple/30 hover:border-purple-400 hover:bg-custom-white'
-              } ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  ? styles.selected
+                  : ''
+              } font-body tracking-custom`}
             >
               <div className="flex items-center justify-between">
                 <div>
                   <span className="font-heading text-gray-600 mr-4">{index + 1}.</span>
-                  <span className="font-body tracking-custom">{option}</span>
+                  <span className="font-body tracking-custom text-gray-900">{option}</span>
                 </div>
                 {isCorrect && <span className="text-green-600 font-heading tracking-custom">✓ Correct</span>}
                 {isIncorrect && <span className="text-red-600 font-heading tracking-custom">✗ Incorrect</span>}
