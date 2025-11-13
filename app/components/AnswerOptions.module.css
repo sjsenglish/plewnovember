@@ -31,4 +31,9 @@
 
 .answerButton:disabled {
   cursor: not-allowed;
+  opacity: 1 !important;
+}
+
+.answerButton:disabled span {
+  color: #000000 !important;
 }

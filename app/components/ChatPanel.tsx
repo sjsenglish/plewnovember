@@ -124,19 +124,19 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
           >
             <div
               className={`font-body text-[0.5rem] mb-1 tracking-custom ${
-                message.role === 'user' ? 'text-gray-500' : 'text-gray-500'
+                message.role === 'user' ? 'text-black' : 'text-black'
               }`}
             >
               {formatTime(message.timestamp)}
             </div>
             <div
-              className={`max-w-[80%] p-5 rounded-2xl shadow-container ${
+              className={`max-w-[80%] rounded-2xl shadow-container ${
                 message.role === 'user'
-                  ? 'bg-[#F3F3FF] text-gray-900'
-                  : 'bg-[#F3F3FF] text-gray-900'
+                  ? 'bg-[#F3F3FF] text-black p-5'
+                  : 'bg-[#F3F3FF] text-black p-8 border-2 border-black'
               }`}
             >
-              <div className="font-body text-[0.9rem] whitespace-pre-wrap tracking-custom">{message.content}</div>
+              <div className="font-body text-[0.9rem] whitespace-pre-wrap tracking-custom text-black">{message.content}</div>
             </div>
           </div>
         ))}
@@ -156,20 +156,21 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
 
       {/* Input */}
       <div className="border-t-2 border-custom-purple/20 p-4 bg-white">
-        <div className="flex items-end space-x-3">
+        <div className="flex items-center gap-3">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask your PLEW buddy for help..."
-            className="flex-1 p-4 bg-[#F8F9FD] border-none rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 font-body text-[0.9rem] tracking-custom shadow-container"
-            rows={2}
+            className="flex-1 p-4 bg-[#F8F9FD] rounded-2xl resize-none focus:outline-none font-body text-[0.9rem] tracking-custom shadow-container border-2 text-black"
+            style={{ borderColor: '#2A3CDB' }}
+            rows={4}
             disabled={isLoading}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="px-6 py-3 bg-white border-none rounded-xl hover:opacity-80 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-heading text-[1rem] tracking-custom shadow-[0_4px_8px_0_rgba(0,0,0,0.15)] transition-opacity text-black"
+            className="px-6 py-3 bg-white border-none rounded-xl hover:opacity-80 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-heading text-[1rem] tracking-custom shadow-[0_4px_8px_0_rgba(0,0,0,0.15)] transition-opacity text-black flex-shrink-0"
           >
             Send
           </button>
