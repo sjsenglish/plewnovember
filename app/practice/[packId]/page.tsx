@@ -7,6 +7,7 @@ import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
 import Navbar from '@/app/components/Navbar'
 import BackButton from '@/app/components/BackButton'
+import styles from './practiceQuestions.module.css'
 
 interface Pack {
   id: string
@@ -97,62 +98,57 @@ export default function Practice() {
   const currentQuestion = pack.questions[currentQuestionIndex]
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className={styles.container}>
       <Navbar />
       <BackButton />
-      <div
-        className="flex-1 flex flex-col overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e')"
-        }}
-      >
-        {/* Top Progress Bar */}
-        <div className="bg-gradient-to-r from-custom-cyan via-custom-purple to-custom-pink shadow-container px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-          <div className="flex items-center justify-between mb-2 sm:mb-3">
-            <h1 className="font-heading text-lg sm:text-xl lg:text-2xl text-gray-900 tracking-custom">PLEW Practice Session</h1>
-            <div className="font-body text-sm sm:text-base text-gray-700 tracking-custom">
-              Question {currentQuestionIndex + 1} of {pack.questions.length}
+      <div className={styles.mainContent}>
+        {/* Question Number Bar */}
+        <div className={styles.questionNumberBar}>
+          {pack.questions.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentQuestionIndex(index)}
+              className={`${styles.questionSquare} ${
+                index === currentQuestionIndex
+                  ? styles.questionSquareActive
+                  : styles.questionSquareInactive
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+
+        {/* Main Content Area */}
+        <div className={styles.contentArea}>
+          {/* Question Panel - 60% width */}
+          <div className={styles.questionPanel}>
+            <div className={styles.questionContent}>
+              <QuestionViewer
+                question={currentQuestion}
+                questionNumber={currentQuestionIndex + 1}
+                totalQuestions={pack.questions.length}
+              />
+            </div>
+            <div className={styles.answerSection}>
+              <AnswerOptions
+                question={currentQuestion}
+                packId={packId}
+                onAnswerSubmit={(isCorrect) => {
+                  console.log('Answer submitted, correct:', isCorrect)
+                }}
+              />
             </div>
           </div>
-          <div className="w-full bg-white/50 rounded-full h-2 sm:h-3 shadow-sm">
-            <div
-              className="bg-gradient-to-r from-purple-500 to-purple-700 h-2 sm:h-3 rounded-full transition-all duration-300"
-              style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
-            ></div>
-          </div>
-        </div>
 
-      {/* Main Content - Responsive Layout */}
-      <div className="flex-1 flex flex-col lg:grid lg:grid-cols-2 overflow-hidden gap-3 sm:gap-4 p-3 sm:p-4">
-        {/* Left Column - Question Viewer */}
-        <div className="flex flex-col bg-white rounded-xl sm:rounded-2xl shadow-container-lg overflow-hidden min-h-0">
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-            <QuestionViewer
-              question={currentQuestion}
-              questionNumber={currentQuestionIndex + 1}
-              totalQuestions={pack.questions.length}
-            />
-          </div>
-          {/* Answer Options at bottom of left column */}
-          <div className="border-t border-custom-purple/20 p-4 sm:p-6">
-            <AnswerOptions
+          {/* Chat Panel - 40% width */}
+          <div className={styles.chatPanel}>
+            <ChatPanel
               question={currentQuestion}
               packId={packId}
-              onAnswerSubmit={(isCorrect) => {
-                console.log('Answer submitted, correct:', isCorrect)
-              }}
             />
           </div>
         </div>
-
-        {/* Right Column - Chat Panel */}
-        <div className="flex flex-col bg-white rounded-xl sm:rounded-2xl shadow-container-lg overflow-hidden min-h-0">
-          <ChatPanel
-            question={currentQuestion}
-            packId={packId}
-          />
-        </div>
-      </div>
       </div>
     </div>
   )
