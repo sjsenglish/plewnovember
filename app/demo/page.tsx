@@ -93,6 +93,10 @@ export default function Demo() {
                 <AnswerOptions
                   question={demoQuestion}
                   packId="demo"
+                  questionIndex={0}
+                  totalQuestions={1}
+                  onStateChange={() => {}}
+                  onNext={() => {}}
                   onAnswerSubmit={(isCorrect) => {
                     console.log('Demo answer submitted, correct:', isCorrect)
                   }}
