@@ -33,7 +33,7 @@ export default function LevelSelect() {
       }}
     >
       {/* Content layer */}
-      <div className="relative z-10 flex flex-col items-center gap-[20px]">
+      <div className="relative z-10 flex flex-row items-center gap-[20px]">
         {levels.map((level) => (
           <Link
             key={level.id}
