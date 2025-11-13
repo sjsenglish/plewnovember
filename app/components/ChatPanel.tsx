@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import styles from './ChatPanel.module.css'
 
 interface Message {
   id: string
@@ -114,35 +115,31 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className={styles.chatContainer}>
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-custom-white">
+      <div className={styles.messagesArea}>
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'}`}
+            className={`${styles.messageWrapper} ${
+              message.role === 'user' ? styles.messageWrapperUser : styles.messageWrapperAssistant
+            }`}
           >
-            <div
-              className={`font-body text-[0.5rem] mb-1 tracking-custom ${
-                message.role === 'user' ? 'text-black' : 'text-black'
-              }`}
-            >
+            <div className={styles.timestamp}>
               {formatTime(message.timestamp)}
             </div>
             <div
-              className={`max-w-[90%] rounded-2xl shadow-container ${
-                message.role === 'user'
-                  ? 'bg-[#F3F3FF] text-black p-5'
-                  : 'bg-[#F3F3FF] text-black p-10 border-2 border-black'
+              className={`${styles.messageBubble} ${
+                message.role === 'user' ? styles.userMessage : styles.buddyMessage
               }`}
             >
-              <div className="font-body text-[0.9rem] whitespace-pre-wrap tracking-custom text-black">{message.content}</div>
+              <div className={styles.messageContent}>{message.content}</div>
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-[#F3F3FF] text-gray-900 p-4 rounded-2xl shadow-container">
+          <div className={styles.loadingContainer}>
+            <div className={styles.loadingBubble}>
               <div className="flex items-center space-x-1.5">
                 <div className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce"></div>
                 <div className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -155,22 +152,21 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
       </div>
 
       {/* Input */}
-      <div className="border-t-2 border-custom-purple/20 p-6 bg-white">
-        <div className="flex items-stretch gap-4">
+      <div className={styles.inputArea}>
+        <div className={styles.inputContainer}>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask your PLEW buddy for help..."
-            className="flex-1 p-4 bg-[#F8F9FD] rounded-2xl resize-none focus:outline-none font-body text-[0.9rem] tracking-custom shadow-container border-2 text-black"
-            style={{ borderColor: '#2A3CDB' }}
+            className={styles.chatInput}
             rows={4}
             disabled={isLoading}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="px-6 bg-white border-none rounded-xl hover:opacity-80 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-heading text-[1rem] tracking-custom shadow-[0_4px_8px_0_rgba(0,0,0,0.15)] transition-opacity text-black flex-shrink-0 self-stretch"
+            className={styles.sendButton}
           >
             Send
           </button>
