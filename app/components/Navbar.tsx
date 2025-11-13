@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import styles from './Navbar.module.css'
 
 export default function Navbar() {
@@ -10,9 +11,9 @@ export default function Navbar() {
     <nav className={styles.navbar}>
       <div className={styles.navbarContainer}>
         {/* PLEW Logo - Top Left */}
-        <div className={styles.logo}>
+        <Link href="/" className={styles.logo}>
           PLEW
-        </div>
+        </Link>
 
         {/* Burger Menu - Top Right */}
         <button

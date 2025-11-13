@@ -1,18 +1,12 @@
 .backButtonContainer {
-  padding: 1rem 1.5rem;
-}
-
-@media (min-width: 640px) {
-  .backButtonContainer {
-    padding: 1rem 2rem;
-  }
+  padding: 0;
 }
 
 .backButton {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-weight: 400;
-  font-size: 1rem;
-  padding: 0.75rem 1.5rem;
+  font-size: 0.8rem;
+  padding: 0.6rem 1.2rem;
   background-color: #FFFFFF;
   border-radius: 12px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
@@ -20,11 +14,13 @@
   border: none;
   cursor: pointer;
   transition: opacity 0.2s ease;
+  margin: 1rem 1.5rem;
 }
 
 @media (min-width: 640px) {
   .backButton {
-    font-size: 1.125rem;
+    font-size: 0.9rem;
+    margin: 1rem 2rem;
   }
 }
 
