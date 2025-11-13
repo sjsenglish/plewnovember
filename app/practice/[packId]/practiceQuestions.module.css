@@ -131,14 +131,6 @@
   position: relative;
 }
 
-.combinedContainer::before {
-  content: '';
-  position: absolute;
-  inset: 3px;
-  background: white;
-  border-radius: calc(1rem - 3px);
-  z-index: 0;
-}
 
 @media (max-width: 1024px) {
   .combinedContainer {

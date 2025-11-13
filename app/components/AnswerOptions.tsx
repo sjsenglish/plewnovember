@@ -73,9 +73,9 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
   }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-5">
-        <p className="font-heading text-[0.9rem] text-black tracking-custom mb-2">Select your answer:</p>
+    <div className={styles.optionsContainer}>
+      <div className={styles.optionsList}>
+        <p className={styles.optionsLabel}>Select your answer:</p>
         {question.answerOptions.map((option, index) => {
           const isSelected = selectedAnswer === option
           const isCorrect = showFeedback && option === question.correctAnswer
@@ -94,12 +94,12 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
                   : isSelected
                   ? styles.selected
                   : ''
-              } font-body tracking-custom`}
+              }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-heading text-[0.8rem] text-black mr-3">{index + 1}.</span>
-                  <span className="font-body text-[0.9rem] tracking-custom text-black">{option}</span>
+                  <span className={styles.optionNumber}>{index + 1}.</span>
+                  <span className={styles.optionText}>{option}</span>
                 </div>
                 {isCorrect && <span className="text-green-600 text-[0.8rem] font-heading tracking-custom">✓ Correct</span>}
                 {isIncorrect && <span className="text-red-600 text-[0.8rem] font-heading tracking-custom">✗ Incorrect</span>}
@@ -109,7 +109,7 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
         })}
       </div>
 
-      <div className="flex justify-between items-center mt-10">
+      <div className={styles.buttonContainer}>
         <div>
           {!showFeedback && (
             <CheckAnswerButton
