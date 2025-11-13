@@ -108,12 +108,6 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-custom-purple via-custom-pink to-custom-cyan text-gray-900 p-6 shadow-container">
-        <h3 className="font-heading text-xl tracking-custom">PLEW Buddy</h3>
-        <p className="font-body text-gray-700 text-sm tracking-custom">Your AI tutor is here to help!</p>
-      </div>
-
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-custom-white">
         {messages.map((message) => (
