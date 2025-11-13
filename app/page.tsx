@@ -11,24 +11,28 @@ export default function Home() {
     >
       {/* Content layer */}
       <div className="relative z-10 flex flex-col items-center">
-        {/* Purple ghost icon - clickable to next page */}
+        {/* Dino icon with bounce animation - clickable to next page */}
         <Link
           href="/level-select"
           className="group flex flex-col items-center gap-6"
         >
-          <div className="bg-custom-white p-12 sm:p-16 rounded-3xl shadow-container-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <div className="animate-bounce-slow">
             <Image
-              src="/purple-ghost.svg"
-              alt="Start"
+              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-with-shadows-how-to-level-pages_option1.svg?alt=media&token=0191caff-8773-4fa2-b713-45d8495115ab"
+              alt="Dino"
               width={200}
               height={200}
               className="w-40 h-40 sm:w-48 sm:h-48 transition-transform duration-300 group-hover:scale-110"
               priority
             />
           </div>
-          <p className="font-heading text-4xl sm:text-5xl tracking-custom text-gray-900 group-hover:text-purple-700 transition-colors duration-300">
-            start
-          </p>
+          <Image
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fstart-button.svg?alt=media&token=30366dfb-d1b5-4d23-afa0-88a197884e65"
+            alt="Start"
+            width={150}
+            height={50}
+            className="transition-transform duration-300 group-hover:scale-105"
+          />
         </Link>
       </div>
     </div>
