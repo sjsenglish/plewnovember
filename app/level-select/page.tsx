@@ -26,22 +26,13 @@ const levels = [
 
 export default function LevelSelect() {
   return (
-    <div className="fixed inset-0 w-screen h-screen overflow-hidden flex flex-col justify-center items-center m-0 p-0">
-      {/* Fullscreen video background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="fixed inset-0 w-screen h-screen object-cover"
-      >
-        <source
-          src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fgradient%20bg.mp4?alt=media&token=582d9cfd-26d4-47ff-b6d3-bfaa84e606b0"
-          type="video/mp4"
-        />
-      </video>
-
-      {/* Content layer on top of video */}
+    <div
+      className="fixed inset-0 w-screen h-screen overflow-hidden flex flex-col justify-center items-center m-0 p-0 bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e')"
+      }}
+    >
+      {/* Content layer */}
       <div className="relative z-10 flex flex-col items-center">
         {levels.map((level, index) => (
           <Link
