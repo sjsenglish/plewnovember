@@ -106,26 +106,33 @@ export default function Practice() {
           backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e')"
         }}
       >
-        {/* Top Progress Bar */}
+        {/* Question Number Squares */}
         <div className="bg-gradient-to-r from-custom-cyan via-custom-purple to-custom-pink shadow-container px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-          <div className="flex items-center justify-between mb-2 sm:mb-3">
-            <h1 className="font-heading text-lg sm:text-xl lg:text-2xl text-gray-900 tracking-custom">PLEW Practice Session</h1>
-            <div className="font-body text-sm sm:text-base text-gray-700 tracking-custom">
-              Question {currentQuestionIndex + 1} of {pack.questions.length}
-            </div>
-          </div>
-          <div className="w-full bg-white/50 rounded-full h-2 sm:h-3 shadow-sm">
-            <div
-              className="bg-gradient-to-r from-purple-500 to-purple-700 h-2 sm:h-3 rounded-full transition-all duration-300"
-              style={{ width: `${((currentQuestionIndex + 1) / pack.questions.length) * 100}%` }}
-            ></div>
+          <div className="flex gap-2 flex-wrap justify-center">
+            {pack.questions.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentQuestionIndex(index)}
+                className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center font-body font-semibold text-sm sm:text-base transition-all duration-200 ${
+                  index === currentQuestionIndex
+                    ? 'bg-[#4248DB] text-white'
+                    : 'bg-black text-white hover:bg-gray-800'
+                }`}
+                style={{
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                }}
+                type="button"
+              >
+                {index + 1}
+              </button>
+            ))}
           </div>
         </div>
 
       {/* Main Content - Responsive Layout */}
-      <div className="flex-1 flex flex-col lg:grid lg:grid-cols-2 overflow-hidden gap-3 sm:gap-4 p-3 sm:p-4">
-        {/* Left Column - Question Viewer */}
-        <div className="flex flex-col bg-white rounded-xl sm:rounded-2xl shadow-container-lg overflow-hidden min-h-0">
+      <div className="flex-1 flex flex-col lg:flex lg:flex-row overflow-hidden gap-3 sm:gap-4 px-6 sm:px-8 py-3 sm:py-4">
+        {/* Left Column - Question Viewer (60% width) */}
+        <div className="flex flex-col bg-white rounded-xl sm:rounded-2xl shadow-container-lg overflow-hidden min-h-0 lg:w-[60%]">
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <QuestionViewer
               question={currentQuestion}
@@ -145,8 +152,8 @@ export default function Practice() {
           </div>
         </div>
 
-        {/* Right Column - Chat Panel */}
-        <div className="flex flex-col bg-white rounded-xl sm:rounded-2xl shadow-container-lg overflow-hidden min-h-0">
+        {/* Right Column - Chat Panel (40% width) */}
+        <div className="flex flex-col bg-white rounded-xl sm:rounded-2xl shadow-container-lg overflow-hidden min-h-0 lg:w-[40%]">
           <ChatPanel
             question={currentQuestion}
             packId={packId}
