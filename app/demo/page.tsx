@@ -11,6 +11,11 @@ import styles from '../practice/[packId]/practiceQuestions.module.css'
 export default function Demo() {
   const [timer, setTimer] = useState(0)
   const [demoCompleted, setDemoCompleted] = useState(false)
+  const [answeredCorrectly, setAnsweredCorrectly] = useState(false)
+  const [questionState, setQuestionState] = useState({
+    selectedAnswer: '',
+    showFeedback: false
+  })
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -95,10 +100,17 @@ export default function Demo() {
                   packId="demo"
                   questionIndex={0}
                   totalQuestions={1}
-                  onStateChange={() => {}}
+                  questionState={questionState}
+                  onStateChange={setQuestionState}
                   onNext={() => {}}
+                  isDemo={true}
+                  showFinishButton={answeredCorrectly}
+                  onFinish={handleDemoCompletion}
                   onAnswerSubmit={(isCorrect) => {
                     console.log('Demo answer submitted, correct:', isCorrect)
+                    if (isCorrect) {
+                      setAnsweredCorrectly(true)
+                    }
                   }}
                 />
               </div>

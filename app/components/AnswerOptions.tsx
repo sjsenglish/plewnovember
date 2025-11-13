@@ -4,6 +4,7 @@ import { useState } from 'react'
 import styles from './AnswerOptions.module.css'
 import CheckAnswerButton from './CheckAnswerButton'
 import NextButton from './NextButton'
+import FinishButton from './FinishButton'
 
 interface Question {
   objectID: string
@@ -28,6 +29,9 @@ interface AnswerOptionsProps {
   onStateChange: (state: QuestionState) => void
   onAnswerSubmit?: (isCorrect: boolean) => void
   onNext: () => void
+  isDemo?: boolean
+  showFinishButton?: boolean
+  onFinish?: () => void
 }
 
 export default function AnswerOptions({
@@ -38,7 +42,10 @@ export default function AnswerOptions({
   questionState,
   onStateChange,
   onAnswerSubmit,
-  onNext
+  onNext,
+  isDemo = false,
+  showFinishButton = false,
+  onFinish
 }: AnswerOptionsProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -143,7 +150,11 @@ export default function AnswerOptions({
           )}
         </div>
         <div>
-          <NextButton onClick={onNext} />
+          {isDemo ? (
+            showFinishButton && <FinishButton onClick={onFinish || (() => {})} />
+          ) : (
+            <NextButton onClick={onNext} />
+          )}
         </div>
       </div>
     </div>
