@@ -24,7 +24,6 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
   const [selectedAnswer, setSelectedAnswer] = useState<string>('')
   const [showFeedback, setShowFeedback] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showNextButton, setShowNextButton] = useState(false)
 
   const handleSubmit = async () => {
     if (!selectedAnswer || isSubmitting) return
@@ -52,7 +51,6 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
 
         // Show visual feedback
         setTimeout(() => {
-          setShowNextButton(true)
           onAnswerSubmit?.(isCorrect)
         }, 2000)
       } else {
@@ -120,9 +118,7 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
           )}
         </div>
         <div>
-          {showNextButton && (
-            <NextButton onClick={handleNext} />
-          )}
+          <NextButton onClick={handleNext} />
         </div>
       </div>
     </div>

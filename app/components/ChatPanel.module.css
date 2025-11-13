@@ -8,7 +8,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 1.5rem;
-  background-color: #F9F9FF;
+  background-color: transparent;
 }
 
 .messageWrapper {
@@ -76,7 +76,7 @@
 .inputArea {
   border-top: 2px solid rgba(212, 208, 255, 0.2);
   padding: 1.5rem;
-  background-color: white;
+  background-color: transparent;
 }
 
 .inputContainer {
