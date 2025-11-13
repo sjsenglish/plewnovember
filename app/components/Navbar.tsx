@@ -1,35 +1,37 @@
 'use client'
 
 import { useState } from 'react'
+import styles from './Navbar.module.css'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <nav className="bg-white shadow-md relative z-50" style={{ backgroundColor: '#FFFFFF' }}>
-      <div className="flex items-center justify-between px-8 sm:px-12 py-8">
-        {/* PLEW Logo */}
-        <div className="font-madimi text-4xl sm:text-6xl font-bold text-gray-900">
+    <nav className={styles.navbar}>
+      <div className={styles.navbarContainer}>
+        {/* PLEW Logo - Top Left */}
+        <div className={styles.logo}>
           PLEW
         </div>
 
-        {/* Burger Menu Button */}
+        {/* Burger Menu - Top Right */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="flex flex-col justify-center items-center w-16 h-16 space-y-2.5 focus:outline-none"
+          className={styles.burgerButton}
           aria-label="Menu"
+          type="button"
         >
-          <span className="block w-12 h-1 bg-gray-900"></span>
-          <span className="block w-12 h-1 bg-gray-900"></span>
-          <span className="block w-12 h-1 bg-gray-900"></span>
+          <span className={styles.burgerLine}></span>
+          <span className={styles.burgerLine}></span>
+          <span className={styles.burgerLine}></span>
         </button>
       </div>
 
-      {/* Mobile Menu Dropdown (for future use) */}
+      {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white shadow-lg">
-          <div className="px-8 py-8">
-            <p className="font-madimi text-gray-600 text-center text-xl">Menu items coming soon...</p>
+        <div className={styles.menuDropdown}>
+          <div className={styles.menuContent}>
+            <p className={styles.menuText}>Menu items coming soon...</p>
           </div>
         </div>
       )}

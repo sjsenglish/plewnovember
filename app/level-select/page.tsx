@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Navbar from '@/app/components/Navbar'
 import BackButton from '@/app/components/BackButton'
+import styles from './levelSelect.module.css'
 
 const levels = [
   {
@@ -28,29 +29,24 @@ const levels = [
 
 export default function LevelSelect() {
   return (
-    <div className="fixed inset-0 w-screen h-screen overflow-hidden flex flex-col m-0 p-0">
+    <div className={styles.container}>
       <Navbar />
       <BackButton />
-      <div
-        className="flex-1 flex flex-col justify-center items-center bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e')"
-        }}
-      >
+      <div className={styles.content}>
         {/* Content layer */}
-        <div className="relative z-10 flex flex-row items-center gap-[20px]">
+        <div className={styles.levelGrid}>
           {levels.map((level) => (
             <Link
               key={level.id}
               href={level.href}
-              className="block transition-transform duration-300 ease-in-out hover:scale-110 cursor-pointer"
+              className={styles.levelButton}
             >
               <Image
                 src={level.iconUrl}
                 alt={level.name}
                 width={320}
                 height={320}
-                className="w-80 h-80 block"
+                className={styles.levelImage}
                 unoptimized
               />
             </Link>
