@@ -53,17 +53,17 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="grid gap-4 sm:gap-6 mb-8 sm:mb-12">
+    <div className="max-w-2xl mx-auto flex flex-col items-center">
+      <div className="grid gap-6 mb-8 sm:mb-12 w-full sm:w-1/2">
         {packSizes.map(({ size, label, description }) => (
           <button
             key={size}
             onClick={() => setSelectedSize(size)}
             disabled={isCreating}
-            className={`p-6 sm:p-8 text-left border-2 rounded-xl sm:rounded-2xl transition-all shadow-container hover:shadow-container-lg ${
+            className={`p-6 sm:p-8 text-left border-2 rounded-xl sm:rounded-2xl transition-all shadow-container hover:shadow-container-lg bg-white ${
               selectedSize === size
-                ? 'border-purple-500 bg-custom-purple'
-                : 'border-custom-purple/30 hover:border-purple-400 bg-white hover:bg-custom-white'
+                ? 'border-purple-500'
+                : 'border-gray-300 hover:border-purple-400'
             } ${isCreating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
           >
             <div className="flex items-center justify-between gap-4">
@@ -82,7 +82,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
       </div>
 
       {/* Custom size input */}
-      <div className="mb-8 sm:mb-12 p-6 sm:p-8 border-2 border-dashed border-custom-purple/50 rounded-xl sm:rounded-2xl bg-custom-white shadow-container">
+      <div className="mb-8 sm:mb-12 p-6 sm:p-8 border-2 border-dashed border-gray-300 rounded-xl sm:rounded-2xl bg-white shadow-container w-full sm:w-1/2">
         <h3 className="font-heading text-lg sm:text-xl text-gray-900 mb-4 sm:mb-6 tracking-custom">
           Custom Size
         </h3>
@@ -99,7 +99,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
               }
             }}
             disabled={isCreating}
-            className="flex-1 p-3 sm:p-4 border-2 border-custom-purple/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-body tracking-custom shadow-container"
+            className="flex-1 p-3 sm:p-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-body tracking-custom shadow-container bg-white"
           />
           <span className="font-body text-sm sm:text-base text-gray-600 tracking-custom text-center sm:text-left">questions (max 50)</span>
         </div>
