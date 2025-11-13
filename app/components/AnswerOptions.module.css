@@ -1,21 +1,22 @@
 .answerButton {
   position: relative;
   width: 100%;
-  padding: 1.25rem;
+  padding: 0.875rem;
   text-align: left;
-  border-radius: 0.75rem;
+  border-radius: 0.525rem;
   transition: all 0.3s ease;
   cursor: pointer;
   background: white;
   border: 2px solid transparent;
   background-clip: padding-box;
+  font-size: 0.7rem;
 }
 
 .answerButton::before {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 0.75rem;
+  border-radius: 0.525rem;
   padding: 2px;
   background: linear-gradient(135deg, #9333ea, #000000);
   -webkit-mask:

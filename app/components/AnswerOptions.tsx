@@ -71,9 +71,9 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-4">
-        <p className="font-heading text-base text-gray-700 tracking-custom">Select your answer:</p>
+    <div className="space-y-4">
+      <div className="space-y-3">
+        <p className="font-heading text-[0.7rem] text-gray-700 tracking-custom">Select your answer:</p>
         {question.answerOptions.map((option, index) => {
           const isSelected = selectedAnswer === option
           const isCorrect = showFeedback && option === question.correctAnswer
@@ -96,30 +96,30 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-heading text-gray-600 mr-4">{index + 1}.</span>
-                  <span className="font-body tracking-custom text-gray-900">{option}</span>
+                  <span className="font-heading text-[0.6125rem] text-gray-600 mr-3">{index + 1}.</span>
+                  <span className="font-body text-[0.7rem] tracking-custom text-gray-900">{option}</span>
                 </div>
-                {isCorrect && <span className="text-green-600 font-heading tracking-custom">✓ Correct</span>}
-                {isIncorrect && <span className="text-red-600 font-heading tracking-custom">✗ Incorrect</span>}
+                {isCorrect && <span className="text-green-600 text-[0.6125rem] font-heading tracking-custom">✓ Correct</span>}
+                {isIncorrect && <span className="text-red-600 text-[0.6125rem] font-heading tracking-custom">✗ Incorrect</span>}
               </div>
             </button>
           )
         })}
       </div>
 
-      <div className="flex space-x-4">
+      <div className="flex space-x-3">
         {!showNextButton ? (
           <button
             onClick={handleSubmit}
             disabled={!selectedAnswer || showFeedback || isSubmitting}
-            className="flex-1 py-4 px-6 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-heading rounded-xl hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-container-lg tracking-custom"
+            className="flex-1 py-3 px-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white text-[0.7rem] font-heading rounded-lg hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-container-lg tracking-custom"
           >
             {isSubmitting ? 'Submitting...' : 'Submit Answer'}
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="flex-1 py-4 px-6 bg-gradient-to-r from-green-600 to-green-700 text-white font-heading rounded-xl hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-container-lg tracking-custom"
+            className="flex-1 py-3 px-4 bg-gradient-to-r from-green-600 to-green-700 text-white text-[0.7rem] font-heading rounded-lg hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-container-lg tracking-custom"
           >
             Next Question →
           </button>
@@ -127,19 +127,19 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
       </div>
 
       {showFeedback && question.explanation && (
-        <div className={`mt-6 p-6 rounded-xl border-2 shadow-container ${
+        <div className={`mt-4 p-4 rounded-lg border-2 shadow-container ${
           selectedAnswer === question.correctAnswer
             ? 'bg-green-50 border-green-300'
             : 'bg-custom-cyan border-cyan-300'
         }`}>
-          <h4 className={`font-heading mb-3 tracking-custom ${
+          <h4 className={`font-heading text-[0.7rem] mb-2 tracking-custom ${
             selectedAnswer === question.correctAnswer
               ? 'text-green-900'
               : 'text-gray-900'
           }`}>
             {selectedAnswer === question.correctAnswer ? '✓ Correct!' : 'Explanation:'}
           </h4>
-          <p className={`font-body tracking-custom ${
+          <p className={`font-body text-[0.6125rem] tracking-custom ${
             selectedAnswer === question.correctAnswer
               ? 'text-green-800'
               : 'text-gray-800'
