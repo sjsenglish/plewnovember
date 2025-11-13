@@ -35,7 +35,7 @@ export default function QuestionViewer({
     <div className="space-y-6">
       {/* Korean Instruction (actualQuestion) */}
       <div>
-        <p className="font-body text-[1.1rem] text-gray-900 tracking-custom">
+        <p className="font-body text-[1.1rem] text-black tracking-custom">
           {question.actualQuestion}
         </p>
       </div>
@@ -54,11 +54,8 @@ export default function QuestionViewer({
       )}
 
       {/* English Passage (questionText) */}
-      <div className="bg-custom-white p-6 rounded-2xl shadow-container">
-        <h4 className="font-heading text-[0.8rem] text-gray-600 mb-4 uppercase tracking-custom">Passage</h4>
-        <div className="font-body text-[1rem] text-gray-900 leading-relaxed whitespace-pre-wrap tracking-custom">
-          {question.questionText}
-        </div>
+      <div className="font-body text-[1rem] text-black leading-relaxed whitespace-pre-wrap tracking-custom">
+        {question.questionText}
       </div>
     </div>
   )
