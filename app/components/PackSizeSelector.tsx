@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import styles from './PackSizeSelector.module.css'
 
 const packSizes = [
   { size: 5, label: 'Quick Practice', description: '5 questions - Perfect for a quick review' },
@@ -53,27 +54,23 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="grid gap-4 sm:gap-6 mb-8 sm:mb-12">
+    <div className={styles.container}>
+      <div className={styles.packGrid}>
         {packSizes.map(({ size, label, description }) => (
           <button
             key={size}
             onClick={() => setSelectedSize(size)}
             disabled={isCreating}
-            className={`p-6 sm:p-8 text-left border-2 rounded-xl sm:rounded-2xl transition-all shadow-container hover:shadow-container-lg ${
-              selectedSize === size
-                ? 'border-purple-500 bg-custom-purple'
-                : 'border-custom-purple/30 hover:border-purple-400 bg-white hover:bg-custom-white'
-            } ${isCreating ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${isCreating ? styles.disabled : ''}`}
           >
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex-1">
-                <h3 className="font-heading text-lg sm:text-xl text-gray-900 mb-1 sm:mb-2 tracking-custom">
+            <div className={styles.packContent}>
+              <div className={styles.packInfo}>
+                <h3 className={styles.packLabel}>
                   {label}
                 </h3>
-                <p className="font-body text-sm sm:text-base text-gray-700 tracking-custom">{description}</p>
+                <p className={styles.packDescription}>{description}</p>
               </div>
-              <div className="font-heading text-3xl sm:text-4xl text-purple-600 tracking-custom flex-shrink-0">
+              <div className={styles.packSize}>
                 {size}
               </div>
             </div>
@@ -82,11 +79,11 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
       </div>
 
       {/* Custom size input */}
-      <div className="mb-8 sm:mb-12 p-6 sm:p-8 border-2 border-dashed border-custom-purple/50 rounded-xl sm:rounded-2xl bg-custom-white shadow-container">
-        <h3 className="font-heading text-lg sm:text-xl text-gray-900 mb-4 sm:mb-6 tracking-custom">
+      <div className={styles.customSizeContainer}>
+        <h3 className={styles.customSizeTitle}>
           Custom Size
         </h3>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+        <div className={styles.customInputGroup}>
           <input
             type="number"
             min="1"
@@ -99,22 +96,22 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
               }
             }}
             disabled={isCreating}
-            className="flex-1 p-3 sm:p-4 border-2 border-custom-purple/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-body tracking-custom shadow-container"
+            className={styles.customInput}
           />
-          <span className="font-body text-sm sm:text-base text-gray-600 tracking-custom text-center sm:text-left">questions (max 50)</span>
+          <span className={styles.customInputLabel}>questions (max 50)</span>
         </div>
       </div>
 
       {/* Create button */}
-      <div className="text-center">
+      <div className={styles.createButtonContainer}>
         <button
           onClick={handleCreatePack}
           disabled={!selectedSize || isCreating}
-          className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-heading rounded-xl hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-container-lg tracking-custom text-base sm:text-lg"
+          className={styles.createButton}
         >
           {isCreating ? (
-            <span className="flex items-center justify-center">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <span className={styles.spinner}>
+              <svg className={styles.spinnerIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
@@ -127,7 +124,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
       </div>
 
       {selectedSize && (
-        <div className="mt-4 sm:mt-6 text-center font-body text-xs sm:text-sm text-gray-600 tracking-custom">
+        <div className={styles.estimatedTime}>
           Estimated time: {Math.ceil(selectedSize * 1.5)} minutes
         </div>
       )}

@@ -1,0 +1,229 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.loadingContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.loadingBox {
+  text-align: center;
+  background-color: #F9F9FF;
+  padding: 2rem 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  max-width: 28rem;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  border-radius: 9999px;
+  height: 4rem;
+  width: 4rem;
+  border-bottom: 2px solid #8b5cf6;
+  margin: 0 auto 1.5rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 1.125rem;
+  color: #374151;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 640px) {
+  .loadingBox {
+    padding: 3rem;
+  }
+
+  .loadingText {
+    font-size: 1.25rem;
+  }
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.progressBar {
+  background: linear-gradient(to right, #DBF7F9, #D4D0FF, #FADEE8);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .progressBar {
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .progressBar {
+    padding: 0.75rem 2rem;
+  }
+}
+
+.progressHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .progressHeader {
+    margin-bottom: 0.75rem;
+  }
+}
+
+.progressTitle {
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
+  font-size: 1.125rem;
+  color: #111827;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 640px) {
+  .progressTitle {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .progressTitle {
+    font-size: 1.5rem;
+  }
+}
+
+.progressCount {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  color: #374151;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 640px) {
+  .progressCount {
+    font-size: 1rem;
+  }
+}
+
+.progressTrack {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 9999px;
+  height: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 640px) {
+  .progressTrack {
+    height: 0.75rem;
+  }
+}
+
+.progressFill {
+  background: linear-gradient(to right, #8b5cf6, #7c3aed);
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s;
+}
+
+.questionArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .questionArea {
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .questionArea {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.questionPanel {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .questionPanel {
+    border-radius: 1rem;
+  }
+}
+
+.questionContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+}
+
+.answerSection {
+  border-top: 1px solid rgba(212, 208, 255, 0.2);
+  padding: 1rem 1.5rem;
+}
+
+.chatPanel {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .chatPanel {
+    border-radius: 1rem;
+  }
+}
