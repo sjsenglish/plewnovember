@@ -21,6 +21,7 @@ export default function Practice() {
   const [pack, setPack] = useState<Pack | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [timer, setTimer] = useState(0)
 
   useEffect(() => {
     const loadPack = () => {
@@ -48,6 +49,19 @@ export default function Practice() {
       loadPack()
     }
   }, [packId])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer(prev => prev + 1)
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
 
   if (loading) {
     return (
@@ -100,53 +114,58 @@ export default function Practice() {
   return (
     <div className={styles.container}>
       <Navbar />
-      <BackButton />
       <div className={styles.mainContent}>
+        <BackButton />
         {/* Question Number Bar */}
         <div className={styles.questionNumberBar}>
-          {pack.questions.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentQuestionIndex(index)}
-              className={`${styles.questionSquare} ${
-                index === currentQuestionIndex
-                  ? styles.questionSquareActive
-                  : styles.questionSquareInactive
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
+          <div className={styles.questionNumbersContainer}>
+            {pack.questions.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentQuestionIndex(index)}
+                className={`${styles.questionSquare} ${
+                  index === currentQuestionIndex
+                    ? styles.questionSquareActive
+                    : styles.questionSquareInactive
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+          <div className={styles.timer}>{formatTime(timer)}</div>
         </div>
 
         {/* Main Content Area */}
         <div className={styles.contentArea}>
-          {/* Question Panel - 60% width */}
-          <div className={styles.questionPanel}>
-            <div className={styles.questionContent}>
-              <QuestionViewer
-                question={currentQuestion}
-                questionNumber={currentQuestionIndex + 1}
-                totalQuestions={pack.questions.length}
-              />
+          <div className={styles.combinedContainer}>
+            {/* Question Panel - 60% width */}
+            <div className={styles.questionPanel}>
+              <div className={styles.questionContent}>
+                <QuestionViewer
+                  question={currentQuestion}
+                  questionNumber={currentQuestionIndex + 1}
+                  totalQuestions={pack.questions.length}
+                />
+              </div>
+              <div className={styles.answerSection}>
+                <AnswerOptions
+                  question={currentQuestion}
+                  packId={packId}
+                  onAnswerSubmit={(isCorrect) => {
+                    console.log('Answer submitted, correct:', isCorrect)
+                  }}
+                />
+              </div>
             </div>
-            <div className={styles.answerSection}>
-              <AnswerOptions
+
+            {/* Chat Panel - 40% width */}
+            <div className={styles.chatPanel}>
+              <ChatPanel
                 question={currentQuestion}
                 packId={packId}
-                onAnswerSubmit={(isCorrect) => {
-                  console.log('Answer submitted, correct:', isCorrect)
-                }}
               />
             </div>
-          </div>
-
-          {/* Chat Panel - 40% width */}
-          <div className={styles.chatPanel}>
-            <ChatPanel
-              question={currentQuestion}
-              packId={packId}
-            />
           </div>
         </div>
       </div>
