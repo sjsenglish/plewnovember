@@ -64,22 +64,6 @@ export default function QuestionViewer({
               {question.questionText}
             </div>
           </div>
-
-          {/* Answer Options Display (for reference - actual selection in AnswerOptions component) */}
-          <div className="space-y-4">
-            <h4 className="font-heading text-gray-700 mb-4 tracking-custom">Answer Options:</h4>
-            {question.answerOptions.map((option, index) => (
-              <div
-                key={index}
-                className="p-4 border-2 border-custom-purple/30 rounded-xl bg-custom-white shadow-container hover:shadow-container-lg transition-all duration-200"
-              >
-                <span className="font-heading text-gray-600 mr-3 tracking-custom">
-                  {index + 1}.
-                </span>
-                <span className="font-body tracking-custom">{option}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
