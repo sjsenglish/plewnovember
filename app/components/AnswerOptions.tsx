@@ -14,16 +14,37 @@ interface Question {
   explanation?: string
 }
 
+interface QuestionState {
+  selectedAnswer: string
+  showFeedback: boolean
+}
+
 interface AnswerOptionsProps {
   question: Question
   packId: string
+  questionIndex: number
+  totalQuestions: number
+  questionState?: QuestionState
+  onStateChange: (state: QuestionState) => void
   onAnswerSubmit?: (isCorrect: boolean) => void
+  onNext: () => void
 }
 
-export default function AnswerOptions({ question, packId, onAnswerSubmit }: AnswerOptionsProps) {
-  const [selectedAnswer, setSelectedAnswer] = useState<string>('')
-  const [showFeedback, setShowFeedback] = useState(false)
+export default function AnswerOptions({
+  question,
+  packId,
+  questionIndex,
+  totalQuestions,
+  questionState,
+  onStateChange,
+  onAnswerSubmit,
+  onNext
+}: AnswerOptionsProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Use state from props or initialize with defaults
+  const selectedAnswer = questionState?.selectedAnswer || ''
+  const showFeedback = questionState?.showFeedback || false
 
   const handleSubmit = async () => {
     if (!selectedAnswer || isSubmitting) return
@@ -47,12 +68,14 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
       })
 
       if (response.ok) {
-        setShowFeedback(true)
+        // Update state to show feedback for this specific question
+        onStateChange({
+          selectedAnswer,
+          showFeedback: true
+        })
 
-        // Show visual feedback
-        setTimeout(() => {
-          onAnswerSubmit?.(isCorrect)
-        }, 2000)
+        // Notify parent component
+        onAnswerSubmit?.(isCorrect)
       } else {
         console.error('Failed to submit progress')
         alert('Failed to save your answer. Please try again.')
@@ -63,11 +86,6 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  const handleNext = () => {
-    // Reload page to get next question
-    window.location.reload()
   }
 
   return (
@@ -82,7 +100,14 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
           return (
             <button
               key={index}
-              onClick={() => !showFeedback && setSelectedAnswer(option)}
+              onClick={() => {
+                if (!showFeedback) {
+                  onStateChange({
+                    selectedAnswer: option,
+                    showFeedback: false
+                  })
+                }
+              }}
               disabled={showFeedback || isSubmitting}
               className={`${styles.answerButton} ${
                 isCorrect
@@ -112,13 +137,13 @@ export default function AnswerOptions({ question, packId, onAnswerSubmit }: Answ
           {!showFeedback && (
             <CheckAnswerButton
               onClick={handleSubmit}
-              disabled={isSubmitting}
+              disabled={!selectedAnswer || isSubmitting}
               isSubmitting={isSubmitting}
             />
           )}
         </div>
         <div>
-          <NextButton onClick={handleNext} />
+          <NextButton onClick={onNext} />
         </div>
       </div>
     </div>

@@ -14,6 +14,11 @@ interface Pack {
   size: number
 }
 
+interface QuestionState {
+  selectedAnswer: string
+  showFeedback: boolean
+}
+
 export default function Practice() {
   const params = useParams()
   const packId = params.packId as string
@@ -21,6 +26,7 @@ export default function Practice() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [timer, setTimer] = useState(0)
+  const [questionStates, setQuestionStates] = useState<Record<number, QuestionState>>({})
 
   useEffect(() => {
     const loadPack = () => {
@@ -148,8 +154,23 @@ export default function Practice() {
                 <AnswerOptions
                   question={currentQuestion}
                   packId={packId}
+                  questionIndex={currentQuestionIndex}
+                  totalQuestions={pack.questions.length}
+                  questionState={questionStates[currentQuestionIndex]}
+                  onStateChange={(state) => {
+                    setQuestionStates(prev => ({
+                      ...prev,
+                      [currentQuestionIndex]: state
+                    }))
+                  }}
                   onAnswerSubmit={(isCorrect) => {
                     console.log('Answer submitted, correct:', isCorrect)
+                  }}
+                  onNext={() => {
+                    // Move to next question or wrap to first question
+                    setCurrentQuestionIndex((prev) =>
+                      prev < pack.questions.length - 1 ? prev + 1 : 0
+                    )
                   }}
                 />
               </div>
