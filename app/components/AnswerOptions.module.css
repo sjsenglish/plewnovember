@@ -1,33 +1,14 @@
 .answerButton {
   position: relative;
   width: 100%;
-  padding: 0.875rem;
+  padding: 1rem;
   text-align: left;
   border-radius: 0.525rem;
   transition: all 0.3s ease;
   cursor: pointer;
   background: white;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  font-size: 0.7rem;
-}
-
-.answerButton::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 0.525rem;
-  padding: 2px;
-  background: linear-gradient(135deg, #9333ea, #000000);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.answerButton {
+  border: none;
+  font-size: 0.9rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
@@ -42,23 +23,12 @@
 
 .answerButton.correct {
   background: #DBF7F9;
-  border-color: #DBF7F9;
-}
-
-.answerButton.correct::before {
-  background: #DBF7F9;
 }
 
 .answerButton.incorrect {
-  background: #FADEE8;
-  border-color: #FADEE8;
-}
-
-.answerButton.incorrect::before {
   background: #FADEE8;
 }
 
 .answerButton:disabled {
   cursor: not-allowed;
-  opacity: 0.8;
 }

@@ -116,7 +116,7 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
   return (
     <div className="h-full flex flex-col">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-custom-white">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-custom-white">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -130,13 +130,13 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
               {formatTime(message.timestamp)}
             </div>
             <div
-              className={`max-w-[80%] p-4 rounded-2xl shadow-container ${
+              className={`max-w-[80%] p-5 rounded-2xl shadow-container ${
                 message.role === 'user'
                   ? 'bg-[#F3F3FF] text-gray-900'
                   : 'bg-[#F3F3FF] text-gray-900'
               }`}
             >
-              <div className="font-body text-[0.7rem] whitespace-pre-wrap tracking-custom">{message.content}</div>
+              <div className="font-body text-[0.9rem] whitespace-pre-wrap tracking-custom">{message.content}</div>
             </div>
           </div>
         ))}
@@ -156,20 +156,20 @@ export default function ChatPanel({ question, packId }: ChatPanelProps) {
 
       {/* Input */}
       <div className="border-t-2 border-custom-purple/20 p-4 bg-white">
-        <div className="flex flex-col space-y-3">
+        <div className="flex items-end space-x-3">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask your PLEW buddy for help..."
-            className="w-full p-4 bg-[#F8F9FD] border-none rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 font-body text-[0.7rem] tracking-custom shadow-container"
+            className="flex-1 p-4 bg-[#F8F9FD] border-none rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 font-body text-[0.9rem] tracking-custom shadow-container"
             rows={2}
             disabled={isLoading}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="self-end px-6 py-2 bg-black text-white text-[0.7rem] rounded-xl hover:opacity-80 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-heading tracking-custom shadow-container-lg transition-opacity"
+            className="px-6 py-3 bg-white border-none rounded-xl hover:opacity-80 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-heading text-[1rem] tracking-custom shadow-[0_4px_8px_0_rgba(0,0,0,0.15)] transition-opacity text-black"
           >
             Send
           </button>

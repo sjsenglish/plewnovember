@@ -1,7 +1,7 @@
 .nextButton {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-weight: 400;
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding: 0.6rem 1.2rem;
   background-color: #FFFFFF;
   border: 2px solid #F3F2FF;
@@ -14,7 +14,7 @@
 
 @media (min-width: 640px) {
   .nextButton {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
   }
 }
 
