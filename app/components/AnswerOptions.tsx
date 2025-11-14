@@ -151,7 +151,7 @@ export default function AnswerOptions({
         </div>
         <div>
           {isDemo ? (
-            showFinishButton && <FinishButton onClick={onFinish || (() => {})} />
+            (showFeedback || showFinishButton) && <FinishButton onClick={onFinish || (() => {})} />
           ) : (
             <NextButton onClick={onNext} />
           )}
