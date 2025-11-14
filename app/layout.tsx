@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Madimi_One, Figtree } from 'next/font/google'
 import './globals.css'
+import PasswordProtection from '@/components/PasswordProtection'
 
 const madimiOne = Madimi_One({
   weight: '400',
@@ -27,7 +28,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${madimiOne.variable} ${figtree.variable} font-figtree antialiased`}>{children}</body>
+      <body className={`${madimiOne.variable} ${figtree.variable} font-figtree antialiased`}>
+        <PasswordProtection>{children}</PasswordProtection>
+      </body>
     </html>
   )
 }
