@@ -145,6 +145,9 @@
   flex-direction: column;
   position: relative;
   z-index: 1;
+  background-color: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
 @media (max-width: 1024px) {
@@ -182,6 +185,9 @@
   max-height: 600px;
   position: relative;
   z-index: 1;
+  background-color: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
 }
 
 @media (max-width: 1024px) {
