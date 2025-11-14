@@ -36,9 +36,17 @@ export default function PasswordProtection({ children }: { children: React.React
   // Show loading state briefly to check session
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100">
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{
+          backgroundImage: 'url(https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
         </div>
       </div>
     )
@@ -47,22 +55,30 @@ export default function PasswordProtection({ children }: { children: React.React
   // Show password prompt if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100 px-4">
+      <div
+        className="min-h-screen flex items-center justify-center px-4"
+        style={{
+          backgroundImage: 'url(https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="max-w-md w-full">
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+          <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 sm:p-10 border-4 border-purple-200">
             <div className="text-center mb-8">
-              <div className="text-6xl mb-4">🔒</div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                Protected Access
+              <div className="text-7xl mb-6 animate-bounce">🦕</div>
+              <h1 className="text-4xl font-bold text-purple-800 mb-3 font-[var(--font-madimi)]">
+                Welcome to PLEW!
               </h1>
-              <p className="text-gray-600">
-                Please enter the password to continue
+              <p className="text-gray-700 text-lg">
+                Enter the password to start your journey
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="password" className="block text-sm font-semibold text-purple-800 mb-2">
                   Password
                 </label>
                 <input
@@ -70,28 +86,28 @@ export default function PasswordProtection({ children }: { children: React.React
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-5 py-4 border-3 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-400 focus:border-purple-500 transition-all text-lg shadow-sm"
                   placeholder="Enter password"
                   autoFocus
                 />
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                <div className="bg-red-100 border-2 border-red-300 text-red-800 px-4 py-3 rounded-2xl text-sm font-medium">
                   {error}
                 </div>
               )}
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 text-lg"
               >
-                Access Site
+                Unlock Adventure 🚀
               </button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-gray-500">
-              Access is restricted to authorized users only
+            <div className="mt-6 text-center text-sm text-gray-600 font-medium">
+              🔒 Authorized access only
             </div>
           </div>
         </div>
