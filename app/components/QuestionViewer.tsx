@@ -1,5 +1,7 @@
 'use client'
 
+import styles from './QuestionViewer.module.css'
+
 interface Question {
   objectID: string
   actualQuestion: string // Korean instruction
@@ -35,7 +37,7 @@ export default function QuestionViewer({
     <div className="space-y-6">
       {/* Korean Instruction (actualQuestion) */}
       <div>
-        <p className="font-body text-[1.1rem] text-black tracking-custom">
+        <p className={`font-body text-[1.1rem] text-black tracking-custom ${styles.instructionText}`}>
           {question.actualQuestion}
         </p>
       </div>
@@ -54,7 +56,7 @@ export default function QuestionViewer({
       )}
 
       {/* English Passage (questionText) */}
-      <div className="font-body text-[1rem] text-black leading-relaxed whitespace-pre-wrap tracking-custom">
+      <div className={`font-body text-[1rem] text-black leading-relaxed whitespace-pre-wrap tracking-custom ${styles.questionText}`}>
         {question.questionText}
       </div>
     </div>
