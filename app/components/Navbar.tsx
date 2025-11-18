@@ -32,6 +32,7 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className={styles.menuDropdown}>
           <div className={styles.menuContent}>
+            <p className={styles.menuText}>메뉴 항목이 곧 제공됩니다...</p>
             <Link
               href="/profile"
               className={styles.menuItem}

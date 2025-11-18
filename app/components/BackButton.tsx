@@ -13,7 +13,7 @@ export default function BackButton() {
         className={styles.backButton}
         type="button"
       >
-        ← Back
+        ← 뒤로
       </button>
     </div>
   )

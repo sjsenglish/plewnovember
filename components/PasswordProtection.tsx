@@ -28,7 +28,7 @@ export default function PasswordProtection({ children }: { children: React.React
       setIsAuthenticated(true)
       setError('')
     } else {
-      setError('Incorrect password. Please try again.')
+      setError('비밀번호가 틀렸습니다. 다시 시도해주세요.')
       setPassword('')
     }
   }
@@ -53,17 +53,17 @@ export default function PasswordProtection({ children }: { children: React.React
             <div className="text-center mb-8">
               <div className="text-6xl mb-4">🔒</div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                Protected Access
+                보호된 접근
               </h1>
               <p className="text-gray-600">
-                Please enter the password to continue
+                계속하려면 비밀번호를 입력하세요
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
+                  비밀번호
                 </label>
                 <input
                   type="password"
@@ -71,7 +71,7 @@ export default function PasswordProtection({ children }: { children: React.React
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Enter password"
+                  placeholder="비밀번호 입력"
                   autoFocus
                 />
               </div>
@@ -86,12 +86,12 @@ export default function PasswordProtection({ children }: { children: React.React
                 type="submit"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
               >
-                Access Site
+                사이트 접속
               </button>
             </form>
 
             <div className="mt-6 text-center text-sm text-gray-500">
-              Access is restricted to authorized users only
+              승인된 사용자만 접근할 수 있습니다
             </div>
           </div>
         </div>

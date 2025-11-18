@@ -85,11 +85,11 @@ export default function AnswerOptions({
         onAnswerSubmit?.(isCorrect)
       } else {
         console.error('Failed to submit progress')
-        alert('Failed to save your answer. Please try again.')
+        alert('답변 저장에 실패했습니다. 다시 시도해주세요.')
       }
     } catch (error) {
       console.error('Error submitting answer:', error)
-      alert('An error occurred. Please try again.')
+      alert('오류가 발생했습니다. 다시 시도해주세요.')
     } finally {
       setIsSubmitting(false)
     }
@@ -98,7 +98,7 @@ export default function AnswerOptions({
   return (
     <div className={styles.optionsContainer}>
       <div className={styles.optionsList}>
-        <p className={styles.optionsLabel}>Select your answer:</p>
+        <p className={styles.optionsLabel}>답을 선택하세요:</p>
         {question.answerOptions.map((option, index) => {
           const isSelected = selectedAnswer === option
           const isCorrect = showFeedback && option === question.correctAnswer
@@ -131,8 +131,8 @@ export default function AnswerOptions({
                   <span className={styles.optionNumber}>{index + 1}.</span>
                   <span className={styles.optionText}>{option}</span>
                 </div>
-                {isCorrect && <span className="text-green-600 text-[0.8rem] font-heading tracking-custom">✓ Correct</span>}
-                {isIncorrect && <span className="text-red-600 text-[0.8rem] font-heading tracking-custom">✗ Incorrect</span>}
+                {isCorrect && <span className="text-green-600 text-[0.8rem] font-heading tracking-custom">✓ 정답</span>}
+                {isIncorrect && <span className="text-red-600 text-[0.8rem] font-heading tracking-custom">✗ 오답</span>}
               </div>
             </button>
           )

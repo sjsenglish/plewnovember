@@ -16,7 +16,7 @@ export default function CheckAnswerButton({ onClick, disabled, isSubmitting }: C
       className={styles.checkAnswerButton}
       type="button"
     >
-      {isSubmitting ? 'Checking...' : 'Check Answer'}
+      {isSubmitting ? '확인 중...' : '답 확인'}
     </button>
   )
 }

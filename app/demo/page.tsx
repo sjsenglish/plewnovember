@@ -76,7 +76,7 @@ export default function Demo() {
             <button
               className={`${styles.questionSquare} ${styles.questionSquareActive}`}
             >
-              DEMO
+              데모
             </button>
           </div>
           <div className={styles.timer}>{formatTime(timer)}</div>

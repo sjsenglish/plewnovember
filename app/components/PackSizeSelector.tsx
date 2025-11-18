@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation'
 import styles from './PackSizeSelector.module.css'
 
 const packSizes = [
-  { size: 5, label: 'Quick Practice', description: '5 questions - Perfect for a quick review' },
-  { size: 10, label: 'Standard Practice', description: '10 questions - Good for focused study' },
-  { size: 15, label: 'Extended Practice', description: '15 questions - Comprehensive review' },
-  { size: 20, label: 'Full Practice', description: '20 questions - Complete practice session' },
+  { size: 1, label: '데일리 연습', description: '1문제 - 빠른 복습에 완벽' },
+  { size: 5, label: '추가 연습', description: '5문제 - 집중 학습에 좋음' },
+  { size: 10, label: '확장 연습', description: '10문제 - 종합적인 복습' },
+  { size: 15, label: '완전 연습', description: '15문제 - 완전한 연습 세션' },
 ]
 
 interface PackSizeSelectorProps {
@@ -72,9 +72,9 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
             <div className={styles.demoContent}>
               <div className={styles.demoIcon}>🎓</div>
               <div className={styles.demoInfo}>
-                <h3 className={styles.demoTitle}>Start Demo</h3>
+                <h3 className={styles.demoTitle}>데모 시작</h3>
                 <p className={styles.demoDescription}>
-                  Learn how to use PLEW buddy with a guided demo
+                  가이드 데모로 PLEW 버디 사용법을 배우세요
                 </p>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
       {!isDemoCompleted && (
         <div className={styles.lockNotice}>
           <p className={styles.lockText}>
-            🔒 Complete the demo above to unlock practice packs
+            🔒 연습 팩을 잠금 해제하려면 위의 데모를 완료하세요
           </p>
         </div>
       )}
@@ -141,14 +141,14 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         {/* Custom size input */}
         <div className={styles.customSizeContainer}>
           <h3 className={styles.customSizeTitle}>
-            Custom Size
+            맞춤 크기
           </h3>
           <div className={styles.customInputGroup}>
             <input
               type="number"
               min="1"
               max="50"
-              placeholder="Enter number of questions"
+              placeholder="문제 수 입력"
               onChange={(e) => {
                 const value = parseInt(e.target.value)
                 if (isDemoCompleted && value > 0 && value <= 50) {
@@ -158,7 +158,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
               disabled={isCreating || !isDemoCompleted}
               className={styles.customInput}
             />
-            <span className={styles.customInputLabel}>questions (max 50)</span>
+            <span className={styles.customInputLabel}>문제 (최대 50)</span>
           </div>
         </div>
       </div>
@@ -177,17 +177,17 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Creating Pack...
+                팩 생성 중...
               </span>
             ) : (
-              `Create Practice Pack (${selectedSize || 0} questions)`
+              `연습 팩 생성 (${selectedSize || 0}문제)`
             )}
           </button>
         </div>
 
         {selectedSize && (
           <div className={styles.estimatedTime}>
-            Estimated time: {Math.ceil(selectedSize * 1.5)} minutes
+            예상 시간: {Math.ceil(selectedSize * 1.5)}분
           </div>
         )}
       </div>
