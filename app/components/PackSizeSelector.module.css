@@ -94,20 +94,16 @@
   }
 }
 
-.packOptionsWrapper {
-  position: relative;
+.lockNotice {
   width: 100%;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.lockOverlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  width: 90%;
-  max-width: 600px;
-  pointer-events: none;
+@media (min-width: 768px) {
+  .lockNotice {
+    margin-bottom: 2rem;
+  }
 }
 
 .lockImage {

@@ -86,21 +86,19 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         </div>
       )}
 
-      {/* Pack options container with lock overlay */}
-      <div className={styles.packOptionsWrapper}>
-        {/* Lock overlay when demo not completed */}
-        {!isDemoCompleted && (
-          <div className={styles.lockOverlay}>
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202802.svg?alt=media&token=5a29cc17-c7b6-47dd-bbbd-7fd7b8bbbf29"
-              alt="잠금 메시지"
-              className={styles.lockImage}
-            />
-          </div>
-        )}
+      {/* Locked message between demo and pack options */}
+      {!isDemoCompleted && (
+        <div className={styles.lockNotice}>
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202802.svg?alt=media&token=5a29cc17-c7b6-47dd-bbbd-7fd7b8bbbf29"
+            alt="잠금 메시지"
+            className={styles.lockImage}
+          />
+        </div>
+      )}
 
-        {/* Row 1: First 3 pack options */}
-        <div className={styles.row1}>
+      {/* Row 1: First 3 pack options */}
+      <div className={styles.row1}>
           {packSizes.slice(0, 3).map(({ size, label, description }) => (
             <button
               key={size}
@@ -124,7 +122,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         </div>
 
         {/* Row 2: 4th pack option and custom size */}
-        <div className={styles.row2}>
+      <div className={styles.row2}>
         {/* 4th pack option */}
         {packSizes.slice(3, 4).map(({ size, label, description }) => (
           <button
@@ -172,8 +170,8 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         </div>
       </div>
 
-        {/* Row 3: Create button */}
-        <div className={styles.row3}>
+      {/* Row 3: Create button */}
+      <div className={styles.row3}>
         <div className={styles.createButtonContainer}>
           <button
             onClick={handleCreatePack}
@@ -199,7 +197,6 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
             예상 시간: {Math.ceil(selectedSize * 1.5)}분
           </div>
         )}
-        </div>
       </div>
     </div>
   )
