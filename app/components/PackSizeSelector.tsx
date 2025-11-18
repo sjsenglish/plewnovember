@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation'
 import styles from './PackSizeSelector.module.css'
 
 const packSizes = [
-  { size: 5, label: 'Quick Practice', description: '5 questions - Perfect for a quick review' },
-  { size: 10, label: 'Standard Practice', description: '10 questions - Good for focused study' },
-  { size: 15, label: 'Extended Practice', description: '15 questions - Comprehensive review' },
-  { size: 20, label: 'Full Practice', description: '20 questions - Complete practice session' },
+  { size: 1, label: 'Daily Practice', description: '1 question - Perfect for a quick review' },
+  { size: 5, label: 'More practice', description: '5 questions - Good for focused study' },
+  { size: 10, label: 'Extended practice', description: '10 questions - Comprehensive review' },
+  { size: 15, label: 'Full practice', description: '15 questions - Complete practice session' },
 ]
 
 interface PackSizeSelectorProps {
