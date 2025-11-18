@@ -69,24 +69,22 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
             onClick={() => router.push('/demo')}
             className={styles.demoButton}
           >
-            <div className={styles.demoContent}>
-              <div className={styles.demoIcon}>🎓</div>
-              <div className={styles.demoInfo}>
-                <h3 className={styles.demoTitle}>데모 시작</h3>
-                <p className={styles.demoDescription}>
-                  가이드 데모로 PLEW 버디 사용법을 배우세요
-                </p>
-              </div>
-            </div>
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202801.svg?alt=media&token=1d860ca6-36fd-4975-aa64-9a5f05359b8d"
+              alt="데모 시작"
+              className={styles.demoImage}
+            />
           </button>
         </div>
       )}
 
       {!isDemoCompleted && (
         <div className={styles.lockNotice}>
-          <p className={styles.lockText}>
-            🔒 연습 팩을 잠금 해제하려면 위의 데모를 완료하세요
-          </p>
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202802.svg?alt=media&token=5a29cc17-c7b6-47dd-bbbd-7fd7b8bbbf29"
+            alt="잠금 메시지"
+            className={styles.lockImage}
+          />
         </div>
       )}
 

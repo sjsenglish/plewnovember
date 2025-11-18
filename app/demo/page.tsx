@@ -46,17 +46,15 @@ export default function Demo() {
             backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e')"
           }}
         >
-          <div className="text-center bg-custom-white p-8 sm:p-12 rounded-3xl shadow-container-lg max-w-md">
-            <div className="text-5xl sm:text-6xl mb-6">🎊</div>
-            <div className="font-body text-xl sm:text-2xl font-semibold text-gray-900 mb-4 tracking-custom">
-              데모 완료!
-            </div>
-            <div className="font-body text-base sm:text-lg text-gray-700 mb-8 tracking-custom leading-relaxed">
-              축하합니다! 이제 실전 문제팩을 만들 수 있습니다.
-            </div>
+          <div className="w-full max-w-3xl flex flex-col items-center">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202803.svg?alt=media&token=ba8ce115-ed4d-47d3-883b-c336b8b83381"
+              alt="데모 완료"
+              className="w-full max-w-2xl mb-8"
+            />
             <a
               href="/pack-maker"
-              className="font-body inline-block px-6 sm:px-8 py-3 bg-custom-purple text-gray-900 rounded-xl hover:bg-purple-300 shadow-container transition-all duration-300 tracking-custom"
+              className="font-heading inline-block px-8 sm:px-12 py-4 sm:py-5 bg-custom-purple text-gray-900 rounded-2xl hover:bg-purple-300 shadow-container-lg transition-all duration-300 tracking-custom text-lg sm:text-xl font-semibold"
             >
               문제팩 만들기
             </a>
