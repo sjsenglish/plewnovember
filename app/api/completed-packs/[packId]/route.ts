@@ -9,10 +9,10 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 // GET: Fetch a specific completed pack with answers
 export async function GET(
   request: NextRequest,
-  { params }: { params: { packId: string } }
+  { params }: { params: Promise<{ packId: string }> }
 ) {
   try {
-    const completedPackId = params.packId
+    const { packId: completedPackId } = await params
 
     // Fetch completed pack details
     const { data: pack, error: packError } = await supabase
