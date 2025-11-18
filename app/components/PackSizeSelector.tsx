@@ -63,58 +63,65 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   return (
     <div className={styles.container}>
       {/* Demo Button Row */}
-      {!isDemoCompleted && (
+      {!isDemoCompleted ? (
         <div className={styles.demoRow}>
           <button
             onClick={() => router.push('/demo')}
             className={styles.demoButton}
           >
-            <div className={styles.demoContent}>
-              <div className={styles.demoIcon}>🎓</div>
-              <div className={styles.demoInfo}>
-                <h3 className={styles.demoTitle}>데모 시작</h3>
-                <p className={styles.demoDescription}>
-                  가이드 데모로 PLEW 버디 사용법을 배우세요
-                </p>
-              </div>
-            </div>
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202801.svg?alt=media&token=1d860ca6-36fd-4975-aa64-9a5f05359b8d"
+              alt="데모 시작"
+              className={styles.demoImage}
+            />
           </button>
+        </div>
+      ) : (
+        <div className={styles.demoRow}>
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202803.svg?alt=media&token=ba8ce115-ed4d-47d3-883b-c336b8b83381"
+            alt="데모 완료"
+            className={styles.demoImage}
+          />
         </div>
       )}
 
+      {/* Locked message between demo and pack options */}
       {!isDemoCompleted && (
         <div className={styles.lockNotice}>
-          <p className={styles.lockText}>
-            🔒 연습 팩을 잠금 해제하려면 위의 데모를 완료하세요
-          </p>
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202802.svg?alt=media&token=5a29cc17-c7b6-47dd-bbbd-7fd7b8bbbf29"
+            alt="잠금 메시지"
+            className={styles.lockImage}
+          />
         </div>
       )}
 
       {/* Row 1: First 3 pack options */}
       <div className={styles.row1}>
-        {packSizes.slice(0, 3).map(({ size, label, description }) => (
-          <button
-            key={size}
-            onClick={() => isDemoCompleted && setSelectedSize(size)}
-            disabled={isCreating || !isDemoCompleted}
-            className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${(isCreating || !isDemoCompleted) ? styles.disabled : ''}`}
-          >
-            <div className={styles.packContent}>
-              <div className={styles.packInfo}>
-                <h3 className={styles.packLabel}>
-                  {label}
-                </h3>
-                <p className={styles.packDescription}>{description}</p>
+          {packSizes.slice(0, 3).map(({ size, label, description }) => (
+            <button
+              key={size}
+              onClick={() => isDemoCompleted && setSelectedSize(size)}
+              disabled={isCreating || !isDemoCompleted}
+              className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${(isCreating || !isDemoCompleted) ? styles.disabled : ''}`}
+            >
+              <div className={styles.packContent}>
+                <div className={styles.packInfo}>
+                  <h3 className={styles.packLabel}>
+                    {label}
+                  </h3>
+                  <p className={styles.packDescription}>{description}</p>
+                </div>
+                <div className={styles.packSize}>
+                  {size}
+                </div>
               </div>
-              <div className={styles.packSize}>
-                {size}
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
+            </button>
+          ))}
+        </div>
 
-      {/* Row 2: 4th pack option and custom size */}
+        {/* Row 2: 4th pack option and custom size */}
       <div className={styles.row2}>
         {/* 4th pack option */}
         {packSizes.slice(3, 4).map(({ size, label, description }) => (

@@ -7,6 +7,7 @@ import AnswerOptions from '@/app/components/AnswerOptions'
 import Navbar from '@/app/components/Navbar'
 import { demoQuestion } from '@/lib/demo-question'
 import styles from '../practice/[packId]/practiceQuestions.module.css'
+import completionStyles from './demoCompletion.module.css'
 
 export default function Demo() {
   const [timer, setTimer] = useState(0)
@@ -38,28 +39,42 @@ export default function Demo() {
 
   if (demoCompleted) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className={completionStyles.completionContainer}>
         <Navbar />
         <div
-          className="flex-1 flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat"
+          className={completionStyles.backgroundWrapper}
           style={{
             backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e')"
           }}
         >
-          <div className="text-center bg-custom-white p-8 sm:p-12 rounded-3xl shadow-container-lg max-w-md">
-            <div className="text-5xl sm:text-6xl mb-6">🎊</div>
-            <div className="font-body text-xl sm:text-2xl font-semibold text-gray-900 mb-4 tracking-custom">
-              데모 완료!
+          <div className={completionStyles.contentWrapper}>
+            <div className={completionStyles.card}>
+              <div className={completionStyles.textSection}>
+                <div className={completionStyles.emoji}>🎉</div>
+                <h1 className={completionStyles.title}>
+                  데모 완료!
+                </h1>
+                <p className={completionStyles.description}>
+                  축하합니다! PLEW 버디 사용법을 성공적으로 배웠습니다.<br/>
+                  이제 실전 문제팩을 만들어 본격적으로 CSAT 독해를 연습해보세요.
+                </p>
+              </div>
+
+              <div className={completionStyles.buttonContainer}>
+                <a
+                  href="/pack-maker"
+                  className={completionStyles.primaryButton}
+                >
+                  문제팩 만들기
+                </a>
+                <a
+                  href="/"
+                  className={completionStyles.secondaryButton}
+                >
+                  홈으로 돌아가기
+                </a>
+              </div>
             </div>
-            <div className="font-body text-base sm:text-lg text-gray-700 mb-8 tracking-custom leading-relaxed">
-              축하합니다! 이제 실전 문제팩을 만들 수 있습니다.
-            </div>
-            <a
-              href="/pack-maker"
-              className="font-body inline-block px-6 sm:px-8 py-3 bg-custom-purple text-gray-900 rounded-xl hover:bg-purple-300 shadow-container transition-all duration-300 tracking-custom"
-            >
-              문제팩 만들기
-            </a>
           </div>
         </div>
       </div>
