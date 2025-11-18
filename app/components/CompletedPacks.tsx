@@ -129,7 +129,6 @@ export default function CompletedPacks() {
     return (
       <div className={styles.container}>
         <div className={styles.errorContainer}>
-          <div className="text-4xl mb-4">😕</div>
           <p className="font-body text-red-600 text-lg tracking-custom">{error}</p>
         </div>
       </div>
@@ -141,7 +140,7 @@ export default function CompletedPacks() {
       {/* User Stats Summary */}
       {userStats && userStats.totalPacksCompleted > 0 && (
         <div className={styles.statsCard}>
-          <h2 className="font-heading text-2xl text-gray-900 mb-4 tracking-custom">📊 내 통계</h2>
+          <h2 className="font-heading text-2xl text-gray-900 mb-4 tracking-custom">내 통계</h2>
           <div className={styles.statsGrid}>
             <div className={styles.statItem}>
               <div className={styles.statValue}>{userStats.totalPacksCompleted}</div>
@@ -166,12 +165,11 @@ export default function CompletedPacks() {
       {/* Completed Packs List */}
       <div className={styles.packsSection}>
         <h2 className="font-heading text-2xl text-gray-900 mb-4 tracking-custom">
-          🎯 완료된 팩 ({completedPacks.length})
+          완료된 팩 ({completedPacks.length})
         </h2>
 
         {completedPacks.length === 0 ? (
           <div className={styles.emptyState}>
-            <div className="text-5xl mb-4">📚</div>
             <p className="font-body text-gray-600 text-lg mb-2 tracking-custom">
               아직 완료된 팩이 없습니다
             </p>
@@ -205,7 +203,7 @@ export default function CompletedPacks() {
                         {pack.score} / {pack.total_questions} 정답
                       </div>
                       <div className={styles.timeText}>
-                        ⏱ {formatTime(pack.time_taken_seconds)}
+                        {formatTime(pack.time_taken_seconds)}
                       </div>
                     </div>
                   </div>

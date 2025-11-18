@@ -73,19 +73,6 @@ export default function Practice() {
     return () => clearInterval(interval)
   }, [])
 
-  // Check if pack is completed whenever questionStates changes
-  useEffect(() => {
-    if (!pack || isCompleted) return
-
-    const answeredQuestions = Object.values(questionStates).filter(
-      state => state.showFeedback
-    ).length
-
-    if (answeredQuestions === pack.questions.length && answeredQuestions > 0) {
-      handlePackCompletion()
-    }
-  }, [questionStates, pack, isCompleted])
-
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
@@ -143,11 +130,12 @@ export default function Practice() {
       })
 
       if (response.ok) {
+        const data = await response.json()
         console.log('Pack completion saved successfully')
-        // Auto-generate new pack after a short delay
-        setTimeout(() => {
-          generateNewPack()
-        }, 2000)
+        // Auto-generate new pack
+        await generateNewPack()
+        // Redirect to pack maker
+        router.push('/pack-maker')
       } else {
         console.error('Failed to save completed pack')
       }
@@ -307,11 +295,10 @@ export default function Practice() {
                     }))
                   }}
                   onNext={() => {
-                    // Move to next question or wrap to first question
-                    setCurrentQuestionIndex((prev) =>
-                      prev < pack.questions.length - 1 ? prev + 1 : 0
-                    )
+                    // Move to next question
+                    setCurrentQuestionIndex((prev) => prev + 1)
                   }}
+                  onFinish={handlePackCompletion}
                 />
               </div>
             </div>
@@ -325,40 +312,6 @@ export default function Practice() {
             </div>
           </div>
         </div>
-
-        {/* Completion Overlay */}
-        {isCompleted && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-custom-white p-8 sm:p-12 rounded-3xl shadow-container-lg max-w-md mx-4">
-              <div className="text-center">
-                <div className="text-6xl mb-6">🎉</div>
-                <h2 className="font-heading text-2xl sm:text-3xl text-gray-900 mb-4 tracking-custom">
-                  팩 완료!
-                </h2>
-                <div className="font-body text-lg text-gray-700 mb-6 tracking-custom">
-                  <p className="mb-2">
-                    점수: {Object.values(questionStates).filter(s => s.isCorrect).length} / {pack.questions.length}
-                  </p>
-                  <p className="mb-2">
-                    소요 시간: {formatTime(timer)}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-4">
-                    {isSaving ? '결과 저장 중...' : '결과가 저장되었습니다'}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    {generatingNewPack ? '새 팩 생성 중...' : '새 팩이 생성되었습니다'}
-                  </p>
-                </div>
-                <button
-                  onClick={() => router.push('/pack-maker')}
-                  className="font-body px-6 sm:px-8 py-3 bg-custom-purple text-gray-900 rounded-xl hover:bg-purple-300 shadow-container transition-all duration-300 tracking-custom"
-                >
-                  팩 메이커로 돌아가기
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
