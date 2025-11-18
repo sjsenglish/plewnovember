@@ -153,7 +153,11 @@ export default function AnswerOptions({
           {isDemo ? (
             (showFeedback || showFinishButton) && <FinishButton onClick={onFinish || (() => {})} />
           ) : (
-            <NextButton onClick={onNext} />
+            showFeedback && questionIndex === totalQuestions - 1 ? (
+              <FinishButton onClick={onFinish || (() => {})} />
+            ) : (
+              showFeedback && <NextButton onClick={onNext} />
+            )
           )}
         </div>
       </div>

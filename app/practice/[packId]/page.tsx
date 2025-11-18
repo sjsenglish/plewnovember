@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import QuestionViewer from '@/app/components/QuestionViewer'
 import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
@@ -12,21 +12,29 @@ interface Pack {
   id: string
   questions: any[]
   size: number
+  level?: number
 }
 
 interface QuestionState {
   selectedAnswer: string
   showFeedback: boolean
+  isCorrect?: boolean
+  answeredAt?: string
 }
 
 export default function Practice() {
   const params = useParams()
+  const router = useRouter()
   const packId = params.packId as string
   const [pack, setPack] = useState<Pack | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [timer, setTimer] = useState(0)
   const [questionStates, setQuestionStates] = useState<Record<number, QuestionState>>({})
+  const [startedAt, setStartedAt] = useState<string | null>(null)
+  const [isCompleted, setIsCompleted] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [generatingNewPack, setGeneratingNewPack] = useState(false)
 
   useEffect(() => {
     const loadPack = () => {
@@ -38,8 +46,11 @@ export default function Practice() {
           setPack({
             id: packData.packId,
             questions: packData.questions,
-            size: packData.size
+            size: packData.size,
+            level: packData.level || 1
           })
+          // Set start time when pack is first loaded
+          setStartedAt(new Date().toISOString())
         } else {
           console.error('Pack not found in localStorage')
         }
@@ -66,6 +77,115 @@ export default function Practice() {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const handlePackCompletion = async () => {
+    if (!pack || !startedAt || isCompleted || isSaving) return
+
+    setIsCompleted(true)
+    setIsSaving(true)
+
+    try {
+      // Get current user
+      const userStr = localStorage.getItem('user')
+      if (!userStr) {
+        console.error('No user found')
+        return
+      }
+      const user = JSON.parse(userStr)
+
+      // Calculate score
+      const score = Object.values(questionStates).filter(state => state.isCorrect).length
+
+      // Prepare answers data
+      const answers = pack.questions.map((question, index) => {
+        const state = questionStates[index]
+        return {
+          questionObjectId: question.objectID,
+          questionText: question.questionText,
+          selectedAnswer: state?.selectedAnswer || '',
+          correctAnswer: question.correctAnswer,
+          isCorrect: state?.isCorrect || false,
+          answeredAt: state?.answeredAt || new Date().toISOString()
+        }
+      })
+
+      // Save completed pack to backend
+      const response = await fetch('/api/completed-packs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userEmail: user.email,
+          packId: pack.id,
+          packSize: pack.size,
+          level: pack.level || 1,
+          score,
+          totalQuestions: pack.questions.length,
+          timeTakenSeconds: timer,
+          startedAt,
+          answers
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        console.log('Pack completion saved successfully')
+        // Auto-generate new pack
+        await generateNewPack()
+        // Redirect to pack maker
+        router.push('/pack-maker')
+      } else {
+        console.error('Failed to save completed pack')
+      }
+    } catch (error) {
+      console.error('Error saving completed pack:', error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const generateNewPack = async () => {
+    if (!pack || generatingNewPack) return
+
+    setGeneratingNewPack(true)
+
+    try {
+      // Get current user
+      const userStr = localStorage.getItem('user')
+      if (!userStr) {
+        console.error('No user found')
+        return
+      }
+      const user = JSON.parse(userStr)
+
+      // Create new pack with same size and level
+      const response = await fetch('/api/packs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          size: pack.size,
+          userEmail: user.email,
+          level: pack.level || 1
+        })
+      })
+
+      if (response.ok) {
+        const newPackData = await response.json()
+        // Store new pack in localStorage
+        localStorage.setItem(`pack-${newPackData.packId}`, JSON.stringify(newPackData))
+        console.log('New pack generated:', newPackData.packId)
+      } else {
+        console.error('Failed to generate new pack')
+      }
+    } catch (error) {
+      console.error('Error generating new pack:', error)
+    } finally {
+      setGeneratingNewPack(false)
+    }
   }
 
   if (loading) {
@@ -164,14 +284,21 @@ export default function Practice() {
                     }))
                   }}
                   onAnswerSubmit={(isCorrect) => {
-                    console.log('Answer submitted, correct:', isCorrect)
+                    // Update question state with correctness and timestamp
+                    setQuestionStates(prev => ({
+                      ...prev,
+                      [currentQuestionIndex]: {
+                        ...prev[currentQuestionIndex],
+                        isCorrect,
+                        answeredAt: new Date().toISOString()
+                      }
+                    }))
                   }}
                   onNext={() => {
-                    // Move to next question or wrap to first question
-                    setCurrentQuestionIndex((prev) =>
-                      prev < pack.questions.length - 1 ? prev + 1 : 0
-                    )
+                    // Move to next question
+                    setCurrentQuestionIndex((prev) => prev + 1)
                   }}
+                  onFinish={handlePackCompletion}
                 />
               </div>
             </div>
