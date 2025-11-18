@@ -17,8 +17,8 @@ const figtree = Figtree({
 })
 
 export const metadata: Metadata = {
-  title: 'PLEW - Reading Comprehension Practice',
-  description: 'Master CSAT English reading comprehension with AI-guided PLEW method',
+  title: 'PLEW - 독해 연습',
+  description: 'AI 가이드 PLEW 방법으로 수능 영어 독해 마스터하기',
 }
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body className={`${madimiOne.variable} ${figtree.variable} font-figtree antialiased`}>
         <PasswordProtection>{children}</PasswordProtection>
       </body>

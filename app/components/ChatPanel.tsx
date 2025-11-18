@@ -129,7 +129,7 @@ export default function ChatPanel({ question, packId, isDemo = false, onDemoComp
       console.error('Error sending message:', error)
       const errorMessage: Message = {
         id: Date.now().toString(),
-        content: "Sorry, I'm having trouble responding right now. Please try again.",
+        content: "죄송합니다. 지금 응답하는 데 문제가 있습니다. 다시 시도해주세요.",
         role: 'assistant',
         timestamp: new Date().toISOString()
       }
@@ -207,7 +207,7 @@ export default function ChatPanel({ question, packId, isDemo = false, onDemoComp
             disabled={!input.trim() || isLoading}
             className={styles.sendButton}
           >
-            Send
+            전송
           </button>
         </div>
       </div>

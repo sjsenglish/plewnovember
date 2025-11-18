@@ -28,7 +28,7 @@ export default function QuestionViewer({
   if (!question) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="text-gray-500">No question selected</div>
+        <div className="text-gray-500">선택된 문제가 없습니다</div>
       </div>
     )
   }

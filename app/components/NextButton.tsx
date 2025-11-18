@@ -13,7 +13,7 @@ export default function NextButton({ onClick }: NextButtonProps) {
       className={styles.nextButton}
       type="button"
     >
-      Next →
+      다음 →
     </button>
   )
 }

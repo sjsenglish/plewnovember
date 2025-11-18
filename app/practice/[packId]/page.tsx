@@ -80,7 +80,7 @@ export default function Practice() {
         >
           <div className="text-center bg-custom-white p-8 sm:p-12 rounded-3xl shadow-container-lg max-w-md">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-6"></div>
-            <div className="font-body text-lg sm:text-xl text-gray-700 tracking-custom">Loading your practice pack...</div>
+            <div className="font-body text-lg sm:text-xl text-gray-700 tracking-custom">연습 팩을 불러오는 중...</div>
           </div>
         </div>
       </div>
@@ -99,12 +99,12 @@ export default function Practice() {
         >
           <div className="text-center bg-custom-white p-8 sm:p-12 rounded-3xl shadow-container-lg max-w-md">
             <div className="text-5xl sm:text-6xl mb-6">📚</div>
-            <div className="font-body text-lg sm:text-xl text-red-600 mb-8 tracking-custom">Pack not found or empty</div>
+            <div className="font-body text-lg sm:text-xl text-red-600 mb-8 tracking-custom">팩을 찾을 수 없거나 비어 있습니다</div>
             <a
               href="/pack-maker"
               className="font-body inline-block px-6 sm:px-8 py-3 bg-custom-purple text-gray-900 rounded-xl hover:bg-purple-300 shadow-container transition-all duration-300 tracking-custom"
             >
-              Create New Pack
+              새 팩 만들기
             </a>
           </div>
         </div>

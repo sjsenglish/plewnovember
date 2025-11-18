@@ -15,7 +15,7 @@ export default function FinishButton({ onClick, disabled = false }: FinishButton
       className={styles.finishButton}
       type="button"
     >
-      Finish
+      완료
     </button>
   )
 }
