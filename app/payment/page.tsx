@@ -7,16 +7,45 @@ import styles from './payment.module.css'
 
 export default function Payment() {
   const [isProcessing, setIsProcessing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubscribe = async () => {
     setIsProcessing(true)
-    // TODO: Add Stripe integration here
-    // const STRIPE_PRICE_ID = 'price_xxxxxxxxxxxxx' // Add your Stripe price ID here
+    setError(null)
 
-    setTimeout(() => {
-      alert('Stripe integration coming soon! Add your Stripe price ID to complete setup.')
+    try {
+      const priceId = process.env.NEXT_PUBLIC_STRIPE_PLUS_MONTHLY_PRICE_ID
+
+      if (!priceId) {
+        throw new Error('Stripe price ID not configured')
+      }
+
+      // Create checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ priceId }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session')
+      }
+
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        throw new Error('No checkout URL received')
+      }
+    } catch (err: any) {
+      console.error('Subscription error:', err)
+      setError(err.message || 'Failed to start checkout. Please try again.')
       setIsProcessing(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -72,6 +101,12 @@ export default function Payment() {
               >
                 {isProcessing ? 'Processing...' : 'Subscribe Now'}
               </button>
+
+              {error && (
+                <p className={styles.error}>
+                  {error}
+                </p>
+              )}
 
               <p className={styles.disclaimer}>
                 Cancel anytime. No commitments.
