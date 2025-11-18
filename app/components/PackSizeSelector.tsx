@@ -33,12 +33,24 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
     setIsCreating(true)
 
     try {
+      // Get current user
+      const userStr = localStorage.getItem('user')
+      let userEmail = null
+      if (userStr) {
+        const user = JSON.parse(userStr)
+        userEmail = user.email
+      }
+
       const response = await fetch('/api/packs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ size: selectedSize, level })
+        body: JSON.stringify({
+          size: selectedSize,
+          level,
+          userEmail
+        })
       })
 
       if (!response.ok) {

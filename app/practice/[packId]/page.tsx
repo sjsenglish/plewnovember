@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import QuestionViewer from '@/app/components/QuestionViewer'
 import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
@@ -12,21 +12,29 @@ interface Pack {
   id: string
   questions: any[]
   size: number
+  level?: number
 }
 
 interface QuestionState {
   selectedAnswer: string
   showFeedback: boolean
+  isCorrect?: boolean
+  answeredAt?: string
 }
 
 export default function Practice() {
   const params = useParams()
+  const router = useRouter()
   const packId = params.packId as string
   const [pack, setPack] = useState<Pack | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [timer, setTimer] = useState(0)
   const [questionStates, setQuestionStates] = useState<Record<number, QuestionState>>({})
+  const [startedAt, setStartedAt] = useState<string | null>(null)
+  const [isCompleted, setIsCompleted] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [generatingNewPack, setGeneratingNewPack] = useState(false)
 
   useEffect(() => {
     const loadPack = () => {
@@ -38,8 +46,11 @@ export default function Practice() {
           setPack({
             id: packData.packId,
             questions: packData.questions,
-            size: packData.size
+            size: packData.size,
+            level: packData.level || 1
           })
+          // Set start time when pack is first loaded
+          setStartedAt(new Date().toISOString())
         } else {
           console.error('Pack not found in localStorage')
         }
@@ -62,10 +73,131 @@ export default function Practice() {
     return () => clearInterval(interval)
   }, [])
 
+  // Check if pack is completed whenever questionStates changes
+  useEffect(() => {
+    if (!pack || isCompleted) return
+
+    const answeredQuestions = Object.values(questionStates).filter(
+      state => state.showFeedback
+    ).length
+
+    if (answeredQuestions === pack.questions.length && answeredQuestions > 0) {
+      handlePackCompletion()
+    }
+  }, [questionStates, pack, isCompleted])
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const handlePackCompletion = async () => {
+    if (!pack || !startedAt || isCompleted || isSaving) return
+
+    setIsCompleted(true)
+    setIsSaving(true)
+
+    try {
+      // Get current user
+      const userStr = localStorage.getItem('user')
+      if (!userStr) {
+        console.error('No user found')
+        return
+      }
+      const user = JSON.parse(userStr)
+
+      // Calculate score
+      const score = Object.values(questionStates).filter(state => state.isCorrect).length
+
+      // Prepare answers data
+      const answers = pack.questions.map((question, index) => {
+        const state = questionStates[index]
+        return {
+          questionObjectId: question.objectID,
+          questionText: question.questionText,
+          selectedAnswer: state?.selectedAnswer || '',
+          correctAnswer: question.correctAnswer,
+          isCorrect: state?.isCorrect || false,
+          answeredAt: state?.answeredAt || new Date().toISOString()
+        }
+      })
+
+      // Save completed pack to backend
+      const response = await fetch('/api/completed-packs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userEmail: user.email,
+          packId: pack.id,
+          packSize: pack.size,
+          level: pack.level || 1,
+          score,
+          totalQuestions: pack.questions.length,
+          timeTakenSeconds: timer,
+          startedAt,
+          answers
+        })
+      })
+
+      if (response.ok) {
+        console.log('Pack completion saved successfully')
+        // Auto-generate new pack after a short delay
+        setTimeout(() => {
+          generateNewPack()
+        }, 2000)
+      } else {
+        console.error('Failed to save completed pack')
+      }
+    } catch (error) {
+      console.error('Error saving completed pack:', error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const generateNewPack = async () => {
+    if (!pack || generatingNewPack) return
+
+    setGeneratingNewPack(true)
+
+    try {
+      // Get current user
+      const userStr = localStorage.getItem('user')
+      if (!userStr) {
+        console.error('No user found')
+        return
+      }
+      const user = JSON.parse(userStr)
+
+      // Create new pack with same size and level
+      const response = await fetch('/api/packs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          size: pack.size,
+          userEmail: user.email,
+          level: pack.level || 1
+        })
+      })
+
+      if (response.ok) {
+        const newPackData = await response.json()
+        // Store new pack in localStorage
+        localStorage.setItem(`pack-${newPackData.packId}`, JSON.stringify(newPackData))
+        console.log('New pack generated:', newPackData.packId)
+      } else {
+        console.error('Failed to generate new pack')
+      }
+    } catch (error) {
+      console.error('Error generating new pack:', error)
+    } finally {
+      setGeneratingNewPack(false)
+    }
   }
 
   if (loading) {
@@ -164,7 +296,15 @@ export default function Practice() {
                     }))
                   }}
                   onAnswerSubmit={(isCorrect) => {
-                    console.log('Answer submitted, correct:', isCorrect)
+                    // Update question state with correctness and timestamp
+                    setQuestionStates(prev => ({
+                      ...prev,
+                      [currentQuestionIndex]: {
+                        ...prev[currentQuestionIndex],
+                        isCorrect,
+                        answeredAt: new Date().toISOString()
+                      }
+                    }))
                   }}
                   onNext={() => {
                     // Move to next question or wrap to first question
@@ -185,6 +325,40 @@ export default function Practice() {
             </div>
           </div>
         </div>
+
+        {/* Completion Overlay */}
+        {isCompleted && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-custom-white p-8 sm:p-12 rounded-3xl shadow-container-lg max-w-md mx-4">
+              <div className="text-center">
+                <div className="text-6xl mb-6">🎉</div>
+                <h2 className="font-heading text-2xl sm:text-3xl text-gray-900 mb-4 tracking-custom">
+                  팩 완료!
+                </h2>
+                <div className="font-body text-lg text-gray-700 mb-6 tracking-custom">
+                  <p className="mb-2">
+                    점수: {Object.values(questionStates).filter(s => s.isCorrect).length} / {pack.questions.length}
+                  </p>
+                  <p className="mb-2">
+                    소요 시간: {formatTime(timer)}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-4">
+                    {isSaving ? '결과 저장 중...' : '결과가 저장되었습니다'}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {generatingNewPack ? '새 팩 생성 중...' : '새 팩이 생성되었습니다'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => router.push('/pack-maker')}
+                  className="font-body px-6 sm:px-8 py-3 bg-custom-purple text-gray-900 rounded-xl hover:bg-purple-300 shadow-container transition-all duration-300 tracking-custom"
+                >
+                  팩 메이커로 돌아가기
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
