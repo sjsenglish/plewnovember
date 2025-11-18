@@ -15,37 +15,46 @@
   text-align: center;
 }
 
-.statsCard {
-  background: var(--custom-white);
-  border-radius: 1.5rem;
-  padding: 2rem;
+.section {
   margin-bottom: 2rem;
-  box-shadow: var(--shadow-container);
+}
+
+.sectionTitle {
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
+  font-size: 1.5rem;
+  color: #171717;
+  margin: 0 0 1rem 0;
+  letter-spacing: 0.04em;
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
-.statItem {
+.statCard {
+  background: linear-gradient(135deg, var(--color-cyan) 0%, var(--color-purple) 100%);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
   text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .statValue {
-  font-family: var(--font-heading);
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 2rem;
-  font-weight: bold;
-  color: var(--custom-purple);
-  margin-bottom: 0.5rem;
+  color: #171717;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.04em;
 }
 
 .statLabel {
-  font-family: var(--font-body);
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
-  color: var(--text-secondary);
-  letter-spacing: var(--tracking-custom);
+  color: #171717;
+  margin: 0;
+  letter-spacing: 0.04em;
 }
 
 .packsSection {
@@ -115,11 +124,28 @@
   width: fit-content;
 }
 
+.packDateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.packDateLabel {
+  font-family: var(--font-body);
+  font-size: 0.625rem;
+  color: var(--text-secondary);
+  letter-spacing: var(--tracking-custom);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
 .packDate {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   letter-spacing: var(--tracking-custom);
+  font-weight: 500;
 }
 
 .packStats {
@@ -201,8 +227,12 @@
     padding: 1rem;
   }
 
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+
   .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
   .packsList {

@@ -93,25 +93,11 @@ export default function CompletedPacks() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
-    const diffHours = Math.floor(diffMs / 3600000)
-    const diffDays = Math.floor(diffMs / 86400000)
-
-    if (diffMins < 60) {
-      return `${diffMins}분 전`
-    } else if (diffHours < 24) {
-      return `${diffHours}시간 전`
-    } else if (diffDays < 7) {
-      return `${diffDays}일 전`
-    } else {
-      return date.toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      })
-    }
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
   }
 
   if (loading) {
@@ -139,24 +125,20 @@ export default function CompletedPacks() {
     <div className={styles.container}>
       {/* User Stats Summary */}
       {userStats && userStats.totalPacksCompleted > 0 && (
-        <div className={styles.statsCard}>
-          <h2 className="font-heading text-2xl text-gray-900 mb-4 tracking-custom">내 통계</h2>
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Progress Stats</h2>
           <div className={styles.statsGrid}>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>{userStats.totalPacksCompleted}</div>
-              <div className={styles.statLabel}>완료된 팩</div>
+            <div className={styles.statCard}>
+              <p className={styles.statValue}>{userStats.totalPacksCompleted}</p>
+              <p className={styles.statLabel}>Packs Completed</p>
             </div>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>{userStats.totalQuestionsAnswered}</div>
-              <div className={styles.statLabel}>총 문제 수</div>
+            <div className={styles.statCard}>
+              <p className={styles.statValue}>{userStats.totalQuestionsAnswered}</p>
+              <p className={styles.statLabel}>Total Questions</p>
             </div>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>{userStats.averageScore.toFixed(1)}%</div>
-              <div className={styles.statLabel}>평균 점수</div>
-            </div>
-            <div className={styles.statItem}>
-              <div className={styles.statValue}>{formatTime(userStats.totalTimeSpentSeconds)}</div>
-              <div className={styles.statLabel}>총 학습 시간</div>
+            <div className={styles.statCard}>
+              <p className={styles.statValue}>{userStats.averageScore.toFixed(1)}%</p>
+              <p className={styles.statLabel}>Accuracy</p>
             </div>
           </div>
         </div>
@@ -186,8 +168,11 @@ export default function CompletedPacks() {
                     <span className={styles.packSize}>{pack.pack_size}문제</span>
                     <span className={styles.levelBadge}>레벨 {pack.level}</span>
                   </div>
-                  <div className={styles.packDate}>
-                    {formatDate(pack.completed_at)}
+                  <div className={styles.packDateContainer}>
+                    <div className={styles.packDateLabel}>Date Test Taken</div>
+                    <div className={styles.packDate}>
+                      {formatDate(pack.completed_at)}
+                    </div>
                   </div>
                 </div>
 
