@@ -46,6 +46,20 @@ export default function Navbar() {
             >
               Subscription
             </Link>
+            <Link
+              href="/about"
+              className={styles.menuItem}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Who We Are
+            </Link>
+            <Link
+              href="/contact"
+              className={styles.menuItem}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contact Us
+            </Link>
           </div>
         </div>
       )}
