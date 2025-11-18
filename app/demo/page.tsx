@@ -41,23 +41,39 @@ export default function Demo() {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <div
-          className="flex-1 flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat"
+          className="flex-1 flex items-center justify-center p-4 sm:p-8 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e')"
           }}
         >
-          <div className="w-full max-w-3xl flex flex-col items-center">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202803.svg?alt=media&token=ba8ce115-ed4d-47d3-883b-c336b8b83381"
-              alt="데모 완료"
-              className="w-full max-w-2xl mb-8"
-            />
-            <a
-              href="/pack-maker"
-              className="font-heading inline-block px-8 sm:px-12 py-4 sm:py-5 bg-custom-purple text-gray-900 rounded-2xl hover:bg-purple-300 shadow-container-lg transition-all duration-300 tracking-custom text-lg sm:text-xl font-semibold"
-            >
-              문제팩 만들기
-            </a>
+          <div className="w-full max-w-4xl">
+            <div className="bg-custom-white rounded-3xl shadow-container-lg p-6 sm:p-10 md:p-12">
+              <div className="text-center mb-8 sm:mb-10">
+                <div className="text-6xl sm:text-7xl mb-6">🎉</div>
+                <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-custom">
+                  데모 완료!
+                </h1>
+                <p className="font-body text-lg sm:text-xl text-gray-700 tracking-custom leading-relaxed max-w-2xl mx-auto">
+                  축하합니다! PLEW 버디 사용법을 성공적으로 배웠습니다.<br/>
+                  이제 실전 문제팩을 만들어 본격적으로 CSAT 독해를 연습해보세요.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a
+                  href="/pack-maker"
+                  className="font-heading w-full sm:w-auto inline-block px-10 sm:px-14 py-4 sm:py-5 bg-custom-purple text-gray-900 rounded-2xl hover:bg-purple-300 shadow-container-lg hover:shadow-container-xl transition-all duration-300 tracking-custom text-lg sm:text-xl font-semibold text-center"
+                >
+                  문제팩 만들기
+                </a>
+                <a
+                  href="/"
+                  className="font-body w-full sm:w-auto inline-block px-10 sm:px-14 py-4 sm:py-5 bg-gray-100 text-gray-700 rounded-2xl hover:bg-gray-200 shadow-container transition-all duration-300 tracking-custom text-lg sm:text-xl text-center"
+                >
+                  홈으로 돌아가기
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
