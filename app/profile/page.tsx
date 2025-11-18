@@ -1,10 +1,31 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Navbar from '@/app/components/Navbar'
 import BackButton from '@/app/components/BackButton'
+import { useAuth } from '../context/AuthContext'
 import styles from './profile.module.css'
 
 export default function Profile() {
+  const router = useRouter()
+  const { user, isAuthenticated, logout } = useAuth()
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login')
+    }
+  }, [isAuthenticated, router])
+
+  const handleLogout = () => {
+    logout()
+    router.push('/')
+  }
+
+  if (!isAuthenticated || !user) {
+    return null
+  }
+
   return (
     <div className={styles.container}>
       <Navbar />
@@ -17,12 +38,12 @@ export default function Profile() {
             <h2 className={styles.sectionTitle}>Account Information</h2>
             <div className={styles.infoGrid}>
               <div className={styles.infoItem}>
-                <label className={styles.label}>Email</label>
-                <p className={styles.value}>Coming soon</p>
+                <label className={styles.label}>Name</label>
+                <p className={styles.value}>{user.name}</p>
               </div>
               <div className={styles.infoItem}>
-                <label className={styles.label}>Member Since</label>
-                <p className={styles.value}>Coming soon</p>
+                <label className={styles.label}>Email</label>
+                <p className={styles.value}>{user.email}</p>
               </div>
             </div>
           </div>
@@ -62,6 +83,10 @@ export default function Profile() {
               </button>
             </div>
           </div>
+
+          <button onClick={handleLogout} className={styles.logoutButton}>
+            Log Out
+          </button>
         </div>
       </div>
     </div>

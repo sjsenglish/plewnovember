@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useAuth } from '../context/AuthContext'
 import styles from './Navbar.module.css'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { user, isAuthenticated } = useAuth()
 
   return (
     <nav className={styles.navbar}>
@@ -15,24 +17,36 @@ export default function Navbar() {
           PLEW
         </Link>
 
-        {/* Burger Menu - Top Right */}
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className={styles.burgerButton}
-          aria-label="Menu"
-          type="button"
-        >
-          <span className={styles.burgerLine}></span>
-          <span className={styles.burgerLine}></span>
-          <span className={styles.burgerLine}></span>
-        </button>
+        <div className={styles.rightSection}>
+          {/* Login/Signup Button or User Info */}
+          {!isAuthenticated ? (
+            <Link href="/login" className={styles.authButton}>
+              Log In / Sign Up
+            </Link>
+          ) : (
+            <Link href="/profile" className={styles.userButton}>
+              {user?.name || 'Profile'}
+            </Link>
+          )}
+
+          {/* Burger Menu - Top Right */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={styles.burgerButton}
+            aria-label="Menu"
+            type="button"
+          >
+            <span className={styles.burgerLine}></span>
+            <span className={styles.burgerLine}></span>
+            <span className={styles.burgerLine}></span>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
         <div className={styles.menuDropdown}>
           <div className={styles.menuContent}>
-            <p className={styles.menuText}>메뉴 항목이 곧 제공됩니다...</p>
             <Link
               href="/profile"
               className={styles.menuItem}
