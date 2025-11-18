@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Madimi_One, Figtree } from 'next/font/google'
 import './globals.css'
+import { Providers } from './components/Providers'
 
 const madimiOne = Madimi_One({
   weight: '400',
@@ -28,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${madimiOne.variable} ${figtree.variable} font-figtree antialiased`}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

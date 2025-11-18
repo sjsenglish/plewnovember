@@ -150,6 +150,29 @@
   transform: translateX(5px);
 }
 
+.logoutButton {
+  width: 100%;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+}
+
+.logoutButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px -1px rgba(239, 68, 68, 0.4);
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
 @media (max-width: 768px) {
   .profileCard {
     padding: 1.5rem;
