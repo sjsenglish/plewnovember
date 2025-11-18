@@ -1,0 +1,212 @@
+.container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-y: auto;
+}
+
+.contactCard {
+  position: relative;
+  z-index: 10;
+  max-width: 700px;
+  width: 100%;
+  background: rgba(249, 249, 255, 0.95);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
+}
+
+.title {
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
+  font-size: 2.5rem;
+  color: #171717;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.intro {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.introText {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  color: #171717;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.input,
+.textarea {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  color: #171717;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e5e5;
+  border-radius: 0.5rem;
+  background: white;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-purple);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.successMessage {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.1);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.errorMessage {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.1);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--color-cyan) 0%, var(--color-purple) 100%);
+  border: none;
+  border-radius: 0.5rem;
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
+  font-size: 1.125rem;
+  color: #171717;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.contactInfo {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.contactInfoTitle {
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
+  font-size: 1.25rem;
+  color: #171717;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.contactMethods {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactMethod {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.contactIcon {
+  font-size: 1.5rem;
+}
+
+.contactText {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  color: #171717;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 768px) {
+  .contactCard {
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .contactMethod {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+}

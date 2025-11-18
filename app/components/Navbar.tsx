@@ -33,6 +33,34 @@ export default function Navbar() {
         <div className={styles.menuDropdown}>
           <div className={styles.menuContent}>
             <p className={styles.menuText}>메뉴 항목이 곧 제공됩니다...</p>
+            <Link
+              href="/profile"
+              className={styles.menuItem}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Profile
+            </Link>
+            <Link
+              href="/payment"
+              className={styles.menuItem}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Subscription
+            </Link>
+            <Link
+              href="/about"
+              className={styles.menuItem}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Who We Are
+            </Link>
+            <Link
+              href="/contact"
+              className={styles.menuItem}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contact Us
+            </Link>
           </div>
         </div>
       )}
