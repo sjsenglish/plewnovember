@@ -6,6 +6,7 @@ import QuestionViewer from '@/app/components/QuestionViewer'
 import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
 import Navbar from '@/app/components/Navbar'
+import { useAuth } from '@/app/context/AuthContext' // Import AuthContext
 import styles from './practiceQuestions.module.css'
 
 interface Pack {
@@ -26,6 +27,8 @@ export default function Practice() {
   const params = useParams()
   const router = useRouter()
   const packId = params.packId as string
+  const { user } = useAuth() // Get real user from context
+
   const [pack, setPack] = useState<Pack | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -35,16 +38,6 @@ export default function Practice() {
   const [isCompleted, setIsCompleted] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [generatingNewPack, setGeneratingNewPack] = useState(false)
-  const [userEmail, setUserEmail] = useState<string | null>(null)
-
-  // Get user email on mount
-  useEffect(() => {
-    const userStr = localStorage.getItem('user')
-    if (userStr) {
-      const user = JSON.parse(userStr)
-      setUserEmail(user.email)
-    }
-  }, [])
 
   useEffect(() => {
     const loadPack = async () => {
@@ -114,18 +107,18 @@ export default function Practice() {
   const handlePackCompletion = async () => {
     if (!pack || !startedAt || isCompleted || isSaving) return
 
+    // Check if user is logged in using context, not localStorage
+    if (!user || !user.email) {
+      console.error('No authenticated user found')
+      alert('로그인이 필요합니다.')
+      router.push('/login')
+      return
+    }
+
     setIsCompleted(true)
     setIsSaving(true)
 
     try {
-      // Get current user
-      const userStr = localStorage.getItem('user')
-      if (!userStr) {
-        console.error('No user found')
-        return
-      }
-      const user = JSON.parse(userStr)
-
       // Calculate score
       const score = Object.values(questionStates).filter(state => state.isCorrect).length
 
@@ -149,7 +142,7 @@ export default function Practice() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userEmail: user.email,
+          userEmail: user.email, // Use the real email from context
           packId: pack.id,
           packSize: pack.size,
           level: pack.level || 1,
@@ -169,29 +162,25 @@ export default function Practice() {
         // Redirect to pack maker
         router.push('/pack-maker')
       } else {
-        console.error('Failed to save completed pack')
+        const errorData = await response.json()
+        console.error('Failed to save completed pack:', errorData)
+        alert(`Error: ${errorData.error || 'Failed to save'}`)
+        setIsSaving(false) // Allow retry if it failed
+        setIsCompleted(false)
       }
     } catch (error) {
       console.error('Error saving completed pack:', error)
-    } finally {
       setIsSaving(false)
+      setIsCompleted(false)
     }
   }
 
   const generateNewPack = async () => {
-    if (!pack || generatingNewPack) return
+    if (!pack || generatingNewPack || !user) return
 
     setGeneratingNewPack(true)
 
     try {
-      // Get current user
-      const userStr = localStorage.getItem('user')
-      if (!userStr) {
-        console.error('No user found')
-        return
-      }
-      const user = JSON.parse(userStr)
-
       // Create new pack with same size and level
       const response = await fetch('/api/packs', {
         method: 'POST',
@@ -200,7 +189,7 @@ export default function Practice() {
         },
         body: JSON.stringify({
           size: pack.size,
-          userEmail: user.email,
+          userEmail: user.email, // Use real email
           level: pack.level || 1
         })
       })
@@ -340,7 +329,7 @@ export default function Practice() {
               <ChatPanel
                 question={currentQuestion}
                 packId={packId}
-                userEmail={userEmail || undefined}
+                userEmail={user?.email || undefined}
               />
             </div>
           </div>
