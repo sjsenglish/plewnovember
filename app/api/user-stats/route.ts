@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-const supabase = createClient(supabaseUrl, supabaseKey)
+import { getAuthenticatedUser, verifyUserOwnership } from '@/lib/auth-helpers'
+import { createClient } from '@/lib/supabase/server'
+import { emailSchema } from '@/lib/validation-schemas'
 
 // GET: Fetch aggregate statistics for a user
 export async function GET(request: NextRequest) {
   try {
+    // Verify user is authenticated (middleware handles this, but double-check)
+    const user = await getAuthenticatedUser()
+    if (!user || !user.email) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please log in' },
+        { status: 401 }
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const userEmail = searchParams.get('userEmail')
 
@@ -19,16 +25,36 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Validate email format
+    const emailValidation = emailSchema.safeParse(userEmail)
+    if (!emailValidation.success) {
+      return NextResponse.json(
+        { error: 'Invalid email format', details: emailValidation.error.issues },
+        { status: 400 }
+      )
+    }
+
+    // Verify user can only access their own stats
+    if (user.email !== emailValidation.data) {
+      return NextResponse.json(
+        { error: 'Forbidden - You can only access your own statistics' },
+        { status: 403 }
+      )
+    }
+
+    // Get Supabase client with user context (respects RLS)
+    const supabase = await createClient()
+
     // Fetch user stats using the database function
     const { data: stats, error } = await supabase
       .rpc('get_user_stats', {
-        p_user_email: userEmail
+        p_user_email: emailValidation.data
       })
 
     if (error) {
       console.error('Error fetching user stats:', error)
       return NextResponse.json(
-        { error: 'Failed to fetch user stats', details: error },
+        { error: 'Failed to fetch user stats' },
         { status: 500 }
       )
     }

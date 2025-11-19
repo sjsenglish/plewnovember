@@ -6,9 +6,13 @@ export async function POST(request: NextRequest) {
   try {
     const { size, userEmail, level = 1, isDemo = false } = await request.json()
 
-    if (!size || size < 1 || size > 100) {
+    const body = await request.json()
+
+    // Validate input
+    const result = packCreationSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Invalid pack size. Must be between 1 and 100.' },
+        { error: 'Invalid input', details: result.error.issues },
         { status: 400 }
       )
     }

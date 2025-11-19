@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 
-const CORRECT_PASSWORD = 'SUNNY2025'
 const PASSWORD_KEY = 'site-access-token'
 
 export default function PasswordProtection({ children }: { children: React.ReactNode }) {
@@ -10,26 +9,47 @@ export default function PasswordProtection({ children }: { children: React.React
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     // Check if user has already authenticated in this session
     const token = sessionStorage.getItem(PASSWORD_KEY)
-    if (token === CORRECT_PASSWORD) {
+    if (token === 'authenticated') {
       setIsAuthenticated(true)
     }
     setIsLoading(false)
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
+    setError('')
 
-    if (password === CORRECT_PASSWORD) {
-      sessionStorage.setItem(PASSWORD_KEY, password)
-      setIsAuthenticated(true)
-      setError('')
-    } else {
-      setError('비밀번호가 틀렸습니다. 다시 시도해주세요.')
+    try {
+      // Verify password with server
+      const response = await fetch('/api/verify-site-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.valid) {
+        sessionStorage.setItem(PASSWORD_KEY, 'authenticated')
+        setIsAuthenticated(true)
+        setError('')
+      } else {
+        setError('비밀번호가 틀렸습니다. 다시 시도해주세요.')
+        setPassword('')
+      }
+    } catch (err) {
+      setError('오류가 발생했습니다. 다시 시도해주세요.')
       setPassword('')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -84,9 +104,10 @@ export default function PasswordProtection({ children }: { children: React.React
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                사이트 접속
+                {isSubmitting ? '확인 중...' : '사이트 접속'}
               </button>
             </form>
 

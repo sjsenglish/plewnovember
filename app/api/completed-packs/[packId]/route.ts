@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-const supabase = createClient(supabaseUrl, supabaseKey)
+import { getAuthenticatedUser } from '@/lib/auth-helpers'
+import { createClient } from '@/lib/supabase/server'
 
 // GET: Fetch a specific completed pack with answers
 export async function GET(
@@ -12,19 +8,48 @@ export async function GET(
   { params }: { params: Promise<{ packId: string }> }
 ) {
   try {
+    // Verify user is authenticated
+    const user = await getAuthenticatedUser()
+    if (!user || !user.email) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please log in' },
+        { status: 401 }
+      )
+    }
+
     const { packId: completedPackId } = await params
+
+    // Validate packId is a number
+    const packIdNum = parseInt(completedPackId)
+    if (isNaN(packIdNum)) {
+      return NextResponse.json(
+        { error: 'Invalid pack ID' },
+        { status: 400 }
+      )
+    }
+
+    // Get Supabase client with user context
+    const supabase = await createClient()
 
     // Fetch completed pack details
     const { data: pack, error: packError } = await supabase
       .from('completed_packs')
       .select('*')
-      .eq('id', completedPackId)
+      .eq('id', packIdNum)
       .single()
 
     if (packError || !pack) {
       return NextResponse.json(
         { error: 'Completed pack not found' },
         { status: 404 }
+      )
+    }
+
+    // Verify user owns this completed pack
+    if (pack.user_email !== user.email) {
+      return NextResponse.json(
+        { error: 'Forbidden - You can only access your own completed packs' },
+        { status: 403 }
       )
     }
 

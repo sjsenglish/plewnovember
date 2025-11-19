@@ -6,6 +6,10 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 const supabase = createClient(supabaseUrl, supabaseKey)
+import { getAuthenticatedUser } from '@/lib/auth-helpers'
+import { createClient } from '@/lib/supabase/server'
+import { completedPackSchema, emailSchema } from '@/lib/validation-schemas'
+import { z } from 'zod'
 
 interface UserAnswer {
   questionObjectId: string
@@ -32,13 +36,50 @@ interface SaveCompletedPackRequest {
 // POST: Save a completed pack
 export async function POST(request: NextRequest) {
   try {
+    // Verify user is authenticated
+    const user = await getAuthenticatedUser()
+    if (!user || !user.email) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please log in' },
+        { status: 401 }
+      )
+    }
+
     const body: SaveCompletedPackRequest = await request.json()
+
+    // Validate input with expanded schema
+    const validationSchema = z.object({
+      userEmail: emailSchema,
+      packId: z.string().min(1).max(255),
+      packSize: z.number().int().min(1).max(100),
+      level: z.number().int().min(1).max(5).optional().default(1),
+      score: z.number().min(0).max(100),
+      totalQuestions: z.number().int().min(1).max(100),
+      timeTakenSeconds: z.number().min(0),
+      startedAt: z.string().datetime(),
+      answers: z.array(z.object({
+        questionObjectId: z.string(),
+        questionText: z.string().max(10000),
+        selectedAnswer: z.string().max(1000),
+        correctAnswer: z.string().max(1000),
+        isCorrect: z.boolean(),
+        answeredAt: z.string().datetime()
+      }))
+    })
+
+    const result = validationSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: result.error.issues },
+        { status: 400 }
+      )
+    }
 
     const {
       userEmail,
       packId,
       packSize,
-      level = 1,
+      level,
       score,
       totalQuestions,
       timeTakenSeconds,
@@ -47,13 +88,16 @@ export async function POST(request: NextRequest) {
       isDemo = false
     } = body
 
-    // Validate required fields
-    if (!userEmail || !packId || score === undefined || !totalQuestions || !timeTakenSeconds || !answers) {
+    // Verify user can only save their own pack completions
+    if (user.email !== userEmail) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
+        { error: 'Forbidden - You can only save your own pack completions' },
+        { status: 403 }
       )
     }
+
+    // Get Supabase client with user context
+    const supabase = await createClient()
 
     // Insert completed pack
     const { data: completedPack, error: packError } = await supabase
@@ -145,10 +189,19 @@ export async function POST(request: NextRequest) {
 // GET: Fetch completed packs for a user
 export async function GET(request: NextRequest) {
   try {
+    // Verify user is authenticated
+    const user = await getAuthenticatedUser()
+    if (!user || !user.email) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please log in' },
+        { status: 401 }
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const userEmail = searchParams.get('userEmail')
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100) // Cap at 100
+    const offset = Math.max(parseInt(searchParams.get('offset') || '0'), 0)
 
     if (!userEmail) {
       return NextResponse.json(
@@ -156,6 +209,26 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Validate email
+    const emailValidation = emailSchema.safeParse(userEmail)
+    if (!emailValidation.success) {
+      return NextResponse.json(
+        { error: 'Invalid email format' },
+        { status: 400 }
+      )
+    }
+
+    // Verify user can only access their own completed packs
+    if (user.email !== emailValidation.data) {
+      return NextResponse.json(
+        { error: 'Forbidden - You can only access your own completed packs' },
+        { status: 403 }
+      )
+    }
+
+    // Get Supabase client with user context
+    const supabase = await createClient()
 
     // Fetch completed packs with answer counts
     const { data: completedPacks, error } = await supabase
