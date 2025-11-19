@@ -3,6 +3,7 @@ import { getAuthenticatedUser } from '@/lib/auth-helpers'
 import { createClient } from '@/lib/supabase/server'
 import { emailSchema } from '@/lib/validation-schemas'
 
+// GET: Fetch aggregate statistics for a user
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthenticatedUser()
@@ -16,8 +17,6 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const paramEmail = searchParams.get('userEmail')
 
-    // If no email provided, use the authenticated user's email
-    // If email IS provided, ensure it matches the authenticated user (case-insensitive)
     let targetEmail = user.email
 
     if (paramEmail) {
@@ -25,14 +24,14 @@ export async function GET(request: NextRequest) {
 
       if (!emailValidation.success) {
         return NextResponse.json(
-          { error: 'Invalid email format' },
+          { error: 'Invalid email format', details: emailValidation.error.issues },
           { status: 400 }
         )
       }
 
       // Case-insensitive comparison
       if (user.email.toLowerCase() !== emailValidation.data.toLowerCase()) {
-        console.error('Email mismatch:', {
+        console.error('Email mismatch in user-stats:', {
           auth: user.email,
           param: emailValidation.data
         })
@@ -41,7 +40,6 @@ export async function GET(request: NextRequest) {
           { status: 403 }
         )
       }
-
       targetEmail = emailValidation.data
     }
 
