@@ -1,15 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchQuestions } from '@/lib/algolia'
+import { checkUserAccess } from '@/lib/user-tracking'
 
 export async function POST(request: NextRequest) {
   try {
-    const { size, userEmail, level = 1 } = await request.json()
+    const { size, userEmail, level = 1, isDemo = false } = await request.json()
 
     if (!size || size < 1 || size > 100) {
       return NextResponse.json(
         { error: 'Invalid pack size. Must be between 1 and 100.' },
         { status: 400 }
       )
+    }
+
+    // Check user access limits (skip for demo)
+    if (userEmail && !isDemo) {
+      const accessCheck = await checkUserAccess(userEmail)
+
+      if (!accessCheck.canAccess) {
+        return NextResponse.json(
+          {
+            error: 'Access limit reached',
+            message: accessCheck.reason || 'You have reached the free tier limit. Upgrade to premium for unlimited access.',
+            tier: accessCheck.tier,
+            questionsCompleted: accessCheck.questionsCompleted,
+            requiresUpgrade: true,
+          },
+          { status: 403 }
+        )
+      }
     }
 
     // Fetch used questions for this user and level if userEmail is provided

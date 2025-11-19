@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { incrementQuestionsCompleted } from '@/lib/user-tracking'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -25,6 +26,7 @@ interface SaveCompletedPackRequest {
   timeTakenSeconds: number
   startedAt: string
   answers: UserAnswer[]
+  isDemo?: boolean
 }
 
 // POST: Save a completed pack
@@ -41,7 +43,8 @@ export async function POST(request: NextRequest) {
       totalQuestions,
       timeTakenSeconds,
       startedAt,
-      answers
+      answers,
+      isDemo = false
     } = body
 
     // Validate required fields
@@ -113,6 +116,16 @@ export async function POST(request: NextRequest) {
     // Ignore unique constraint violations (questions already marked as used)
     if (usedQuestionsError && !usedQuestionsError.message.includes('duplicate')) {
       console.error('Error saving used questions:', usedQuestionsError)
+    }
+
+    // Increment questions completed count (but not for demo)
+    if (!isDemo) {
+      try {
+        await incrementQuestionsCompleted(userEmail, totalQuestions)
+      } catch (error) {
+        console.error('Error incrementing questions completed:', error)
+        // Don't fail the whole request if this fails
+      }
     }
 
     return NextResponse.json({

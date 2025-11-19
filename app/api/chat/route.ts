@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { anthropic } from '@/lib/anthropic'
 import { plewPrompt } from '@/lib/plew-prompt'
 import { isUsageLimitExceeded, trackUsage, calculateCost, getUsageSummary } from '@/lib/usage-tracking'
+import { findOrCreateConversation, addConversationMessage } from '@/lib/conversation-tracking'
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, question, chatHistory = [] } = await request.json()
+    const { message, question, chatHistory = [], userEmail, packId, questionObjectId } = await request.json()
 
     if (!message) {
       return NextResponse.json(
@@ -81,6 +82,34 @@ export async function POST(request: NextRequest) {
       cost_usd: cost,
       endpoint: '/api/chat',
     })
+
+    // Save conversation to database if userEmail is provided
+    if (userEmail) {
+      try {
+        const conversationId = await findOrCreateConversation(
+          userEmail,
+          packId,
+          questionObjectId,
+          false // not a demo
+        )
+
+        if (conversationId) {
+          // Save user message
+          await addConversationMessage(conversationId, 'user', message)
+
+          // Save assistant response with token count
+          await addConversationMessage(
+            conversationId,
+            'assistant',
+            assistantMessage.text,
+            outputTokens
+          )
+        }
+      } catch (error) {
+        console.error('Error saving conversation to database:', error)
+        // Don't fail the request if conversation saving fails
+      }
+    }
 
     return NextResponse.json({
       response: assistantMessage.text,

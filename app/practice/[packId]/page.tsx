@@ -35,6 +35,16 @@ export default function Practice() {
   const [isCompleted, setIsCompleted] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [generatingNewPack, setGeneratingNewPack] = useState(false)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+
+  // Get user email on mount
+  useEffect(() => {
+    const userStr = localStorage.getItem('user')
+    if (userStr) {
+      const user = JSON.parse(userStr)
+      setUserEmail(user.email)
+    }
+  }, [])
 
   useEffect(() => {
     const loadPack = () => {
@@ -308,6 +318,7 @@ export default function Practice() {
               <ChatPanel
                 question={currentQuestion}
                 packId={packId}
+                userEmail={userEmail || undefined}
               />
             </div>
           </div>
