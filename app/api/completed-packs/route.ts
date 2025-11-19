@@ -82,12 +82,11 @@ export async function POST(request: NextRequest) {
       isDemo = false
     } = body
 
-    // Verify user can only save their own pack completions
-    if (user.email !== userEmail) {
+    // Case-Insensitive Check
+    if (user.email.toLowerCase() !== userEmail.toLowerCase()) {
       console.error('Email mismatch in POST completed-packs:', {
         authenticatedEmail: user.email,
-        requestedEmail: userEmail,
-        match: user.email === userEmail
+        requestedEmail: userEmail
       })
       return NextResponse.json(
         { error: 'Forbidden - You can only save your own pack completions' },
@@ -102,7 +101,7 @@ export async function POST(request: NextRequest) {
     const { data: completedPack, error: packError } = await supabase
       .from('completed_packs')
       .insert({
-        user_email: userEmail,
+        user_email: user.email, // Use authenticated email to be safe
         pack_id: packId,
         pack_size: packSize,
         level,
@@ -140,12 +139,11 @@ export async function POST(request: NextRequest) {
 
     if (answersError) {
       console.error('Error saving user answers:', answersError)
-      // Don't fail the whole request if answers fail, but log it
     }
 
     // Insert used questions to avoid repetition
     const usedQuestionsToInsert = answers.map(answer => ({
-      user_email: userEmail,
+      user_email: user.email,
       question_object_id: answer.questionObjectId,
       level,
       used_at: answer.answeredAt
@@ -156,7 +154,6 @@ export async function POST(request: NextRequest) {
       .insert(usedQuestionsToInsert)
       .select()
 
-    // Ignore unique constraint violations (questions already marked as used)
     if (usedQuestionsError && !usedQuestionsError.message.includes('duplicate')) {
       console.error('Error saving used questions:', usedQuestionsError)
     }
@@ -164,10 +161,9 @@ export async function POST(request: NextRequest) {
     // Increment questions completed count (but not for demo)
     if (!isDemo) {
       try {
-        await incrementQuestionsCompleted(userEmail, totalQuestions)
+        await incrementQuestionsCompleted(user.email, totalQuestions)
       } catch (error) {
         console.error('Error incrementing questions completed:', error)
-        // Don't fail the whole request if this fails
       }
     }
 
@@ -199,36 +195,21 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const userEmail = searchParams.get('userEmail')
-    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100) // Cap at 100
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
     const offset = Math.max(parseInt(searchParams.get('offset') || '0'), 0)
 
-    if (!userEmail) {
-      return NextResponse.json(
-        { error: 'userEmail is required' },
-        { status: 400 }
-      )
-    }
+    let targetEmail = user.email
 
-    // Validate email
-    const emailValidation = emailSchema.safeParse(userEmail)
-    if (!emailValidation.success) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      )
-    }
-
-    // Verify user can only access their own completed packs
-    if (user.email !== emailValidation.data) {
-      console.error('Email mismatch in completed-packs:', {
-        authenticatedEmail: user.email,
-        requestedEmail: emailValidation.data,
-        match: user.email === emailValidation.data
-      })
-      return NextResponse.json(
-        { error: 'Forbidden - You can only access your own completed packs' },
-        { status: 403 }
-      )
+    if (userEmail) {
+      // Case-Insensitive Check
+      if (user.email.toLowerCase() !== userEmail.toLowerCase().trim()) {
+        return NextResponse.json(
+          { error: 'Forbidden - You can only access your own completed packs' },
+          { status: 403 }
+        )
+      }
+      // Use the param email if it matches (but cleaned up)
+      targetEmail = userEmail.trim()
     }
 
     // Get Supabase client with user context
@@ -237,7 +218,7 @@ export async function GET(request: NextRequest) {
     // Fetch completed packs with answer counts
     const { data: completedPacks, error } = await supabase
       .rpc('get_completed_packs_summary', {
-        p_user_email: userEmail,
+        p_user_email: targetEmail,
         p_limit: limit,
         p_offset: offset
       })

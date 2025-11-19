@@ -6,7 +6,7 @@ import QuestionViewer from '@/app/components/QuestionViewer'
 import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
 import Navbar from '@/app/components/Navbar'
-import { useAuth } from '@/app/context/AuthContext' // Import AuthContext
+import { useAuth } from '@/app/context/AuthContext'
 import styles from './practiceQuestions.module.css'
 
 interface Pack {
@@ -27,7 +27,7 @@ export default function Practice() {
   const params = useParams()
   const router = useRouter()
   const packId = params.packId as string
-  const { user } = useAuth() // Get real user from context
+  const { user } = useAuth()
 
   const [pack, setPack] = useState<Pack | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -42,7 +42,6 @@ export default function Practice() {
   useEffect(() => {
     const loadPack = async () => {
       try {
-        // Try to get pack from localStorage first
         const storedPack = localStorage.getItem(`pack-${packId}`)
         if (storedPack) {
           const packData = JSON.parse(storedPack)
@@ -52,24 +51,19 @@ export default function Practice() {
             size: packData.size,
             level: packData.level || 1
           })
-          // Set start time when pack is first loaded
           setStartedAt(new Date().toISOString())
         } else {
-          // If not in localStorage, try to fetch from API (for shared packs)
           console.log('[DEBUG] Pack not in localStorage, trying API for shared pack:', packId)
           const response = await fetch(`/api/packs/${packId}`)
           if (response.ok) {
             const packData = await response.json()
-            // Check if it's a shared pack (has questions array)
             if (packData.questions && packData.questions.length > 0) {
-              console.log('[DEBUG] Loaded shared pack from API:', packId)
               setPack({
                 id: packData.packId,
                 questions: packData.questions,
                 size: packData.size,
                 level: packData.level || 1
               })
-              // Store in localStorage for future use
               localStorage.setItem(`pack-${packId}`, JSON.stringify(packData))
               setStartedAt(new Date().toISOString())
             } else {
@@ -107,7 +101,6 @@ export default function Practice() {
   const handlePackCompletion = async () => {
     if (!pack || !startedAt || isCompleted || isSaving) return
 
-    // Check if user is logged in using context, not localStorage
     if (!user || !user.email) {
       console.error('No authenticated user found')
       alert('로그인이 필요합니다.')
@@ -119,10 +112,8 @@ export default function Practice() {
     setIsSaving(true)
 
     try {
-      // Calculate score
       const score = Object.values(questionStates).filter(state => state.isCorrect).length
 
-      // Prepare answers data
       const answers = pack.questions.map((question, index) => {
         const state = questionStates[index]
         return {
@@ -135,14 +126,13 @@ export default function Practice() {
         }
       })
 
-      // Save completed pack to backend
       const response = await fetch('/api/completed-packs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userEmail: user.email, // Use the real email from context
+          userEmail: user.email,
           packId: pack.id,
           packSize: pack.size,
           level: pack.level || 1,
@@ -155,17 +145,14 @@ export default function Practice() {
       })
 
       if (response.ok) {
-        const data = await response.json()
         console.log('Pack completion saved successfully')
-        // Auto-generate new pack
         await generateNewPack()
-        // Redirect to pack maker
         router.push('/pack-maker')
       } else {
         const errorData = await response.json()
         console.error('Failed to save completed pack:', errorData)
         alert(`Error: ${errorData.error || 'Failed to save'}`)
-        setIsSaving(false) // Allow retry if it failed
+        setIsSaving(false)
         setIsCompleted(false)
       }
     } catch (error) {
@@ -181,7 +168,6 @@ export default function Practice() {
     setGeneratingNewPack(true)
 
     try {
-      // Create new pack with same size and level
       const response = await fetch('/api/packs', {
         method: 'POST',
         headers: {
@@ -189,14 +175,24 @@ export default function Practice() {
         },
         body: JSON.stringify({
           size: pack.size,
-          userEmail: user.email, // Use real email
+          userEmail: user.email,
           level: pack.level || 1
         })
       })
 
+      // --- NEW: Handle the Limit Reached Error ---
+      if (response.status === 403) {
+        const data = await response.json()
+        if (data.requiresUpgrade) {
+          alert('🎉 무료 체험이 끝났습니다! 무제한 이용을 위해 프리미엄으로 업그레이드하세요.')
+          router.push('/payment') // Redirects to payment page
+          return
+        }
+      }
+      // -------------------------------------------
+
       if (response.ok) {
         const newPackData = await response.json()
-        // Store new pack in localStorage
         localStorage.setItem(`pack-${newPackData.packId}`, JSON.stringify(newPackData))
         console.log('New pack generated:', newPackData.packId)
       } else {
@@ -259,7 +255,6 @@ export default function Practice() {
     <div className={styles.container}>
       <Navbar />
       <div className={styles.mainContent}>
-        {/* Question Number Bar */}
         <div className={styles.questionNumberBar}>
           <div className={styles.questionNumbersContainer}>
             {pack.questions.map((_, index) => (
@@ -279,10 +274,8 @@ export default function Practice() {
           <div className={styles.timer}>{formatTime(timer)}</div>
         </div>
 
-        {/* Main Content Area */}
         <div className={styles.contentArea}>
           <div className={styles.combinedContainer}>
-            {/* Question Panel - 60% width */}
             <div className={styles.questionPanel}>
               <div className={styles.questionContent}>
                 <QuestionViewer
@@ -305,7 +298,6 @@ export default function Practice() {
                     }))
                   }}
                   onAnswerSubmit={(isCorrect) => {
-                    // Update question state with correctness and timestamp
                     setQuestionStates(prev => ({
                       ...prev,
                       [currentQuestionIndex]: {
@@ -316,7 +308,6 @@ export default function Practice() {
                     }))
                   }}
                   onNext={() => {
-                    // Move to next question
                     setCurrentQuestionIndex((prev) => prev + 1)
                   }}
                   onFinish={handlePackCompletion}
@@ -324,7 +315,6 @@ export default function Practice() {
               </div>
             </div>
 
-            {/* Chat Panel - 40% width */}
             <div className={styles.chatPanel}>
               <ChatPanel
                 question={currentQuestion}
