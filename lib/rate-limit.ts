@@ -1,29 +1,10 @@
 /**
- * Simple in-memory rate limiter
- * For production, consider using Redis or a dedicated rate limiting service
+ * Supabase-backed rate limiter
+ * Uses persistent database storage for rate limiting across serverless instances
  */
 
-interface RateLimitEntry {
-  count: number
-  resetTime: number
-}
-
-// Store rate limit data in memory
-// Note: This will reset when the server restarts
-// For production, use Redis or similar persistent storage
-const rateLimitStore = new Map<string, RateLimitEntry>()
-
-// Cleanup old entries every 5 minutes
-setInterval(() => {
-  const now = Date.now()
-  const keysToDelete: string[] = []
-  rateLimitStore.forEach((entry, key) => {
-    if (entry.resetTime < now) {
-      keysToDelete.push(key)
-    }
-  })
-  keysToDelete.forEach(key => rateLimitStore.delete(key))
-}, 5 * 60 * 1000)
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 export interface RateLimitConfig {
   /**
@@ -50,42 +31,139 @@ export interface RateLimitResult {
 }
 
 /**
+ * Create Supabase admin client for rate limiting operations
+ * Rate limiting requires bypassing RLS to work correctly
+ */
+async function createRateLimitClient() {
+  const cookieStore = await cookies()
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options)
+            })
+          } catch {
+            // Ignore cookie errors in Server Components
+          }
+        },
+      },
+    }
+  )
+}
+
+/**
  * Check if a request should be rate limited
  *
  * @param key - Unique key to identify the requester (e.g., user email, IP address)
  * @param config - Rate limit configuration
  * @returns RateLimitResult indicating if request is allowed
  */
-export function checkRateLimit(
+export async function checkRateLimit(
   key: string,
   config: RateLimitConfig
-): RateLimitResult {
+): Promise<RateLimitResult> {
   const now = Date.now()
   const rateLimitKey = `${config.identifier}:${key}`
+  const supabase = await createRateLimitClient()
 
-  // Get existing entry or create new one
-  let entry = rateLimitStore.get(rateLimitKey)
+  try {
+    // Try to get existing entry
+    const { data: existingEntry } = await supabase
+      .from('rate_limits')
+      .select('*')
+      .eq('identifier', rateLimitKey)
+      .single()
 
-  // If no entry or entry has expired, create new entry
-  if (!entry || entry.resetTime < now) {
-    entry = {
-      count: 0,
-      resetTime: now + config.windowMs,
+    let count = 0
+    let resetTime = now + config.windowMs
+
+    if (existingEntry) {
+      // Check if the entry has expired
+      if (existingEntry.reset_time < now) {
+        // Entry expired, reset the count
+        count = 1
+        resetTime = now + config.windowMs
+
+        await supabase
+          .from('rate_limits')
+          .update({
+            count,
+            reset_time: resetTime,
+          })
+          .eq('identifier', rateLimitKey)
+      } else {
+        // Entry still valid, increment count
+        count = existingEntry.count + 1
+        resetTime = existingEntry.reset_time
+
+        await supabase
+          .from('rate_limits')
+          .update({
+            count,
+          })
+          .eq('identifier', rateLimitKey)
+      }
+    } else {
+      // No entry exists, create new one
+      count = 1
+      resetTime = now + config.windowMs
+
+      await supabase.from('rate_limits').insert({
+        identifier: rateLimitKey,
+        count,
+        reset_time: resetTime,
+      })
     }
-    rateLimitStore.set(rateLimitKey, entry)
+
+    // Check if limit exceeded
+    const success = count <= config.maxRequests
+
+    return {
+      success,
+      limit: config.maxRequests,
+      remaining: Math.max(0, config.maxRequests - count),
+      reset: resetTime,
+    }
+  } catch (error) {
+    // If database operation fails, log error and allow request
+    // (fail open to prevent rate limiting from blocking all traffic)
+    console.error('Rate limit check failed:', error)
+    return {
+      success: true,
+      limit: config.maxRequests,
+      remaining: config.maxRequests,
+      reset: now + config.windowMs,
+    }
   }
+}
 
-  // Increment request count
-  entry.count++
+/**
+ * Cleanup expired rate limit entries
+ * Should be called periodically (e.g., via cron job)
+ */
+export async function cleanupExpiredRateLimits(): Promise<number> {
+  const supabase = await createRateLimitClient()
 
-  // Check if limit exceeded
-  const success = entry.count <= config.maxRequests
+  try {
+    const { data, error } = await supabase.rpc('cleanup_expired_rate_limits')
 
-  return {
-    success,
-    limit: config.maxRequests,
-    remaining: Math.max(0, config.maxRequests - entry.count),
-    reset: entry.resetTime,
+    if (error) {
+      console.error('Failed to cleanup expired rate limits:', error)
+      return 0
+    }
+
+    return data || 0
+  } catch (error) {
+    console.error('Cleanup rate limits error:', error)
+    return 0
   }
 }
 

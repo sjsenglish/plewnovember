@@ -1,3 +1,30 @@
+// Algolia configuration and client setup
+// Note: Uncomment the algoliasearch import when ready to use actual Algolia
+// import algoliasearch from 'algoliasearch/lite'
+
+// Environment variable validation
+const ALGOLIA_APP_ID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID
+const ALGOLIA_SEARCH_KEY = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
+const ALGOLIA_INDEX_NAME = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME
+
+// Validate that all required Algolia environment variables are set
+if (typeof window !== 'undefined') {
+  // Only validate on client-side to avoid build-time errors when Algolia is not yet configured
+  if (!ALGOLIA_INDEX_NAME) {
+    console.warn('NEXT_PUBLIC_ALGOLIA_INDEX_NAME is not set. Expected value: "csat_final"')
+  }
+  if (!ALGOLIA_APP_ID) {
+    console.warn('NEXT_PUBLIC_ALGOLIA_APP_ID is not set. Algolia search will use mock data.')
+  }
+  if (!ALGOLIA_SEARCH_KEY) {
+    console.warn('NEXT_PUBLIC_ALGOLIA_SEARCH_KEY is not set. Algolia search will use mock data.')
+  }
+}
+
+// Initialize Algolia client (uncomment when ready to use)
+// const searchClient = algoliasearch(ALGOLIA_APP_ID!, ALGOLIA_SEARCH_KEY!)
+// const index = searchClient.initIndex(ALGOLIA_INDEX_NAME || 'csat_final')
+
 // PLEW Question Interface
 export interface AlgoliaQuestion {
   objectID: string
@@ -117,19 +144,61 @@ const mockQuestions: AlgoliaQuestion[] = [
   }
 ]
 
+/**
+ * Search questions using Algolia (or mock data if Algolia is not configured)
+ *
+ * @param query - Search query string
+ * @param limit - Maximum number of results to return
+ * @param filters - Algolia filter string
+ * @returns Array of questions matching the search criteria
+ */
 export async function searchQuestions(
   query: string = '',
   limit: number = 10,
   filters?: string
 ): Promise<AlgoliaQuestion[]> {
+  // TODO: Implement actual Algolia search when configured
+  // Example implementation:
+  // if (ALGOLIA_APP_ID && ALGOLIA_SEARCH_KEY && ALGOLIA_INDEX_NAME) {
+  //   const { hits } = await index.search(query, {
+  //     hitsPerPage: limit,
+  //     filters: filters,
+  //   })
+  //   return hits as AlgoliaQuestion[]
+  // }
+
   // Return mock data for now
   return mockQuestions.slice(0, limit)
 }
 
+/**
+ * Get a specific question by its objectID
+ *
+ * @param objectID - The unique identifier for the question
+ * @returns The question object or null if not found
+ */
 export async function getQuestionById(objectID: string): Promise<AlgoliaQuestion | null> {
+  // TODO: Implement actual Algolia getObject when configured
+  // Example implementation:
+  // if (ALGOLIA_APP_ID && ALGOLIA_SEARCH_KEY && ALGOLIA_INDEX_NAME) {
+  //   try {
+  //     const question = await index.getObject<AlgoliaQuestion>(objectID)
+  //     return question
+  //   } catch (error) {
+  //     return null
+  //   }
+  // }
+
   return mockQuestions.find(q => q.objectID === objectID) || null
 }
 
+/**
+ * Search questions by subject
+ *
+ * @param subject - The subject to filter by
+ * @param limit - Maximum number of results to return
+ * @returns Array of questions in the specified subject
+ */
 export async function searchQuestionsBySubject(
   subject: string,
   limit: number = 10
@@ -137,9 +206,24 @@ export async function searchQuestionsBySubject(
   return searchQuestions('', limit, `subject:"${subject}"`)
 }
 
+/**
+ * Search questions by difficulty level
+ *
+ * @param difficulty - The difficulty level to filter by
+ * @param limit - Maximum number of results to return
+ * @returns Array of questions with the specified difficulty
+ */
 export async function searchQuestionsByDifficulty(
   difficulty: 'easy' | 'medium' | 'hard',
   limit: number = 10
 ): Promise<AlgoliaQuestion[]> {
   return searchQuestions('', limit, `difficulty:"${difficulty}"`)
+}
+
+/**
+ * Get the configured Algolia index name
+ * @returns The index name (defaults to 'csat_final' if not configured)
+ */
+export function getAlgoliaIndexName(): string {
+  return ALGOLIA_INDEX_NAME || 'csat_final'
 }

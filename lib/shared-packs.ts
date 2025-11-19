@@ -1,53 +1,229 @@
 // Shared packs accessible to all users
 // These packs can be accessed without authentication or tier restrictions
+// Data is now stored in Supabase for easy management
 
-export const sharedPacks = {
-  'sample-pack-2026': {
-    packId: 'sample-pack-2026',
-    name: 'Sample Pack 2026',
-    description: 'Try out a real CSAT question from 2026',
-    size: 1,
-    level: 3,
-    questions: [
-      {
-        "questionNumber": 34,
-        "year": "2026",
-        "questionText": "Kant was a strong defender of the rule of law as the ultimate guarantee, not only of security and peace, but also of freedom. He believed that human societies were moving towards more rational forms regulated by effective and binding legal frameworks because only such frameworks enabled people to live in harmony, to prosper and to co-operate. However, his belief in inevitable progress was not based on an optimistic or high-minded view of human nature. On the contrary, it comes close to Hobbes's outlook: man's violent and conflict-prone nature makes it necessary to establish and maintain an effective legal framework in order to secure peace. We cannot count on people's benevolence or goodwill, but even 'a nation of devils' can live in harmony in a legal system that binds every citizen equally. Ideally, the law is the embodiment of those political principles that all rational beings would freely choose. If such laws forbid them to do something that they would not rationally choose to do anyway, then the law cannot be _______.",
-        "actualQuestion": "다음 빈칸에 들어갈 말로 가장 적절한 것을 고르시오.",
-        "answerOptions": [
-          "① regarded as reasonably confining human liberty",
-          "② viewed as a strong defender of the justice system",
-          "③ understood as a restraint on their freedom",
-          "④ enforced effectively to suppress their evil nature",
-          "⑤ accepted within the assumption of ideal legal frameworks"
-        ],
-        "correctAnswer": "③ understood as a restraint on their freedom",
-        "imageFile": "default_image.jpg",
-        "videoSolutionLink": "",
-        "source": "past-paper",
-        "primarySubjectArea": "social science",
-        "passageType": "argumentative",
-        "questionSkill": "빈칸 추론",
-        "objectID": "2026_pp_36",
-        "questionId": "2026_pp_36",
-        "passage": "Kant was a strong defender of the rule of law as the ultimate guarantee, not only of security and peace, but also of freedom. He believed that human societies were moving towards more rational forms regulated by effective and binding legal frameworks because only such frameworks enabled people to live in harmony, to prosper and to co-operate. However, his belief in inevitable progress was not based on an optimistic or high-minded view of human nature. On the contrary, it comes close to Hobbes's outlook: man's violent and conflict-prone nature makes it necessary to establish and maintain an effective legal framework in order to secure peace. We cannot count on people's benevolence or goodwill, but even 'a nation of devils' can live in harmony in a legal system that binds every citizen equally. Ideally, the law is the embodiment of those political principles that all rational beings would freely choose. If such laws forbid them to do something that they would not rationally choose to do anyway, then the law cannot be _______.",
-        "difficulty": "medium",
-        "subject": "English",
-        "topic": "빈칸 추론",
-        "requiresPLEW": true,
-        "correctAnswerNumber": 3
-      }
-    ],
-    createdAt: new Date().toISOString()
-  }
-};
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-export type SharedPack = typeof sharedPacks[keyof typeof sharedPacks];
-
-export function getSharedPack(packId: string): SharedPack | null {
-  return sharedPacks[packId as keyof typeof sharedPacks] || null;
+// Type definitions to match the database schema
+export interface SharedPackQuestion {
+  questionNumber: number
+  year: string
+  questionText: string
+  actualQuestion: string
+  answerOptions: string[]
+  correctAnswer: string
+  correctAnswerNumber: number
+  imageFile: string
+  videoSolutionLink: string
+  source: string
+  primarySubjectArea: string
+  passageType: string
+  questionSkill: string
+  objectID: string
+  questionId: string
+  passage: string
+  difficulty: string
+  subject: string
+  topic: string
+  requiresPLEW: boolean
 }
 
-export function isSharedPack(packId: string): boolean {
-  return packId in sharedPacks;
+export interface SharedPack {
+  packId: string
+  name: string
+  description: string
+  size: number
+  level: number
+  questions: SharedPackQuestion[]
+  createdAt: string
+}
+
+/**
+ * Create Supabase client for fetching public packs
+ * Uses anon key since public packs are accessible to everyone
+ */
+async function createPublicPacksClient() {
+  const cookieStore = await cookies()
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options)
+            })
+          } catch {
+            // Ignore cookie errors in Server Components
+          }
+        },
+      },
+    }
+  )
+}
+
+/**
+ * Fetch a shared pack by its ID from Supabase
+ */
+export async function getSharedPack(packId: string): Promise<SharedPack | null> {
+  try {
+    const supabase = await createPublicPacksClient()
+
+    // Fetch pack metadata
+    const { data: pack, error: packError } = await supabase
+      .from('public_packs')
+      .select('*')
+      .eq('pack_id', packId)
+      .single()
+
+    if (packError || !pack) {
+      console.error('Error fetching shared pack:', packError)
+      return null
+    }
+
+    // Fetch pack questions
+    const { data: questions, error: questionsError } = await supabase
+      .from('public_pack_questions')
+      .select('*')
+      .eq('pack_id', packId)
+
+    if (questionsError) {
+      console.error('Error fetching shared pack questions:', questionsError)
+      return null
+    }
+
+    // Transform database format to application format
+    const transformedQuestions: SharedPackQuestion[] = (questions || []).map((q: any) => ({
+      questionNumber: q.question_number,
+      year: q.year,
+      questionText: q.question_text,
+      actualQuestion: q.actual_question,
+      answerOptions: q.answer_options,
+      correctAnswer: q.correct_answer,
+      correctAnswerNumber: q.correct_answer_number,
+      imageFile: q.image_file,
+      videoSolutionLink: q.video_solution_link,
+      source: q.source,
+      primarySubjectArea: q.primary_subject_area,
+      passageType: q.passage_type,
+      questionSkill: q.question_skill,
+      objectID: q.object_id,
+      questionId: q.question_id,
+      passage: q.passage,
+      difficulty: q.difficulty,
+      subject: q.subject,
+      topic: q.topic,
+      requiresPLEW: q.requires_plew,
+    }))
+
+    return {
+      packId: pack.pack_id,
+      name: pack.name,
+      description: pack.description,
+      size: pack.size,
+      level: pack.level,
+      questions: transformedQuestions,
+      createdAt: pack.created_at,
+    }
+  } catch (error) {
+    console.error('Error in getSharedPack:', error)
+    return null
+  }
+}
+
+/**
+ * Check if a pack ID is a shared pack
+ */
+export async function isSharedPack(packId: string): Promise<boolean> {
+  try {
+    const supabase = await createPublicPacksClient()
+
+    const { data, error } = await supabase
+      .from('public_packs')
+      .select('pack_id')
+      .eq('pack_id', packId)
+      .single()
+
+    if (error || !data) {
+      return false
+    }
+
+    return true
+  } catch (error) {
+    console.error('Error checking if pack is shared:', error)
+    return false
+  }
+}
+
+/**
+ * Get all available shared packs
+ */
+export async function getAllSharedPacks(): Promise<SharedPack[]> {
+  try {
+    const supabase = await createPublicPacksClient()
+
+    const { data: packs, error } = await supabase
+      .from('public_packs')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error || !packs) {
+      console.error('Error fetching all shared packs:', error)
+      return []
+    }
+
+    // Fetch questions for each pack
+    const packsWithQuestions = await Promise.all(
+      packs.map(async (pack) => {
+        const { data: questions } = await supabase
+          .from('public_pack_questions')
+          .select('*')
+          .eq('pack_id', pack.pack_id)
+
+        const transformedQuestions: SharedPackQuestion[] = (questions || []).map((q: any) => ({
+          questionNumber: q.question_number,
+          year: q.year,
+          questionText: q.question_text,
+          actualQuestion: q.actual_question,
+          answerOptions: q.answer_options,
+          correctAnswer: q.correct_answer,
+          correctAnswerNumber: q.correct_answer_number,
+          imageFile: q.image_file,
+          videoSolutionLink: q.video_solution_link,
+          source: q.source,
+          primarySubjectArea: q.primary_subject_area,
+          passageType: q.passage_type,
+          questionSkill: q.question_skill,
+          objectID: q.object_id,
+          questionId: q.question_id,
+          passage: q.passage,
+          difficulty: q.difficulty,
+          subject: q.subject,
+          topic: q.topic,
+          requiresPLEW: q.requires_plew,
+        }))
+
+        return {
+          packId: pack.pack_id,
+          name: pack.name,
+          description: pack.description,
+          size: pack.size,
+          level: pack.level,
+          questions: transformedQuestions,
+          createdAt: pack.created_at,
+        }
+      })
+    )
+
+    return packsWithQuestions
+  } catch (error) {
+    console.error('Error in getAllSharedPacks:', error)
+    return []
+  }
 }

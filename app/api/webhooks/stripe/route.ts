@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { headers } from 'next/headers'
+import { logger } from '@/lib/logger'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-10-29.clover',
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
     const signature = headersList.get('stripe-signature')
 
     if (!signature) {
-      console.error('Missing stripe-signature header')
+      logger.error('Missing stripe-signature header')
       return NextResponse.json(
         { error: 'Missing signature' },
         { status: 400 }
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!webhookSecret) {
-      console.error('STRIPE_WEBHOOK_SECRET not configured')
+      logger.error('STRIPE_WEBHOOK_SECRET not configured')
       return NextResponse.json(
         { error: 'Webhook not configured' },
         { status: 500 }
@@ -43,7 +44,7 @@ export async function POST(request: NextRequest) {
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
     } catch (err: any) {
-      console.error('Webhook signature verification failed:', err.message)
+      logger.error('Webhook signature verification failed:', err)
       return NextResponse.json(
         { error: 'Invalid signature' },
         { status: 400 }
@@ -54,9 +55,9 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session
-        console.log('Checkout session completed:', session.id)
-        console.log('Customer email:', session.customer_email)
-        console.log('Subscription ID:', session.subscription)
+        logger.debug('Checkout session completed:', session.id)
+        logger.debug('Customer email:', session.customer_email)
+        logger.debug('Subscription ID:', session.subscription)
 
         // TODO: Update user subscription status in your database
         // Example:
@@ -71,8 +72,8 @@ export async function POST(request: NextRequest) {
 
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription
-        console.log('Subscription updated:', subscription.id)
-        console.log('Status:', subscription.status)
+        logger.debug('Subscription updated:', subscription.id)
+        logger.debug('Status:', subscription.status)
 
         // TODO: Update subscription status in database
         break
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription
-        console.log('Subscription cancelled:', subscription.id)
+        logger.debug('Subscription cancelled:', subscription.id)
 
         // TODO: Update user subscription status to cancelled
         break
@@ -88,7 +89,7 @@ export async function POST(request: NextRequest) {
 
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice
-        console.log('Payment succeeded for invoice:', invoice.id)
+        logger.debug('Payment succeeded for invoice:', invoice.id)
 
         // TODO: Record successful payment
         break
@@ -96,20 +97,20 @@ export async function POST(request: NextRequest) {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice
-        console.log('Payment failed for invoice:', invoice.id)
+        logger.debug('Payment failed for invoice:', invoice.id)
 
         // TODO: Notify user of payment failure
         break
       }
 
       default:
-        console.log('Unhandled event type:', event.type)
+        logger.debug('Unhandled event type:', event.type)
     }
 
     // Return 200 to acknowledge receipt
     return NextResponse.json({ received: true })
   } catch (error) {
-    console.error('Webhook error:', error)
+    logger.error('Webhook error:', error)
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 500 }

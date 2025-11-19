@@ -50,7 +50,6 @@ export default function LevelSelect() {
                   width={320}
                   height={320}
                   className={styles.levelImage}
-                  unoptimized
                 />
               </div>
             ) : (
@@ -65,7 +64,6 @@ export default function LevelSelect() {
                   width={320}
                   height={320}
                   className={styles.levelImage}
-                  unoptimized
                 />
               </Link>
             )

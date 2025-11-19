@@ -21,39 +21,55 @@ export default function SignupPage() {
     e.preventDefault()
     setError('')
     setIsLoading(true)
-    console.log('[DEBUG] Signup form submitted')
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DEBUG] Signup form submitted')
+    }
 
     if (!name || !email || !password || !confirmPassword) {
-      console.log('[DEBUG] Validation failed: missing fields', { name: !!name, email: !!email, password: !!password, confirmPassword: !!confirmPassword })
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DEBUG] Validation failed: missing fields')
+      }
       setError('Please fill in all fields')
       setIsLoading(false)
       return
     }
 
     if (password !== confirmPassword) {
-      console.log('[DEBUG] Validation failed: passwords do not match')
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DEBUG] Validation failed: passwords do not match')
+      }
       setError('Passwords do not match')
       setIsLoading(false)
       return
     }
 
     if (password.length < 6) {
-      console.log('[DEBUG] Validation failed: password too short', { length: password.length })
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DEBUG] Validation failed: password too short')
+      }
       setError('Password must be at least 6 characters')
       setIsLoading(false)
       return
     }
 
-    console.log('[DEBUG] Form validation passed, calling signup function...', { email, name })
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DEBUG] Form validation passed, calling signup function...')
+    }
     const success = await signup(email, password, name)
-    console.log('[DEBUG] Signup function returned:', { success })
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DEBUG] Signup function returned:', { success })
+    }
 
     if (success) {
       router.push('/')
-      console.log('[DEBUG] Signup successful, redirecting to /profile')
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DEBUG] Signup successful, redirecting to /profile')
+      }
       router.push('/profile')
     } else {
-      console.error('[ERROR] Signup failed - check browser console for detailed error logs')
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[ERROR] Signup failed - check browser console for detailed error logs')
+      }
       setError('Signup failed. Please check your email and try again.')
       setIsLoading(false)
     }

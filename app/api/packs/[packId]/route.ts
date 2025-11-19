@@ -16,8 +16,8 @@ export async function GET(
     }
 
     // Check if this is a shared pack
-    if (isSharedPack(packId)) {
-      const sharedPack = getSharedPack(packId)
+    if (await isSharedPack(packId)) {
+      const sharedPack = await getSharedPack(packId)
       if (sharedPack) {
         console.log('[DEBUG] Returning shared pack:', packId)
         return NextResponse.json(sharedPack)

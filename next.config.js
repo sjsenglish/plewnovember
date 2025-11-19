@@ -4,6 +4,15 @@ const nextConfig = {
   experimental: {
     turbopackUseSystemTlsCerts: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        pathname: '/**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig
