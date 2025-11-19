@@ -47,6 +47,43 @@ export default function Demo() {
             backgroundImage: "url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e')"
           }}
         >
+          {/* Try a Sample Pack Button - Top Right */}
+          <a
+            href="/practice/sample-pack-2026"
+            style={{
+              position: 'fixed',
+              top: '100px',
+              right: '20px',
+              zIndex: 50,
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+              backgroundColor: '#c4b5fd',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              textDecoration: 'none'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#a78bfa'
+              e.currentTarget.style.transform = 'scale(1.1)'
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#c4b5fd'
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
+            title="Try a sample CSAT question"
+          >
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ffolder_blue.svg?alt=media&token=3f5b15d2-6e3c-4679-aa98-3d8bc86e4aff"
+              alt="Sample Pack"
+              style={{ width: '32px', height: '32px' }}
+            />
+          </a>
+
           <div className={completionStyles.contentWrapper}>
             <div className={completionStyles.card}>
               <div className={completionStyles.textSection}>
