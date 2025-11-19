@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getSharedPack, isSharedPack } from '@/lib/shared-packs'
 
 export async function GET(
   request: NextRequest,
@@ -12,6 +13,15 @@ export async function GET(
         { error: 'Pack ID is required' },
         { status: 400 }
       )
+    }
+
+    // Check if this is a shared pack
+    if (isSharedPack(packId)) {
+      const sharedPack = getSharedPack(packId)
+      if (sharedPack) {
+        console.log('[DEBUG] Returning shared pack:', packId)
+        return NextResponse.json(sharedPack)
+      }
     }
 
     // Return instructions for client-side pack retrieval

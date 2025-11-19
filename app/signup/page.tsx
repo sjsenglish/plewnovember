@@ -21,31 +21,39 @@ export default function SignupPage() {
     e.preventDefault()
     setError('')
     setIsLoading(true)
+    console.log('[DEBUG] Signup form submitted')
 
     if (!name || !email || !password || !confirmPassword) {
+      console.log('[DEBUG] Validation failed: missing fields', { name: !!name, email: !!email, password: !!password, confirmPassword: !!confirmPassword })
       setError('Please fill in all fields')
       setIsLoading(false)
       return
     }
 
     if (password !== confirmPassword) {
+      console.log('[DEBUG] Validation failed: passwords do not match')
       setError('Passwords do not match')
       setIsLoading(false)
       return
     }
 
     if (password.length < 6) {
+      console.log('[DEBUG] Validation failed: password too short', { length: password.length })
       setError('Password must be at least 6 characters')
       setIsLoading(false)
       return
     }
 
+    console.log('[DEBUG] Form validation passed, calling signup function...', { email, name })
     const success = await signup(email, password, name)
+    console.log('[DEBUG] Signup function returned:', { success })
 
     if (success) {
+      console.log('[DEBUG] Signup successful, redirecting to /profile')
       router.push('/profile')
     } else {
-      setError('Email already exists')
+      console.error('[ERROR] Signup failed - check browser console for detailed error logs')
+      setError('Signup failed. Please check your email and try again.')
       setIsLoading(false)
     }
   }

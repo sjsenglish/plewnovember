@@ -47,9 +47,9 @@ export default function Practice() {
   }, [])
 
   useEffect(() => {
-    const loadPack = () => {
+    const loadPack = async () => {
       try {
-        // Try to get pack from localStorage
+        // Try to get pack from localStorage first
         const storedPack = localStorage.getItem(`pack-${packId}`)
         if (storedPack) {
           const packData = JSON.parse(storedPack)
@@ -62,7 +62,29 @@ export default function Practice() {
           // Set start time when pack is first loaded
           setStartedAt(new Date().toISOString())
         } else {
-          console.error('Pack not found in localStorage')
+          // If not in localStorage, try to fetch from API (for shared packs)
+          console.log('[DEBUG] Pack not in localStorage, trying API for shared pack:', packId)
+          const response = await fetch(`/api/packs/${packId}`)
+          if (response.ok) {
+            const packData = await response.json()
+            // Check if it's a shared pack (has questions array)
+            if (packData.questions && packData.questions.length > 0) {
+              console.log('[DEBUG] Loaded shared pack from API:', packId)
+              setPack({
+                id: packData.packId,
+                questions: packData.questions,
+                size: packData.size,
+                level: packData.level || 1
+              })
+              // Store in localStorage for future use
+              localStorage.setItem(`pack-${packId}`, JSON.stringify(packData))
+              setStartedAt(new Date().toISOString())
+            } else {
+              console.error('Pack not found in localStorage or API')
+            }
+          } else {
+            console.error('Pack not found in localStorage or API')
+          }
         }
       } catch (error) {
         console.error('Error loading pack:', error)

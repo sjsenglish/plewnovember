@@ -66,7 +66,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signup = async (email: string, password: string, name: string): Promise<boolean> => {
+    console.log('[DEBUG] Signup attempt started', { email, name, passwordLength: password.length })
+
     try {
+      console.log('[DEBUG] Calling supabase.auth.signUp...')
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -77,23 +80,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       })
 
+      console.log('[DEBUG] Supabase signUp response:', {
+        hasData: !!data,
+        hasUser: !!data?.user,
+        userId: data?.user?.id,
+        userEmail: data?.user?.email,
+        hasError: !!error,
+        errorMessage: error?.message,
+        errorStatus: error?.status,
+        errorCode: error?.name
+      })
+
       if (error) {
-        console.error('Signup error:', error.message)
+        console.error('[ERROR] Signup failed:', {
+          message: error.message,
+          status: error.status,
+          name: error.name,
+          fullError: error
+        })
         return false
       }
 
       if (data.user) {
+        console.log('[DEBUG] User created successfully:', {
+          userId: data.user.id,
+          email: data.user.email,
+          emailConfirmed: data.user.email_confirmed_at,
+          confirmationSent: data.user.confirmation_sent_at
+        })
+
         setUser({
           email: data.user.email!,
           name,
           id: data.user.id
         })
+        console.log('[DEBUG] User state updated in context')
         return true
       }
 
+      console.warn('[WARN] No error but no user returned from signup')
       return false
     } catch (error) {
-      console.error('Signup error:', error)
+      console.error('[ERROR] Signup exception:', {
+        error,
+        errorType: typeof error,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorStack: error instanceof Error ? error.stack : undefined
+      })
       return false
     }
   }
