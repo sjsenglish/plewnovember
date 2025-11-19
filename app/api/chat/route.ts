@@ -2,32 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { anthropic } from '@/lib/anthropic'
 import { plewPrompt } from '@/lib/plew-prompt'
 import { isUsageLimitExceeded, trackUsage, calculateCost, getUsageSummary } from '@/lib/usage-tracking'
-import { getAuthenticatedUser } from '@/lib/auth-helpers'
-import { chatMessageSchema } from '@/lib/validation-schemas'
+import { findOrCreateConversation, addConversationMessage } from '@/lib/conversation-tracking'
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify user is authenticated
-    const user = await getAuthenticatedUser()
-    if (!user || !user.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please log in to use chat' },
-        { status: 401 }
-      )
-    }
-
-    const body = await request.json()
-
-    // Validate input
-    const result = chatMessageSchema.safeParse(body)
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Invalid input', details: result.error.issues },
-        { status: 400 }
-      )
-    }
-
-    const { message, questionText: question, chatHistory = [] } = body
+    const { message, question, chatHistory = [], userEmail, packId, questionObjectId } = await request.json()
 
     if (!message) {
       return NextResponse.json(
@@ -103,6 +82,34 @@ export async function POST(request: NextRequest) {
       cost_usd: cost,
       endpoint: '/api/chat',
     })
+
+    // Save conversation to database if userEmail is provided
+    if (userEmail) {
+      try {
+        const conversationId = await findOrCreateConversation(
+          userEmail,
+          packId,
+          questionObjectId,
+          false // not a demo
+        )
+
+        if (conversationId) {
+          // Save user message
+          await addConversationMessage(conversationId, 'user', message)
+
+          // Save assistant response with token count
+          await addConversationMessage(
+            conversationId,
+            'assistant',
+            assistantMessage.text,
+            outputTokens
+          )
+        }
+      } catch (error) {
+        console.error('Error saving conversation to database:', error)
+        // Don't fail the request if conversation saving fails
+      }
+    }
 
     return NextResponse.json({
       response: assistantMessage.text,

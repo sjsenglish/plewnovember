@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useUserAccess } from '@/app/hooks/useUserAccess'
+import UpgradeModal from '@/app/components/UpgradeModal'
+import AccessLimitBanner from '@/app/components/AccessLimitBanner'
 import styles from './PackSizeSelector.module.css'
 
 const packSizes = [
@@ -19,12 +22,24 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null)
   const [isCreating, setIsCreating] = useState(false)
   const [isDemoCompleted, setIsDemoCompleted] = useState(false)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const router = useRouter()
+
+  // Check user access
+  const { access, refresh: refreshAccess } = useUserAccess(userEmail)
 
   useEffect(() => {
     // Check if demo is completed
     const demoCompleted = localStorage.getItem('demo-completed')
     setIsDemoCompleted(demoCompleted === 'true')
+
+    // Get current user
+    const userStr = localStorage.getItem('user')
+    if (userStr) {
+      const user = JSON.parse(userStr)
+      setUserEmail(user.email)
+    }
   }, [])
 
   const handleCreatePack = async () => {
@@ -53,11 +68,17 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         })
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to create pack')
+      const data = await response.json()
+
+      // Check if user hit the access limit
+      if (response.status === 403 && data.requiresUpgrade) {
+        setShowUpgradeModal(true)
+        return
       }
 
-      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to create pack')
+      }
 
       // Store pack data in localStorage for client-side retrieval
       localStorage.setItem(`pack-${data.packId}`, JSON.stringify(data))
@@ -72,8 +93,37 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
     }
   }
 
+  const handleUpgrade = () => {
+    // Redirect to upgrade/checkout page
+    router.push('/pricing')
+  }
+
   return (
     <div className={styles.container}>
+      {/* Access Limit Banner */}
+      {access && !access.canAccess && (
+        <AccessLimitBanner
+          questionsRemaining={access.questionsRemaining}
+          onUpgrade={handleUpgrade}
+        />
+      )}
+
+      {/* Show warning banner for free users */}
+      {access && access.canAccess && access.tier === 'free' && access.questionsRemaining >= 0 && (
+        <AccessLimitBanner
+          questionsRemaining={access.questionsRemaining}
+          onUpgrade={handleUpgrade}
+        />
+      )}
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        questionsCompleted={access?.questionsCompleted || 0}
+        onUpgrade={handleUpgrade}
+      />
+
       {/* Demo Button Row */}
       {!isDemoCompleted ? (
         <div className={styles.demoRow}>

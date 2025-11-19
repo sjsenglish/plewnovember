@@ -15,9 +15,10 @@ interface ChatPanelProps {
   packId: string
   isDemo?: boolean
   onDemoComplete?: () => void
+  userEmail?: string
 }
 
-export default function ChatPanel({ question, packId, isDemo = false, onDemoComplete }: ChatPanelProps) {
+export default function ChatPanel({ question, packId, isDemo = false, onDemoComplete, userEmail }: ChatPanelProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -99,7 +100,10 @@ export default function ChatPanel({ question, packId, isDemo = false, onDemoComp
           chatHistory: messages.map(m => ({
             role: m.role,
             content: m.content
-          }))
+          })),
+          userEmail,
+          packId,
+          questionObjectId: question?.objectID
         })
       })
 

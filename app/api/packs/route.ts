@@ -1,18 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchQuestions } from '@/lib/algolia'
-import { getAuthenticatedUser } from '@/lib/auth-helpers'
-import { packCreationSchema } from '@/lib/validation-schemas'
+import { checkUserAccess } from '@/lib/user-tracking'
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify user is authenticated
-    const user = await getAuthenticatedUser()
-    if (!user || !user.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please log in' },
-        { status: 401 }
-      )
-    }
+    const { size, userEmail, level = 1, isDemo = false } = await request.json()
 
     const body = await request.json()
 
@@ -25,14 +17,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { size, userEmail, level } = result.data
+    // Check user access limits (skip for demo)
+    if (userEmail && !isDemo) {
+      const accessCheck = await checkUserAccess(userEmail)
 
-    // Verify user can only create packs for themselves
-    if (user.email !== userEmail) {
-      return NextResponse.json(
-        { error: 'Forbidden - You can only create packs for yourself' },
-        { status: 403 }
-      )
+      if (!accessCheck.canAccess) {
+        return NextResponse.json(
+          {
+            error: 'Access limit reached',
+            message: accessCheck.reason || 'You have reached the free tier limit. Upgrade to premium for unlimited access.',
+            tier: accessCheck.tier,
+            questionsCompleted: accessCheck.questionsCompleted,
+            requiresUpgrade: true,
+          },
+          { status: 403 }
+        )
+      }
     }
 
     // Fetch used questions for this user and level if userEmail is provided
