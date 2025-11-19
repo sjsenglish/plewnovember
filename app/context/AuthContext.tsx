@@ -1,10 +1,13 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { User as SupabaseUser } from '@supabase/supabase-js'
 
 interface User {
   email: string
   name: string
+  id: string
 }
 
 interface AuthContextType {
@@ -20,38 +23,75 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const supabase = createClient()
 
   useEffect(() => {
-    // Check if user is logged in on mount
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
+    // Check for existing session
+    const initializeAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+
+        if (session?.user) {
+          setUser({
+            email: session.user.email!,
+            name: session.user.user_metadata?.name || '',
+            id: session.user.id
+          })
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error)
+      } finally {
+        setIsLoading(false)
+      }
     }
-    setIsLoading(false)
+
+    initializeAuth()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser({
+          email: session.user.email!,
+          name: session.user.user_metadata?.name || '',
+          id: session.user.id
+        })
+      } else {
+        setUser(null)
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
   }, [])
 
   const signup = async (email: string, password: string, name: string): Promise<boolean> => {
     try {
-      // Get existing users
-      const existingUsersStr = localStorage.getItem('users')
-      const existingUsers = existingUsersStr ? JSON.parse(existingUsersStr) : []
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name
+          }
+        }
+      })
 
-      // Check if user already exists
-      if (existingUsers.some((u: { email: string }) => u.email === email)) {
+      if (error) {
+        console.error('Signup error:', error.message)
         return false
       }
 
-      // Add new user
-      const newUser = { email, password, name }
-      existingUsers.push(newUser)
-      localStorage.setItem('users', JSON.stringify(existingUsers))
+      if (data.user) {
+        setUser({
+          email: data.user.email!,
+          name,
+          id: data.user.id
+        })
+        return true
+      }
 
-      // Auto-login after signup
-      const userInfo = { email, name }
-      setUser(userInfo)
-      localStorage.setItem('user', JSON.stringify(userInfo))
-
-      return true
+      return false
     } catch (error) {
       console.error('Signup error:', error)
       return false
@@ -60,20 +100,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // Get existing users
-      const existingUsersStr = localStorage.getItem('users')
-      const existingUsers = existingUsersStr ? JSON.parse(existingUsersStr) : []
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
 
-      // Find user
-      const foundUser = existingUsers.find(
-        (u: { email: string; password: string; name: string }) =>
-          u.email === email && u.password === password
-      )
+      if (error) {
+        console.error('Login error:', error.message)
+        return false
+      }
 
-      if (foundUser) {
-        const userInfo = { email: foundUser.email, name: foundUser.name }
-        setUser(userInfo)
-        localStorage.setItem('user', JSON.stringify(userInfo))
+      if (data.user) {
+        setUser({
+          email: data.user.email!,
+          name: data.user.user_metadata?.name || '',
+          id: data.user.id
+        })
         return true
       }
 
@@ -84,9 +126,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem('user')
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut()
+      setUser(null)
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
   }
 
   if (isLoading) {
