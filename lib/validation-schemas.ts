@@ -19,7 +19,10 @@ export const packCreationSchema = z.object({
     .int('Pack size must be an integer')
     .min(1, 'Pack size must be at least 1')
     .max(100, 'Pack size cannot exceed 100'),
-  userEmail: emailSchema,
+
+  // CHANGE THIS LINE: Allow optional/nullable email
+  userEmail: emailSchema.optional().nullable(),
+
   level: z
     .number()
     .int('Level must be an integer')
