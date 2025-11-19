@@ -43,7 +43,7 @@ export default function SignupPage() {
     const success = await signup(email, password, name)
 
     if (success) {
-      router.push('/profile')
+      router.push('/')
     } else {
       setError('Email already exists')
       setIsLoading(false)
