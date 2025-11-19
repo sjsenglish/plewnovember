@@ -2,10 +2,32 @@ import { NextRequest, NextResponse } from 'next/server'
 import { anthropic } from '@/lib/anthropic'
 import { plewPrompt } from '@/lib/plew-prompt'
 import { isUsageLimitExceeded, trackUsage, calculateCost, getUsageSummary } from '@/lib/usage-tracking'
+import { getAuthenticatedUser } from '@/lib/auth-helpers'
+import { chatMessageSchema } from '@/lib/validation-schemas'
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, question, chatHistory = [] } = await request.json()
+    // Verify user is authenticated
+    const user = await getAuthenticatedUser()
+    if (!user || !user.email) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please log in to use chat' },
+        { status: 401 }
+      )
+    }
+
+    const body = await request.json()
+
+    // Validate input
+    const result = chatMessageSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: result.error.issues },
+        { status: 400 }
+      )
+    }
+
+    const { message, questionText: question, chatHistory = [] } = body
 
     if (!message) {
       return NextResponse.json(
