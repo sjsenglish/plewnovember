@@ -27,6 +27,7 @@ export const packCreationSchema = z.object({
     .max(5, 'Level cannot exceed 5')
     .optional()
     .default(1),
+  isDemo: z.boolean().optional().default(false),
 })
 
 // Chat message schema

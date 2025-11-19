@@ -36,6 +36,11 @@ export async function GET(request: NextRequest) {
 
     // Verify user can only access their own stats
     if (user.email !== emailValidation.data) {
+      console.error('Email mismatch in user-stats:', {
+        authenticatedEmail: user.email,
+        requestedEmail: emailValidation.data,
+        match: user.email === emailValidation.data
+      })
       return NextResponse.json(
         { error: 'Forbidden - You can only access your own statistics' },
         { status: 403 }
