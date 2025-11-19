@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchQuestions } from '@/lib/algolia'
 import { checkUserAccess } from '@/lib/user-tracking'
+import { packCreationSchema } from '@/lib/validation-schemas'
 
 export async function POST(request: NextRequest) {
   try {
-    const { size, userEmail, level = 1, isDemo = false } = await request.json()
-
     const body = await request.json()
 
     // Validate input
@@ -16,6 +15,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    const { size, userEmail, level, isDemo } = result.data
 
     // Check user access limits (skip for demo)
     if (userEmail && !isDemo) {

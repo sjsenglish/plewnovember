@@ -1,11 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { incrementQuestionsCompleted } from '@/lib/user-tracking'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-const supabase = createClient(supabaseUrl, supabaseKey)
 import { getAuthenticatedUser } from '@/lib/auth-helpers'
 import { createClient } from '@/lib/supabase/server'
 import { completedPackSchema, emailSchema } from '@/lib/validation-schemas'
@@ -90,6 +84,11 @@ export async function POST(request: NextRequest) {
 
     // Verify user can only save their own pack completions
     if (user.email !== userEmail) {
+      console.error('Email mismatch in POST completed-packs:', {
+        authenticatedEmail: user.email,
+        requestedEmail: userEmail,
+        match: user.email === userEmail
+      })
       return NextResponse.json(
         { error: 'Forbidden - You can only save your own pack completions' },
         { status: 403 }
@@ -221,6 +220,11 @@ export async function GET(request: NextRequest) {
 
     // Verify user can only access their own completed packs
     if (user.email !== emailValidation.data) {
+      console.error('Email mismatch in completed-packs:', {
+        authenticatedEmail: user.email,
+        requestedEmail: emailValidation.data,
+        match: user.email === emailValidation.data
+      })
       return NextResponse.json(
         { error: 'Forbidden - You can only access your own completed packs' },
         { status: 403 }
