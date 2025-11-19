@@ -181,7 +181,6 @@ export default function Practice() {
     setGeneratingNewPack(true)
 
     try {
-      // Create new pack with same size and level
       const response = await fetch('/api/packs', {
         method: 'POST',
         headers: {
@@ -189,16 +188,27 @@ export default function Practice() {
         },
         body: JSON.stringify({
           size: pack.size,
-          userEmail: user.email, // Use real email
+          userEmail: user.email,
           level: pack.level || 1
         })
       })
 
+      // HANDLE 403 LIMIT ERROR
+      if (response.status === 403) {
+        const data = await response.json()
+        if (data.requiresUpgrade) {
+          alert('🎉 Free trial complete! Redirecting to upgrades...')
+          router.push('/pricing') // Or '/pack-maker' to see the upgrade modal
+          return
+        }
+      }
+
       if (response.ok) {
         const newPackData = await response.json()
-        // Store new pack in localStorage
         localStorage.setItem(`pack-${newPackData.packId}`, JSON.stringify(newPackData))
         console.log('New pack generated:', newPackData.packId)
+        // Optional: Redirect to the new pack immediately
+        // router.push(`/practice/${newPackData.packId}`)
       } else {
         console.error('Failed to generate new pack')
       }

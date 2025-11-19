@@ -188,7 +188,6 @@ export async function POST(request: NextRequest) {
 // GET: Fetch completed packs for a user
 export async function GET(request: NextRequest) {
   try {
-    // Verify user is authenticated
     const user = await getAuthenticatedUser()
     if (!user || !user.email) {
       return NextResponse.json(
@@ -198,46 +197,29 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const userEmail = searchParams.get('userEmail')
-    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100) // Cap at 100
+    const paramEmail = searchParams.get('userEmail')
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
     const offset = Math.max(parseInt(searchParams.get('offset') || '0'), 0)
 
-    if (!userEmail) {
-      return NextResponse.json(
-        { error: 'userEmail is required' },
-        { status: 400 }
-      )
+    // Robust email handling (Case Insensitive)
+    let targetEmail = user.email
+
+    if (paramEmail) {
+      // Normalize both to lowercase for comparison
+      if (user.email.toLowerCase() !== paramEmail.toLowerCase().trim()) {
+         return NextResponse.json(
+          { error: 'Forbidden - You can only access your own completed packs' },
+          { status: 403 }
+        )
+      }
+      targetEmail = paramEmail.trim()
     }
 
-    // Validate email
-    const emailValidation = emailSchema.safeParse(userEmail)
-    if (!emailValidation.success) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      )
-    }
-
-    // Verify user can only access their own completed packs
-    if (user.email !== emailValidation.data) {
-      console.error('Email mismatch in completed-packs:', {
-        authenticatedEmail: user.email,
-        requestedEmail: emailValidation.data,
-        match: user.email === emailValidation.data
-      })
-      return NextResponse.json(
-        { error: 'Forbidden - You can only access your own completed packs' },
-        { status: 403 }
-      )
-    }
-
-    // Get Supabase client with user context
     const supabase = await createClient()
 
-    // Fetch completed packs with answer counts
     const { data: completedPacks, error } = await supabase
       .rpc('get_completed_packs_summary', {
-        p_user_email: userEmail,
+        p_user_email: targetEmail,
         p_limit: limit,
         p_offset: offset
       })
