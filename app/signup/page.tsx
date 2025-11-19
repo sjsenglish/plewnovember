@@ -49,6 +49,7 @@ export default function SignupPage() {
     console.log('[DEBUG] Signup function returned:', { success })
 
     if (success) {
+      router.push('/')
       console.log('[DEBUG] Signup successful, redirecting to /profile')
       router.push('/profile')
     } else {
