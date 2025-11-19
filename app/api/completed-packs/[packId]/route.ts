@@ -19,11 +19,11 @@ export async function GET(
 
     const { packId: completedPackId } = await params
 
-    // Validate packId is a number
-    const packIdNum = parseInt(completedPackId)
-    if (isNaN(packIdNum)) {
+    // Validate packId is a valid UUID
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!uuidRegex.test(completedPackId)) {
       return NextResponse.json(
-        { error: 'Invalid pack ID' },
+        { error: 'Invalid pack ID format' },
         { status: 400 }
       )
     }
@@ -35,10 +35,15 @@ export async function GET(
     const { data: pack, error: packError } = await supabase
       .from('completed_packs')
       .select('*')
-      .eq('id', packIdNum)
+      .eq('id', completedPackId)
       .single()
 
     if (packError || !pack) {
+      console.error('Completed pack not found:', {
+        completedPackId,
+        userEmail: user.email,
+        error: packError
+      })
       return NextResponse.json(
         { error: 'Completed pack not found' },
         { status: 404 }
@@ -57,7 +62,7 @@ export async function GET(
     const { data: answers, error: answersError } = await supabase
       .from('user_answers')
       .select('*')
-      .eq('completed_pack_id', packIdNum)
+      .eq('completed_pack_id', completedPackId)
       .order('answered_at', { ascending: true })
 
     if (answersError) {

@@ -8,6 +8,9 @@ interface User {
   email: string
   name: string
   id: string
+  createdAt?: string
+  subscriptionStatus?: string
+  subscriptionEndDate?: string
 }
 
 interface AuthContextType {
@@ -35,7 +38,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser({
             email: session.user.email!,
             name: session.user.user_metadata?.name || '',
-            id: session.user.id
+            id: session.user.id,
+            createdAt: session.user.created_at,
+            subscriptionStatus: session.user.user_metadata?.subscription_status,
+            subscriptionEndDate: session.user.user_metadata?.subscription_end_date
           })
         }
       } catch (error) {
@@ -53,7 +59,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser({
           email: session.user.email!,
           name: session.user.user_metadata?.name || '',
-          id: session.user.id
+          id: session.user.id,
+          createdAt: session.user.created_at,
+          subscriptionStatus: session.user.user_metadata?.subscription_status,
+          subscriptionEndDate: session.user.user_metadata?.subscription_end_date
         })
       } else {
         setUser(null)
@@ -112,7 +121,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser({
           email: data.user.email!,
           name,
-          id: data.user.id
+          id: data.user.id,
+          createdAt: data.user.created_at,
+          subscriptionStatus: data.user.user_metadata?.subscription_status,
+          subscriptionEndDate: data.user.user_metadata?.subscription_end_date
         })
         console.log('[DEBUG] User state updated in context')
         return true
@@ -147,7 +159,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser({
           email: data.user.email!,
           name: data.user.user_metadata?.name || '',
-          id: data.user.id
+          id: data.user.id,
+          createdAt: data.user.created_at,
+          subscriptionStatus: data.user.user_metadata?.subscription_status,
+          subscriptionEndDate: data.user.user_metadata?.subscription_end_date
         })
         return true
       }
