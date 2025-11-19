@@ -12,40 +12,6 @@
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  position: relative;
-}
-
-.sharedPackButton {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 48px;
-  height: 48px;
-  border: none;
-  border-radius: 12px;
-  background: var(--custom-white);
-  box-shadow: var(--shadow-container);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-
-.sharedPackButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(147, 112, 219, 0.3);
-}
-
-.sharedPackButton:active {
-  transform: translateY(0);
-}
-
-.sharedPackIcon {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
 }
 
 @media (min-width: 640px) {
@@ -104,17 +70,5 @@
   .tabButton {
     font-size: 0.875rem;
     padding: 0.625rem 1rem;
-  }
-
-  .sharedPackButton {
-    width: 40px;
-    height: 40px;
-    top: 0.5rem;
-    right: 0.5rem;
-  }
-
-  .sharedPackIcon {
-    width: 24px;
-    height: 24px;
   }
 }
