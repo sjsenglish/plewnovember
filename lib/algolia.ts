@@ -4,7 +4,8 @@ import { algoliasearch } from 'algoliasearch'
 // MAKE SURE these are set in your Vercel Environment Variables!
 const appID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || '';
 const apiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY || '';
-const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME || 'questions'; // Default index name
+// Use the environment variable, or fallback to 'csat_final' if you prefer
+const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME || 'questions';
 
 const client = algoliasearch(appID, apiKey);
 
@@ -40,7 +41,12 @@ export async function searchQuestions(
 
     // 2. Extract hits
     if (response.results && response.results[0]) {
-        const hits = response.results[0].hits;
+        // --- THE FIX IS HERE ---
+        // We cast to 'any' because TypeScript thinks this might be a Facet response (which has no hits)
+        const searchResult = response.results[0] as any;
+        const hits = searchResult.hits;
+
+        if (!hits) return [];
 
         // 3. Map to your interface safely
         return hits.map((hit: any) => ({
@@ -69,7 +75,8 @@ export async function getQuestionById(objectID: string): Promise<AlgoliaQuestion
   try {
     const response = await client.getObject({
         indexName: indexName,
-        objectID: objectID
+        objectID: objectID,
+        attributesToRetrieve: ['*']
     });
     return response as unknown as AlgoliaQuestion;
   } catch (error) {
