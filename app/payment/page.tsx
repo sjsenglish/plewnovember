@@ -20,7 +20,7 @@ export default function Payment() {
         throw new Error('Stripe price ID not configured')
       }
 
-      // Create checkout session
+      // Create checkout session (user email is pulled from auth on server-side)
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {

@@ -94,8 +94,8 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   }
 
   const handleUpgrade = () => {
-    // Redirect to upgrade/checkout page
-    router.push('/pricing')
+    // Redirect to existing payment page
+    router.push('/payment')
   }
 
   return (
