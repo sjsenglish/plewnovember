@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUserAccess } from '@/app/hooks/useUserAccess'
 import UpgradeModal from '@/app/components/UpgradeModal'
-import AccessLimitBanner from '@/app/components/AccessLimitBanner'
 import styles from './PackSizeSelector.module.css'
 
 const packSizes = [
@@ -100,22 +99,6 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
 
   return (
     <div className={styles.container}>
-      {/* Access Limit Banner */}
-      {access && !access.canAccess && (
-        <AccessLimitBanner
-          questionsRemaining={access.questionsRemaining}
-          onUpgrade={handleUpgrade}
-        />
-      )}
-
-      {/* Show warning banner for free users */}
-      {access && access.canAccess && access.tier === 'free' && access.questionsRemaining >= 0 && (
-        <AccessLimitBanner
-          questionsRemaining={access.questionsRemaining}
-          onUpgrade={handleUpgrade}
-        />
-      )}
-
       {/* Upgrade Modal */}
       <UpgradeModal
         isOpen={showUpgradeModal}

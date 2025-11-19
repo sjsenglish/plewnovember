@@ -14,34 +14,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { searchParams } = new URL(request.url)
-    const paramEmail = searchParams.get('userEmail')
-
-    let targetEmail = user.email
-
-    if (paramEmail) {
-      const emailValidation = emailSchema.safeParse(paramEmail)
-
-      if (!emailValidation.success) {
-        return NextResponse.json(
-          { error: 'Invalid email format', details: emailValidation.error.issues },
-          { status: 400 }
-        )
-      }
-
-      // Case-insensitive comparison
-      if (user.email.toLowerCase() !== emailValidation.data.toLowerCase()) {
-        console.error('Email mismatch in user-stats:', {
-          auth: user.email,
-          param: emailValidation.data
-        })
-        return NextResponse.json(
-          { error: 'Forbidden - You can only access your own statistics' },
-          { status: 403 }
-        )
-      }
-      targetEmail = emailValidation.data
-    }
+    // Always use the authenticated user's email, ignore query parameter
+    const targetEmail = user.email
 
     const supabase = await createClient()
 
