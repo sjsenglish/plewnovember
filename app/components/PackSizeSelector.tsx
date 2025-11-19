@@ -183,7 +183,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
           ))}
         </div>
 
-        {/* Row 2: 4th pack option and custom size */}
+        {/* Row 2: 4th pack option, custom size, and shared pack */}
       <div className={styles.row2}>
         {/* 4th pack option */}
         {packSizes.slice(3, 4).map(({ size, label, description }) => (
@@ -230,6 +230,30 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
             <span className={styles.customInputLabel}>문제 (최대 50)</span>
           </div>
         </div>
+
+        {/* Shared Pack Button - appears after demo completion */}
+        {isDemoCompleted && (
+          <button
+            onClick={() => router.push('/practice/sample-pack-2026')}
+            className={styles.sharedPackButton}
+          >
+            <div className={styles.packContent}>
+              <div className={styles.packInfo}>
+                <h3 className={styles.packLabel}>
+                  샘플 팩
+                </h3>
+                <p className={styles.packDescription}>2026 실전 문제 체험</p>
+              </div>
+              <div className={styles.sharedPackIcon}>
+                <img
+                  src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ffolder_blue.svg?alt=media&token=3f5b15d2-6e3c-4679-aa98-3d8bc86e4aff"
+                  alt="샘플 팩"
+                  className={styles.iconImage}
+                />
+              </div>
+            </div>
+          </button>
+        )}
       </div>
 
       {/* Row 3: Create button */}
