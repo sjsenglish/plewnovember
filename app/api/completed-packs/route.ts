@@ -194,23 +194,11 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const userEmail = searchParams.get('userEmail')
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100)
     const offset = Math.max(parseInt(searchParams.get('offset') || '0'), 0)
 
-    let targetEmail = user.email
-
-    if (userEmail) {
-      // Case-Insensitive Check
-      if (user.email.toLowerCase() !== userEmail.toLowerCase().trim()) {
-        return NextResponse.json(
-          { error: 'Forbidden - You can only access your own completed packs' },
-          { status: 403 }
-        )
-      }
-      // Use the param email if it matches (but cleaned up)
-      targetEmail = userEmail.trim()
-    }
+    // Always use the authenticated user's email, ignore query parameter
+    const targetEmail = user.email
 
     // Get Supabase client with user context
     const supabase = await createClient()
