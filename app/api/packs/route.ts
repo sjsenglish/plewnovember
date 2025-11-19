@@ -1,14 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchQuestions } from '@/lib/algolia'
+import { getAuthenticatedUser } from '@/lib/auth-helpers'
+import { packCreationSchema } from '@/lib/validation-schemas'
 
 export async function POST(request: NextRequest) {
   try {
-    const { size, userEmail, level = 1 } = await request.json()
-
-    if (!size || size < 1 || size > 100) {
+    // Verify user is authenticated
+    const user = await getAuthenticatedUser()
+    if (!user || !user.email) {
       return NextResponse.json(
-        { error: 'Invalid pack size. Must be between 1 and 100.' },
+        { error: 'Unauthorized - Please log in' },
+        { status: 401 }
+      )
+    }
+
+    const body = await request.json()
+
+    // Validate input
+    const result = packCreationSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: result.error.issues },
         { status: 400 }
+      )
+    }
+
+    const { size, userEmail, level } = result.data
+
+    // Verify user can only create packs for themselves
+    if (user.email !== userEmail) {
+      return NextResponse.json(
+        { error: 'Forbidden - You can only create packs for yourself' },
+        { status: 403 }
       )
     }
 

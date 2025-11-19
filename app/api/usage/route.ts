@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getUsageSummary } from '@/lib/usage-tracking'
+import { getAuthenticatedUser } from '@/lib/auth-helpers'
 
 /**
  * GET /api/usage - Check current API usage status
@@ -9,9 +10,20 @@ import { getUsageSummary } from '@/lib/usage-tracking'
  * - Total requests
  * - Remaining budget
  * - Whether limit is exceeded
+ *
+ * Note: This is sensitive information, so it requires authentication
  */
 export async function GET(request: NextRequest) {
   try {
+    // Verify user is authenticated
+    const user = await getAuthenticatedUser()
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please log in' },
+        { status: 401 }
+      )
+    }
+
     const summary = await getUsageSummary()
 
     if (!summary) {
