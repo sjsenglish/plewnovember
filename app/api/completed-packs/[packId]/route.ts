@@ -57,7 +57,7 @@ export async function GET(
     const { data: answers, error: answersError } = await supabase
       .from('user_answers')
       .select('*')
-      .eq('completed_pack_id', completedPackId)
+      .eq('completed_pack_id', packIdNum)
       .order('answered_at', { ascending: true })
 
     if (answersError) {
