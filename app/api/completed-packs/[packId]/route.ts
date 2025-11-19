@@ -39,6 +39,11 @@ export async function GET(
       .single()
 
     if (packError || !pack) {
+      console.error('Completed pack not found:', {
+        completedPackId,
+        userEmail: user.email,
+        error: packError
+      })
       return NextResponse.json(
         { error: 'Completed pack not found' },
         { status: 404 }

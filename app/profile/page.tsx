@@ -45,42 +45,38 @@ export default function Profile() {
                 <label className={styles.label}>Email</label>
                 <p className={styles.value}>{user.email}</p>
               </div>
-            </div>
-          </div>
-
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Progress Stats</h2>
-            <div className={styles.statsGrid}>
-              <div className={styles.statCard}>
-                <p className={styles.statValue}>0</p>
-                <p className={styles.statLabel}>Packs Completed</p>
+              <div className={styles.infoItem}>
+                <label className={styles.label}>Date Joined</label>
+                <p className={styles.value}>
+                  {user.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })
+                    : 'N/A'}
+                </p>
               </div>
-              <div className={styles.statCard}>
-                <p className={styles.statValue}>0</p>
-                <p className={styles.statLabel}>Total Questions</p>
+              <div className={styles.infoItem}>
+                <label className={styles.label}>Subscription Status</label>
+                <p className={styles.value}>
+                  {user.subscriptionStatus || 'Free'}
+                </p>
               </div>
-              <div className={styles.statCard}>
-                <p className={styles.statValue}>0%</p>
-                <p className={styles.statLabel}>Accuracy</p>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Settings</h2>
-            <div className={styles.settingsList}>
-              <button className={styles.settingButton}>
-                <span>Notification Preferences</span>
-                <span className={styles.arrow}>→</span>
-              </button>
-              <button className={styles.settingButton}>
-                <span>Language Settings</span>
-                <span className={styles.arrow}>→</span>
-              </button>
-              <button className={styles.settingButton}>
-                <span>Privacy Settings</span>
-                <span className={styles.arrow}>→</span>
-              </button>
+              {user.subscriptionEndDate && (
+                <div className={styles.infoItem}>
+                  <label className={styles.label}>
+                    {user.subscriptionStatus === 'Active' ? 'Renews On' : 'Expires On'}
+                  </label>
+                  <p className={styles.value}>
+                    {new Date(user.subscriptionEndDate).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
