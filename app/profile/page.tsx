@@ -3,7 +3,6 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/app/components/Navbar'
-import BackButton from '@/app/components/BackButton'
 import { useAuth } from '../context/AuthContext'
 import styles from './profile.module.css'
 
@@ -29,7 +28,6 @@ export default function Profile() {
   return (
     <div className={styles.container}>
       <Navbar />
-      <BackButton />
       <div className={styles.content}>
         <div className={styles.profileCard}>
           <h1 className={styles.title}>Profile</h1>

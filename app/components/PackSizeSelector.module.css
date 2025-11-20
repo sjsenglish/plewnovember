@@ -8,27 +8,6 @@
   padding: 0 1rem;
 }
 
-/* Banner Row - Half Size */
-.bannerRow {
-  width: 100%;
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-}
-
-.bannerImage {
-  width: 50%;
-  max-width: 400px;
-  height: auto;
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .bannerImage {
-    width: 60%;
-  }
-}
-
 /* Quick Options Row - 1 Question and Sample Pack */
 .quickOptionsRow {
   display: grid;
@@ -281,10 +260,11 @@
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
   color: #111827;
-  background-color: white;
+  background-color: var(--custom-white);
   cursor: pointer;
   transition: all 0.2s;
   letter-spacing: 0.04em;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 @media (min-width: 640px) {
@@ -296,6 +276,7 @@
 
 .filterSelect:hover {
   border-color: #a78bfa;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .filterSelect:focus {

@@ -6,6 +6,7 @@ import QuestionViewer from '@/app/components/QuestionViewer'
 import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
 import Navbar from '@/app/components/Navbar'
+import BackButton from '@/app/components/BackButton'
 import { useAuth } from '@/app/context/AuthContext'
 import styles from './practiceQuestions.module.css'
 
@@ -250,10 +251,12 @@ export default function Practice() {
   }
 
   const currentQuestion = pack.questions[currentQuestionIndex]
+  const backDestination = pack.level ? `/pack-maker-level${pack.level}` : '/pack-maker'
 
   return (
     <div className={styles.container}>
       <Navbar />
+      <BackButton to={backDestination} />
       <div className={styles.mainContent}>
         <div className={styles.questionNumberBar}>
           <div className={styles.questionNumbersContainer}>

@@ -227,15 +227,6 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         onUpgrade={handleUpgrade}
       />
 
-      {/* Plew Method Banner - Half Size */}
-      <div className={styles.bannerRow}>
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202803.svg?alt=media&token=ba8ce115-ed4d-47d3-883b-c336b8b83381"
-          alt="Plew Method"
-          className={styles.bannerImage}
-        />
-      </div>
-
       {/* Quick Options Row - 1 Question and Sample Pack 2026 */}
       <div className={styles.quickOptionsRow}>
         <button

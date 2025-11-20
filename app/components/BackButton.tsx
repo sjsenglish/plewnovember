@@ -3,13 +3,17 @@
 import { useRouter } from 'next/navigation'
 import styles from './BackButton.module.css'
 
-export default function BackButton() {
+interface BackButtonProps {
+  to: string
+}
+
+export default function BackButton({ to }: BackButtonProps) {
   const router = useRouter()
 
   return (
     <div className={styles.backButtonContainer}>
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push(to)}
         className={styles.backButton}
         type="button"
       >

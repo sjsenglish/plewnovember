@@ -1,14 +1,12 @@
 'use client'
 
 import Navbar from '@/app/components/Navbar'
-import BackButton from '@/app/components/BackButton'
 import styles from './about.module.css'
 
 export default function About() {
   return (
     <div className={styles.container}>
       <Navbar />
-      <BackButton />
       <div className={styles.content}>
         <div className={styles.aboutCard}>
           <h1 className={styles.title}>Who We Are</h1>
