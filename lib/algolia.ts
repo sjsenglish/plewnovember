@@ -19,6 +19,15 @@ export interface AlgoliaQuestion {
   difficulty?: 'easy' | 'medium' | 'hard'
   subject?: string
   topic?: string
+  // New fields for filtering
+  questionNumber?: number
+  year?: string
+  imageFile?: string
+  videoSolutionLink?: string
+  source?: string
+  primarySubjectArea?: string
+  passageType?: string
+  questionSkill?: string
 }
 
 export async function searchQuestions(
@@ -58,7 +67,16 @@ export async function searchQuestions(
             explanation: hit.explanation || '',
             difficulty: hit.difficulty || 'medium',
             subject: hit.subject || 'General',
-            topic: hit.topic || ''
+            topic: hit.topic || '',
+            // New fields
+            questionNumber: hit.questionNumber,
+            year: hit.year,
+            imageFile: hit.imageFile,
+            videoSolutionLink: hit.videoSolutionLink,
+            source: hit.source,
+            primarySubjectArea: hit.primarySubjectArea,
+            passageType: hit.passageType,
+            questionSkill: hit.questionSkill
         }));
     }
 
