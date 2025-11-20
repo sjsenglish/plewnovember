@@ -7,38 +7,136 @@ import { useUserAccess } from '@/app/hooks/useUserAccess'
 import UpgradeModal from '@/app/components/UpgradeModal'
 import styles from './PackSizeSelector.module.css'
 
-const packSizes = [
-  { size: 1, label: '데일리 연습', description: '1문제 - 빠른 복습에 완벽' },
-  { size: 5, label: '추가 연습', description: '5문제 - 집중 학습에 좋음' },
-  { size: 10, label: '확장 연습', description: '10문제 - 종합적인 복습' },
-  { size: 15, label: '완전 연습', description: '15문제 - 완전한 연습 세션' },
-]
+interface Pack {
+  id: string
+  questions: any[]
+  number: number
+}
+
+interface FilteredPacks {
+  [key: string]: Pack[]
+}
+
+interface CompletedPacksData {
+  [packId: string]: boolean
+}
 
 interface PackSizeSelectorProps {
   level?: number
 }
 
 export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
-  const [selectedSize, setSelectedSize] = useState<number | null>(null)
-  const [isCreating, setIsCreating] = useState(false)
-  const [isDemoCompleted, setIsDemoCompleted] = useState(false)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [selectedFilters, setSelectedFilters] = useState({
+    primarySubjectArea: '',
+    passageType: '',
+    questionSkill: '',
+    source: ''
+  })
+  const [filteredPacks, setFilteredPacks] = useState<FilteredPacks>({})
+  const [completedPacks, setCompletedPacks] = useState<CompletedPacksData>({})
+  const [isLoading, setIsLoading] = useState(false)
+  const [dailyQuestionId, setDailyQuestionId] = useState<string | null>(null)
+  const [filterOptions, setFilterOptions] = useState({
+    primarySubjectArea: [] as string[],
+    passageType: [] as string[],
+    questionSkill: [] as string[],
+    source: [] as string[]
+  })
+
   const router = useRouter()
   const { user } = useAuth()
-
-  // Check user access using the authenticated user's email
   const { access, refresh: refreshAccess } = useUserAccess(user?.email || null)
 
+  // Get daily question ID based on current date
   useEffect(() => {
-    // Check if demo is completed
-    const demoCompleted = localStorage.getItem('demo-completed')
-    setIsDemoCompleted(demoCompleted === 'true')
+    const getDailyQuestionId = async () => {
+      try {
+        const response = await fetch('/api/daily-question')
+        const data = await response.json()
+        if (data.questionId) {
+          setDailyQuestionId(data.questionId)
+        }
+      } catch (error) {
+        console.error('Error fetching daily question:', error)
+      }
+    }
+    getDailyQuestionId()
   }, [])
 
-  const handleCreatePack = async () => {
-    if (!selectedSize) return
+  // Load filter options
+  useEffect(() => {
+    const loadFilterOptions = async () => {
+      try {
+        const response = await fetch('/api/filter-options')
+        const data = await response.json()
+        if (data.options) {
+          setFilterOptions(data.options)
+        }
+      } catch (error) {
+        console.error('Error loading filter options:', error)
+      }
+    }
+    loadFilterOptions()
+  }, [])
 
-    setIsCreating(true)
+  // Load completed packs from Supabase
+  useEffect(() => {
+    const loadCompletedPacks = async () => {
+      if (!user?.email) return
+
+      try {
+        const response = await fetch('/api/completed-filter-packs')
+        const data = await response.json()
+        if (data.completedPacks) {
+          const completedMap: CompletedPacksData = {}
+          data.completedPacks.forEach((packId: string) => {
+            completedMap[packId] = true
+          })
+          setCompletedPacks(completedMap)
+        }
+      } catch (error) {
+        console.error('Error loading completed packs:', error)
+      }
+    }
+    loadCompletedPacks()
+  }, [user?.email])
+
+  // Fetch filtered packs when filters change
+  useEffect(() => {
+    const fetchFilteredPacks = async () => {
+      // Only fetch if at least one filter is selected
+      const hasFilter = Object.values(selectedFilters).some(v => v !== '')
+      if (!hasFilter) {
+        setFilteredPacks({})
+        return
+      }
+
+      setIsLoading(true)
+      try {
+        const queryParams = new URLSearchParams()
+        Object.entries(selectedFilters).forEach(([key, value]) => {
+          if (value) queryParams.append(key, value)
+        })
+
+        const response = await fetch(`/api/filtered-packs?${queryParams}`)
+        const data = await response.json()
+
+        if (data.packs) {
+          setFilteredPacks(data.packs)
+        }
+      } catch (error) {
+        console.error('Error fetching filtered packs:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFilteredPacks()
+  }, [selectedFilters])
+
+  const handleDailyQuestion = async () => {
+    if (!dailyQuestionId) return
 
     try {
       const response = await fetch('/api/packs', {
@@ -47,15 +145,15 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          size: selectedSize,
+          size: 1,
           level,
-          userEmail: user?.email || null
+          userEmail: user?.email || null,
+          questionId: dailyQuestionId
         })
       })
 
       const data = await response.json()
 
-      // Check if user hit the access limit
       if (response.status === 403 && data.requiresUpgrade) {
         setShowUpgradeModal(true)
         return
@@ -65,27 +163,63 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         throw new Error(data.message || 'Failed to create pack')
       }
 
-      // Store pack data in localStorage for client-side retrieval
       localStorage.setItem(`pack-${data.packId}`, JSON.stringify(data))
+      router.push(`/practice/${data.packId}`)
+    } catch (error) {
+      console.error('Error creating daily question pack:', error)
+      alert('Failed to create practice pack. Please try again.')
+    }
+  }
 
-      // Navigate to the practice page
+  const handlePackClick = async (pack: Pack) => {
+    // Check if pack is completed
+    if (completedPacks[pack.id]) {
+      // Navigate to review/results page
+      router.push(`/pack-review/${pack.id}`)
+      return
+    }
+
+    // Create new practice session for this pack
+    try {
+      const response = await fetch('/api/packs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          size: 3,
+          level,
+          userEmail: user?.email || null,
+          packId: pack.id,
+          questions: pack.questions
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.status === 403 && data.requiresUpgrade) {
+        setShowUpgradeModal(true)
+        return
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to create pack')
+      }
+
+      localStorage.setItem(`pack-${data.packId}`, JSON.stringify(data))
       router.push(`/practice/${data.packId}`)
     } catch (error) {
       console.error('Error creating pack:', error)
       alert('Failed to create practice pack. Please try again.')
-    } finally {
-      setIsCreating(false)
     }
   }
 
   const handleUpgrade = () => {
-    // Redirect to upgrade/checkout page
     router.push('/pricing')
   }
 
   return (
     <div className={styles.container}>
-      {/* Upgrade Modal */}
       <UpgradeModal
         isOpen={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
@@ -93,166 +227,157 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         onUpgrade={handleUpgrade}
       />
 
-      {/* Demo Button Row */}
-      {!isDemoCompleted ? (
-        <div className={styles.demoRow}>
-          <button
-            onClick={() => router.push('/demo')}
-            className={styles.demoButton}
-          >
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202801.svg?alt=media&token=1d860ca6-36fd-4975-aa64-9a5f05359b8d"
-              alt="데모 시작"
-              className={styles.demoImage}
-            />
-          </button>
-        </div>
-      ) : (
-        <div className={styles.demoRow}>
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202803.svg?alt=media&token=ba8ce115-ed4d-47d3-883b-c336b8b83381"
-            alt="데모 완료"
-            className={styles.demoImage}
-          />
-        </div>
-      )}
+      {/* Plew Method Banner - Half Size */}
+      <div className={styles.bannerRow}>
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202803.svg?alt=media&token=ba8ce115-ed4d-47d3-883b-c336b8b83381"
+          alt="Plew Method"
+          className={styles.bannerImage}
+        />
+      </div>
 
-      {/* Locked message between demo and pack options */}
-      {!isDemoCompleted && (
-        <div className={styles.lockNotice}>
-          <img
-            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202802.svg?alt=media&token=5a29cc17-c7b6-47dd-bbbd-7fd7b8bbbf29"
-            alt="잠금 메시지"
-            className={styles.lockImage}
-          />
-        </div>
-      )}
+      {/* Quick Options Row - 1 Question and Sample Pack 2026 */}
+      <div className={styles.quickOptionsRow}>
+        <button
+          onClick={handleDailyQuestion}
+          className={styles.dailyQuestionButton}
+        >
+          <div className={styles.packContent}>
+            <div className={styles.packInfo}>
+              <h3 className={styles.packLabel}>1 문제</h3>
+              <p className={styles.packDescription}>오늘의 데일리 문제</p>
+            </div>
+            <div className={styles.packSize}>1</div>
+          </div>
+        </button>
 
-      {/* Row 1: First 3 pack options */}
-      <div className={styles.row1}>
-          {packSizes.slice(0, 3).map(({ size, label, description }) => (
-            <button
-              key={size}
-              onClick={() => isDemoCompleted && setSelectedSize(size)}
-              disabled={isCreating || !isDemoCompleted}
-              className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${(isCreating || !isDemoCompleted) ? styles.disabled : ''}`}
+        <button
+          onClick={() => router.push('/practice/sample-pack-2026')}
+          className={styles.samplePackButton}
+        >
+          <div className={styles.packContent}>
+            <div className={styles.packInfo}>
+              <h3 className={styles.packLabel}>샘플 팩</h3>
+              <p className={styles.packDescription}>2026 실전 문제 체험</p>
+            </div>
+            <div className={styles.sharedPackIcon}>
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ffolder_blue.svg?alt=media&token=3f5b15d2-6e3c-4679-aa98-3d8bc86e4aff"
+                alt="샘플 팩"
+                className={styles.iconImage}
+              />
+            </div>
+          </div>
+        </button>
+      </div>
+
+      {/* Filter Section */}
+      <div className={styles.filterSection}>
+        <h2 className={styles.filterTitle}>필터</h2>
+        <div className={styles.filterGrid}>
+          <div className={styles.filterGroup}>
+            <label className={styles.filterLabel}>과목</label>
+            <select
+              value={selectedFilters.primarySubjectArea}
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, primarySubjectArea: e.target.value }))}
+              className={styles.filterSelect}
             >
-              <div className={styles.packContent}>
-                <div className={styles.packInfo}>
-                  <h3 className={styles.packLabel}>
-                    {label}
-                  </h3>
-                  <p className={styles.packDescription}>{description}</p>
-                </div>
-                <div className={styles.packSize}>
-                  {size}
-                </div>
+              <option value="">전체</option>
+              {filterOptions.primarySubjectArea.map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.filterGroup}>
+            <label className={styles.filterLabel}>지문 유형</label>
+            <select
+              value={selectedFilters.passageType}
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, passageType: e.target.value }))}
+              className={styles.filterSelect}
+            >
+              <option value="">전체</option>
+              {filterOptions.passageType.map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.filterGroup}>
+            <label className={styles.filterLabel}>문제 유형</label>
+            <select
+              value={selectedFilters.questionSkill}
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, questionSkill: e.target.value }))}
+              className={styles.filterSelect}
+            >
+              <option value="">전체</option>
+              {filterOptions.questionSkill.map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.filterGroup}>
+            <label className={styles.filterLabel}>출처</label>
+            <select
+              value={selectedFilters.source}
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, source: e.target.value }))}
+              className={styles.filterSelect}
+            >
+              <option value="">전체</option>
+              {filterOptions.source.map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Packs Display */}
+      {isLoading ? (
+        <div className={styles.loadingContainer}>
+          <div className={styles.spinner}>
+            <svg className={styles.spinnerIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>팩 로딩 중...</span>
+          </div>
+        </div>
+      ) : Object.keys(filteredPacks).length > 0 ? (
+        <div className={styles.packsContainer}>
+          {Object.entries(filteredPacks).map(([category, packs]) => (
+            <div key={category} className={styles.categorySection}>
+              <h3 className={styles.categoryTitle}>{category}</h3>
+              <div className={styles.packsScroll}>
+                {packs.map((pack) => (
+                  <div
+                    key={pack.id}
+                    onClick={() => handlePackClick(pack)}
+                    className={styles.packCard}
+                  >
+                    <img
+                      src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ffolder_blue.svg?alt=media&token=3f5b15d2-6e3c-4679-aa98-3d8bc86e4aff"
+                      alt={`Pack ${pack.number}`}
+                      className={styles.packCardImage}
+                    />
+                    <div className={styles.packNumber}>{pack.number}</div>
+                    {completedPacks[pack.id] && (
+                      <div className={styles.completedBadge}>완성</div>
+                    )}
+                  </div>
+                ))}
               </div>
-            </button>
+            </div>
           ))}
         </div>
-
-        {/* Row 2: 4th pack option, custom size, and shared pack */}
-      <div className={styles.row2}>
-        {/* 4th pack option */}
-        {packSizes.slice(3, 4).map(({ size, label, description }) => (
-          <button
-            key={size}
-            onClick={() => isDemoCompleted && setSelectedSize(size)}
-            disabled={isCreating || !isDemoCompleted}
-            className={`${styles.packButton} ${selectedSize === size ? styles.selected : ''} ${(isCreating || !isDemoCompleted) ? styles.disabled : ''}`}
-          >
-            <div className={styles.packContent}>
-              <div className={styles.packInfo}>
-                <h3 className={styles.packLabel}>
-                  {label}
-                </h3>
-                <p className={styles.packDescription}>{description}</p>
-              </div>
-              <div className={styles.packSize}>
-                {size}
-              </div>
-            </div>
-          </button>
-        ))}
-
-        {/* Custom size input */}
-        <div className={styles.customSizeContainer}>
-          <h3 className={styles.customSizeTitle}>
-            맞춤 크기
-          </h3>
-          <div className={styles.customInputGroup}>
-            <input
-              type="number"
-              min="1"
-              max="50"
-              placeholder="문제 수 입력"
-              onChange={(e) => {
-                const value = parseInt(e.target.value)
-                if (isDemoCompleted && value > 0 && value <= 50) {
-                  setSelectedSize(value)
-                }
-              }}
-              disabled={isCreating || !isDemoCompleted}
-              className={styles.customInput}
-            />
-            <span className={styles.customInputLabel}>문제 (최대 50)</span>
+      ) : (
+        Object.values(selectedFilters).some(v => v !== '') && (
+          <div className={styles.noResultsContainer}>
+            <p className={styles.noResultsText}>선택한 필터에 해당하는 팩이 없습니다.</p>
           </div>
-        </div>
-
-        {/* Shared Pack Button - appears after demo completion */}
-        {isDemoCompleted && (
-          <button
-            onClick={() => router.push('/practice/sample-pack-2026')}
-            className={styles.sharedPackButton}
-          >
-            <div className={styles.packContent}>
-              <div className={styles.packInfo}>
-                <h3 className={styles.packLabel}>
-                  샘플 팩
-                </h3>
-                <p className={styles.packDescription}>2026 실전 문제 체험</p>
-              </div>
-              <div className={styles.sharedPackIcon}>
-                <img
-                  src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ffolder_blue.svg?alt=media&token=3f5b15d2-6e3c-4679-aa98-3d8bc86e4aff"
-                  alt="샘플 팩"
-                  className={styles.iconImage}
-                />
-              </div>
-            </div>
-          </button>
-        )}
-      </div>
-
-      {/* Row 3: Create button */}
-      <div className={styles.row3}>
-        <div className={styles.createButtonContainer}>
-          <button
-            onClick={handleCreatePack}
-            disabled={!selectedSize || isCreating || !isDemoCompleted}
-            className={styles.createButton}
-          >
-            {isCreating ? (
-              <span className={styles.spinner}>
-                <svg className={styles.spinnerIcon} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                팩 생성 중...
-              </span>
-            ) : (
-              `연습 팩 생성 (${selectedSize || 0}문제)`
-            )}
-          </button>
-        </div>
-
-        {selectedSize && (
-          <div className={styles.estimatedTime}>
-            예상 시간: {Math.ceil(selectedSize * 1.5)}분
-          </div>
-        )}
-      </div>
+        )
+      )}
     </div>
   )
 }
