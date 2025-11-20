@@ -157,6 +157,14 @@ export default function ChatPanel({ question, packId, isDemo = false, onDemoComp
     return `${hours}:${minutes}`
   }
 
+  const formatMessageContent = (content: string) => {
+    // Convert **text** to <strong>text</strong>
+    let formattedContent = content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Convert newlines to <br> tags
+    formattedContent = formattedContent.replace(/\n/g, '<br>')
+    return formattedContent
+  }
+
   return (
     <div className={styles.chatContainer}>
       {/* Messages */}
@@ -176,7 +184,10 @@ export default function ChatPanel({ question, packId, isDemo = false, onDemoComp
                 message.role === 'user' ? styles.userMessage : styles.buddyMessage
               }`}
             >
-              <div className={styles.messageContent}>{message.content}</div>
+              <div
+                className={styles.messageContent}
+                dangerouslySetInnerHTML={{ __html: formatMessageContent(message.content) }}
+              />
             </div>
           </div>
         ))}
