@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/app/context/AuthContext'
 import { useUserAccess } from '@/app/hooks/useUserAccess'
 import UpgradeModal from '@/app/components/UpgradeModal'
 import styles from './PackSizeSelector.module.css'
@@ -21,24 +22,17 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   const [selectedSize, setSelectedSize] = useState<number | null>(null)
   const [isCreating, setIsCreating] = useState(false)
   const [isDemoCompleted, setIsDemoCompleted] = useState(false)
-  const [userEmail, setUserEmail] = useState<string | null>(null)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const router = useRouter()
+  const { user } = useAuth()
 
-  // Check user access
-  const { access, refresh: refreshAccess } = useUserAccess(userEmail)
+  // Check user access using the authenticated user's email
+  const { access, refresh: refreshAccess } = useUserAccess(user?.email || null)
 
   useEffect(() => {
     // Check if demo is completed
     const demoCompleted = localStorage.getItem('demo-completed')
     setIsDemoCompleted(demoCompleted === 'true')
-
-    // Get current user
-    const userStr = localStorage.getItem('user')
-    if (userStr) {
-      const user = JSON.parse(userStr)
-      setUserEmail(user.email)
-    }
   }, [])
 
   const handleCreatePack = async () => {
@@ -47,14 +41,6 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
     setIsCreating(true)
 
     try {
-      // Get current user
-      const userStr = localStorage.getItem('user')
-      let userEmail = null
-      if (userStr) {
-        const user = JSON.parse(userStr)
-        userEmail = user.email
-      }
-
       const response = await fetch('/api/packs', {
         method: 'POST',
         headers: {
@@ -63,7 +49,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         body: JSON.stringify({
           size: selectedSize,
           level,
-          userEmail
+          userEmail: user?.email || null
         })
       })
 

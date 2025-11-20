@@ -10,8 +10,8 @@ export default function Home() {
       <div className={styles.content}>
         {/* Content layer */}
         <div className={styles.contentLayer}>
-          {/* Dino icon with bounce animation - clickable to next page */}
-          <Link href="/level-select" className={styles.linkGroup}>
+          {/* Dino icon with bounce animation - clickable to pack-maker-level1 */}
+          <Link href="/pack-maker-level1" className={styles.linkGroup}>
             <div className={styles.dinoContainer}>
               <Image
                 src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-with-shadows-how-to-level-pages_option1.svg?alt=media&token=0191caff-8773-4fa2-b713-45d8495115ab"

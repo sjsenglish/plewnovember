@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
@@ -13,6 +13,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { login } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,7 +30,9 @@ export default function LoginPage() {
     const success = await login(email, password)
 
     if (success) {
-      router.push('/')
+      // Get redirect parameter from URL, default to home page
+      const redirect = searchParams.get('redirect') || '/'
+      router.push(redirect)
     } else {
       setError('Invalid email or password')
       setIsLoading(false)
