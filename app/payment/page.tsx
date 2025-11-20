@@ -52,52 +52,20 @@ export default function Payment() {
       <Navbar />
       <div className={styles.content}>
         <div className={styles.paymentCard}>
-          <h1 className={styles.title}>Subscription</h1>
+          <h1 className={styles.title}>옥스포드 PLEW</h1>
 
           <div className={styles.pricingSection}>
             <div className={styles.priceCard}>
-              <div className={styles.priceHeader}>
-                <h2 className={styles.planName}>Monthly Plan</h2>
-                <p className={styles.planDescription}>
-                  Full access to all PLEW features
-                </p>
-              </div>
-
               <div className={styles.priceAmount}>
-                <span className={styles.currency}>$</span>
-                <span className={styles.amount}>9.99</span>
-                <span className={styles.period}>/month</span>
+                <span className={styles.amount}>50,000원/월</span>
               </div>
-
-              <ul className={styles.featureList}>
-                <li className={styles.feature}>
-                  <span className={styles.checkmark}>✓</span>
-                  Unlimited practice sessions
-                </li>
-                <li className={styles.feature}>
-                  <span className={styles.checkmark}>✓</span>
-                  AI-powered feedback
-                </li>
-                <li className={styles.feature}>
-                  <span className={styles.checkmark}>✓</span>
-                  Progress tracking
-                </li>
-                <li className={styles.feature}>
-                  <span className={styles.checkmark}>✓</span>
-                  All difficulty levels
-                </li>
-                <li className={styles.feature}>
-                  <span className={styles.checkmark}>✓</span>
-                  Custom pack creation
-                </li>
-              </ul>
 
               <button
                 className={styles.subscribeButton}
                 onClick={handleSubscribe}
                 disabled={isProcessing}
               >
-                {isProcessing ? 'Processing...' : 'Subscribe Now'}
+                {isProcessing ? 'Processing...' : '구독'}
               </button>
 
               {error && (
@@ -105,10 +73,6 @@ export default function Payment() {
                   {error}
                 </p>
               )}
-
-              <p className={styles.disclaimer}>
-                Cancel anytime. No commitments.
-              </p>
             </div>
           </div>
 

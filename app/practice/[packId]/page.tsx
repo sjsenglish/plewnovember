@@ -6,7 +6,6 @@ import QuestionViewer from '@/app/components/QuestionViewer'
 import ChatPanel from '@/app/components/ChatPanel'
 import AnswerOptions from '@/app/components/AnswerOptions'
 import Navbar from '@/app/components/Navbar'
-import BackButton from '@/app/components/BackButton'
 import { useAuth } from '@/app/context/AuthContext'
 import styles from './practiceQuestions.module.css'
 
@@ -256,7 +255,6 @@ export default function Practice() {
   return (
     <div className={styles.container}>
       <Navbar />
-      <BackButton to={backDestination} />
       <div className={styles.mainContent}>
         <div className={styles.questionNumberBar}>
           <div className={styles.questionNumbersContainer}>
@@ -279,6 +277,13 @@ export default function Practice() {
 
         <div className={styles.contentArea}>
           <div className={styles.combinedContainer}>
+            <button
+              onClick={() => router.push(backDestination)}
+              className={styles.closeButton}
+              aria-label="닫기"
+            >
+              ✕
+            </button>
             <div className={styles.questionPanel}>
               <div className={styles.questionContent}>
                 <QuestionViewer
