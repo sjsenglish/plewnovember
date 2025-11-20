@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Use custom pack ID if provided, otherwise generate a timestamp-based one
-    const packId = customPackId || `pack-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const packId = customPackId || `generated-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 
     // Return pack data (client will handle storage)
     return NextResponse.json({

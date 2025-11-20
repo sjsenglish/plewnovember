@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { algoliasearch } from 'algoliasearch'
+import crypto from 'crypto'
 
 const appID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || ''
 const apiKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY || ''
@@ -31,6 +32,13 @@ export async function GET(request: NextRequest) {
 
     const filterString = filters.join(' AND ')
 
+    // Create a URL-safe hash from the filter string
+    const filterHash = crypto
+      .createHash('md5')
+      .update(filterString || 'all')
+      .digest('hex')
+      .substring(0, 8)
+
     // Fetch questions from Algolia
     const response = await client.search({
       requests: [
@@ -61,7 +69,7 @@ export async function GET(request: NextRequest) {
       if (packQuestions.length === 3) { // Only create packs with exactly 3 questions
         const packNumber = Math.floor(i / 3) + 1
         packs.push({
-          id: `pack-${filterString}-${packNumber}`,
+          id: `filtered-${filterHash}-${packNumber}`,
           questions: packQuestions,
           number: packNumber
         })
