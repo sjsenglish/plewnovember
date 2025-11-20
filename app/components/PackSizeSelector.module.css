@@ -256,7 +256,7 @@
 .filterSelect {
   padding: 0.75rem;
   border: 2px solid #d1d5db;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
   color: #111827;
@@ -264,7 +264,7 @@
   cursor: pointer;
   transition: all 0.2s;
   letter-spacing: 0.04em;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-container);
 }
 
 @media (min-width: 640px) {
@@ -276,7 +276,7 @@
 
 .filterSelect:hover {
   border-color: #a78bfa;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-container);
 }
 
 .filterSelect:focus {
