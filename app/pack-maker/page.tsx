@@ -13,7 +13,7 @@ export default function PackMaker() {
   return (
     <div className={styles.container}>
       <Navbar />
-      <BackButton />
+      <BackButton to="/" />
       <div className={styles.content}>
         {/* Tab Navigation */}
         <div className={styles.tabNavigation}>

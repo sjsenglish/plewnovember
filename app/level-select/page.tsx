@@ -34,7 +34,7 @@ export default function LevelSelect() {
   return (
     <div className={styles.container}>
       <Navbar />
-      <BackButton />
+      <BackButton to="/" />
       <div className={styles.content}>
         {/* Content layer */}
         <div className={styles.levelGrid}>
