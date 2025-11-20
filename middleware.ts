@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Protected pages - redirect to login if not authenticated
-  const protectedPaths = ['/profile', '/pack-maker', '/payment']
+  const protectedPaths = ['/profile', '/pack-maker', '/pack-maker-level1', '/pack-maker-level2', '/pack-maker-level3', '/payment']
   const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   )
@@ -98,6 +98,9 @@ export const config = {
     '/api/:path*',
     '/profile/:path*',
     '/pack-maker/:path*',
+    '/pack-maker-level1/:path*',
+    '/pack-maker-level2/:path*',
+    '/pack-maker-level3/:path*',
     '/payment/:path*',
     '/practice/:path*',
     '/((?!_next/static|_next/image|favicon.ico).*)',

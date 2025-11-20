@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/app/context/AuthContext'
 import styles from './CompletedPacks.module.css'
 
 interface CompletedPack {
@@ -34,22 +35,25 @@ export default function CompletedPacks() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const { user } = useAuth()
 
   useEffect(() => {
-    loadCompletedPacks()
-    loadUserStats()
-  }, [])
+    if (user?.email) {
+      loadCompletedPacks()
+      loadUserStats()
+    } else {
+      setError('로그인이 필요합니다')
+      setLoading(false)
+    }
+  }, [user])
 
   const loadCompletedPacks = async () => {
     try {
-      const userStr = localStorage.getItem('user')
-      if (!userStr) {
+      if (!user?.email) {
         setError('로그인이 필요합니다')
         setLoading(false)
         return
       }
-
-      const user = JSON.parse(userStr)
 
       const response = await fetch(`/api/completed-packs?userEmail=${encodeURIComponent(user.email)}`)
 
@@ -69,10 +73,7 @@ export default function CompletedPacks() {
 
   const loadUserStats = async () => {
     try {
-      const userStr = localStorage.getItem('user')
-      if (!userStr) return
-
-      const user = JSON.parse(userStr)
+      if (!user?.email) return
 
       const response = await fetch(`/api/user-stats?userEmail=${encodeURIComponent(user.email)}`)
 

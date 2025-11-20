@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/app/context/AuthContext'
 import PackSizeSelector from '@/app/components/PackSizeSelector'
 import CompletedPacks from '@/app/components/CompletedPacks'
 import Navbar from '@/app/components/Navbar'
@@ -9,6 +11,14 @@ import styles from './packMakerLevel1.module.css'
 
 export default function PackMakerLevel1() {
   const [activeTab, setActiveTab] = useState<'create' | 'completed'>('create')
+  const { isAuthenticated } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login?redirect=/pack-maker-level1')
+    }
+  }, [isAuthenticated, router])
 
   return (
     <div className={styles.container}>
