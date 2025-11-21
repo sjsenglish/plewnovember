@@ -68,6 +68,15 @@ const ExamSearch: React.FC = () => {
   const currentSubject = getCurrentSubject();
   const showResults = showTSAResults || showBMATResults;
 
+  // Get default filters based on subject
+  const getDefaultFilters = () => {
+    if (showTSAResults) {
+      // Exclude Problem Solving questions and specific sub types from TSA
+      return 'NOT question_type:"Problem Solving" AND NOT sub_types:"Rates" AND NOT sub_types:"Ratio/Proportion/Percentage"';
+    }
+    return undefined;
+  };
+
   return (
     <InstantSearch
       searchClient={searchClient}
@@ -75,7 +84,7 @@ const ExamSearch: React.FC = () => {
       key={selectedAdmissionsTest}
       future={{ preserveSharedStateOnUnmount: true }}
     >
-      <Configure hitsPerPage={20} />
+      <Configure hitsPerPage={20} filters={getDefaultFilters()} />
       <div className="exam-search-wrapper">
         {/* Navbar */}
         <Navbar />

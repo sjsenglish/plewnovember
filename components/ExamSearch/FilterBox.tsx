@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRefinementList, useClearRefinements } from 'react-instantsearch';
 import { Button } from '../ui/Button';
+import { getSubjectConfig } from '@/lib/subjectConfig';
 import './FilterBox.css';
 
 const getFilterTitle = (subject: string) => {
@@ -54,6 +55,11 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ onHideFilters, currentSubj
 
   const attributes = getAttributes(currentSubject);
 
+  // Get subject config to check for excluded values
+  const subjectConfig = getSubjectConfig(currentSubject);
+  const subTypesFilter = subjectConfig?.filters?.find(f => f.id === 'subTypes');
+  const excludedSubTypes = subTypesFilter?.excludeFromFetch || [];
+
   // Refinement lists
   const questionTypeRefinement = useRefinementList({
     attribute: attributes.questionType,
@@ -68,6 +74,11 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ onHideFilters, currentSubj
   });
 
   const { refine: clearAllFilters } = useClearRefinements();
+
+  // Filter out excluded sub types
+  const filteredSubTypes = subTypesRefinement.items.filter(
+    item => !excludedSubTypes.includes(item.value)
+  );
 
   return (
     <div className="filter-box-container">
@@ -104,7 +115,7 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ onHideFilters, currentSubj
               <span>{attributes.subTypeLabel}</span>
             </div>
 
-            {subTypesRefinement.items.map((item) => (
+            {filteredSubTypes.map((item) => (
               <label key={item.value} className="filter-option">
                 <input
                   type="checkbox"

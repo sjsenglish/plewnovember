@@ -13,6 +13,7 @@ export interface FilterConfig {
   type: 'checkbox' | 'radio' | 'select';
   options?: FilterOption[]; // Static options
   fetchFromIndex?: boolean; // Whether to fetch options dynamically from Algolia
+  excludeFromFetch?: string[]; // Values to exclude when fetching from index
 }
 
 export interface SubjectConfig {
@@ -43,8 +44,7 @@ export const SUBJECT_CONFIGS: SubjectConfig[] = [
         field: 'question_type',
         type: 'checkbox',
         options: [
-          { value: 'Critical Thinking', label: 'Critical Thinking' },
-          { value: 'Problem Solving', label: 'Problem Solving' }
+          { value: 'Critical Thinking', label: 'Critical Thinking' }
         ]
       },
       {
@@ -52,7 +52,8 @@ export const SUBJECT_CONFIGS: SubjectConfig[] = [
         label: 'Categories',
         field: 'sub_types',
         type: 'checkbox',
-        fetchFromIndex: true // Will fetch available sub_types from the index
+        fetchFromIndex: true, // Will fetch available sub_types from the index
+        excludeFromFetch: ['Rates', 'Ratio/Proportion/Percentage'] // Exclude these categories
       }
     ]
   },
