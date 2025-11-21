@@ -80,7 +80,7 @@ export async function middleware(request: NextRequest) {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "font-src 'self' data:",
-    "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.stripe.com",
+    "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.stripe.com https://*.algolia.net https://*.algolianet.com",
     "frame-src https://js.stripe.com",
     "object-src 'none'",
     "base-uri 'self'",
