@@ -59,11 +59,11 @@ export default function Profile() {
                 <label className={styles.label}>구독 상태</label>
                 <p className={styles.value}>
                   {user.subscriptionStatus === 'Active' ? (
-                    <span style={{ color: '#10b981', fontWeight: 600 }}>PLEW Plus 활성</span>
+                    <span style={{ backgroundColor: '#E5FAFA', padding: '4px 12px', borderRadius: '4px', fontWeight: 600 }}>PLEW Plus 활성</span>
                   ) : user.subscriptionStatus === 'Cancelling' ? (
-                    <span style={{ color: '#f59e0b', fontWeight: 600 }}>해지 예정</span>
+                    <span style={{ backgroundColor: '#E5FAFA', padding: '4px 12px', borderRadius: '4px', fontWeight: 600 }}>해지 예정</span>
                   ) : user.subscriptionStatus === 'Cancelled' ? (
-                    <span style={{ color: '#ef4444' }}>해지됨</span>
+                    <span style={{ backgroundColor: '#E5FAFA', padding: '4px 12px', borderRadius: '4px' }}>해지됨</span>
                   ) : (
                     <span>무료</span>
                   )}
