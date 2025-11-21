@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
           // Get subscription details to find end date
           const subscriptionData = await stripe.subscriptions.retrieve(
             session.subscription as string
-          ) as Stripe.Subscription
+          ) as unknown as { current_period_end: number }
 
           const endDate = new Date(subscriptionData.current_period_end * 1000)
 
@@ -131,14 +131,20 @@ export async function POST(request: NextRequest) {
       }
 
       case 'customer.subscription.updated': {
-        const subscription = event.data.object as Stripe.Subscription
+        const subscription = event.data.object as unknown as {
+          id: string
+          status: string
+          customer: string
+          current_period_end: number
+          cancel_at_period_end: boolean
+        }
         console.log('Subscription updated:', subscription.id)
         console.log('Status:', subscription.status)
 
         // Get customer email
         const customer = await stripe.customers.retrieve(
-          subscription.customer as string
-        ) as Stripe.Customer
+          subscription.customer
+        ) as unknown as { email: string | null }
         const email = customer.email
 
         if (email) {
@@ -152,13 +158,13 @@ export async function POST(request: NextRequest) {
       }
 
       case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription
+        const subscription = event.data.object as unknown as { id: string; customer: string }
         console.log('Subscription cancelled:', subscription.id)
 
         // Get customer email
         const customer = await stripe.customers.retrieve(
-          subscription.customer as string
-        ) as Stripe.Customer
+          subscription.customer
+        ) as unknown as { email: string | null }
         const email = customer.email
 
         if (email) {
