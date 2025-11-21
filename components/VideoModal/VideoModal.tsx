@@ -8,6 +8,27 @@ interface VideoModalProps {
   videoUrl?: string;
 }
 
+// Helper function to convert YouTube URLs to embed format
+const getYouTubeEmbedUrl = (url: string): string => {
+  if (!url) return '';
+
+  // Handle different YouTube URL formats
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+    /youtube\.com\/embed\/([^&\n?#]+)/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match && match[1]) {
+      return `https://www.youtube.com/embed/${match[1]}`;
+    }
+  }
+
+  // If already an embed URL or not a YouTube URL, return as is
+  return url;
+};
+
 export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, videoUrl }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -46,23 +67,24 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, videoUr
 
   if (!isMounted || !isOpen) return null;
 
+  const embedUrl = videoUrl ? getYouTubeEmbedUrl(videoUrl) : '';
+
   const modalContent = (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeButton} onClick={onClose}>
         </button>
 
-        {videoUrl ? (
+        {embedUrl ? (
           <div className={styles.videoContainer}>
-            <video
-              src={videoUrl}
-              controls
-              controlsList="nodownload"
+            <iframe
+              src={embedUrl}
+              title="Video Solution"
               className={styles.videoFrame}
-              style={{ width: '100%', height: '100%', backgroundColor: '#000' }}
-            >
-              Your browser does not support the video tag.
-            </video>
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{ width: '100%', height: '100%', border: 'none' }}
+            />
           </div>
         ) : (
           <div className={styles.noVideoMessage}>
