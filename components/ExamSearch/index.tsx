@@ -135,7 +135,7 @@ const ExamSearch: React.FC = () => {
               color: '#000000',
               margin: 0,
               cursor: 'pointer'
-            }}>examrizzsearch</h1>
+            }}>옥스포드영어</h1>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             {/* Login/Logout Button */}
@@ -282,9 +282,9 @@ const ExamSearch: React.FC = () => {
         }}>
         {/* Cloud Icons */}
         <div className="cloud-icons-container">
-          <img src="/svg/island-cloud-big.svg" alt="Cloud" className="cloud-icon cloud-left" />
-          <img src="/svg/island-cloud-big.svg" alt="Cloud" className="cloud-icon cloud-center" />
-          <img src="/svg/island-cloud-big.svg" alt="Cloud" className="cloud-icon cloud-right" />
+          <img src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fisland-cloud-medium.svg?alt=media&token=5ba656af-b1c6-4a77-89e3-210fcfa78e12" alt="Cloud" className="cloud-icon cloud-left" />
+          <img src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fisland-cloud-medium.svg?alt=media&token=5ba656af-b1c6-4a77-89e3-210fcfa78e12" alt="Cloud" className="cloud-icon cloud-center" />
+          <img src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fisland-cloud-medium.svg?alt=media&token=5ba656af-b1c6-4a77-89e3-210fcfa78e12" alt="Cloud" className="cloud-icon cloud-right" />
         </div>
 
         {/* Page Title */}
@@ -310,7 +310,7 @@ const ExamSearch: React.FC = () => {
               aria-label="Admissions tab"
             >
               <Image
-                src="/admissions-box-white.svg"
+                src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%20610.svg?alt=media&token=a8b52250-03aa-4149-8ef5-95661a14b81b"
                 alt="Admissions"
                 width={249}
                 height={45}
