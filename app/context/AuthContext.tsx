@@ -69,6 +69,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setUser(null)
       }
+      // Auth state is now known, so we're no longer loading
+      setIsLoading(false)
     })
 
     return () => {
