@@ -16,10 +16,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background-image: url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #FAF9F6;
   overflow-y: auto;
 }
 
@@ -50,7 +47,7 @@
   align-items: center;
   justify-content: center;
   font-size: 3rem;
-  color: #171717;
+  color: #000000;
   animation: scaleIn 0.5s ease-out;
 }
 
@@ -69,7 +66,7 @@
 .title {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 2.5rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 1rem 0;
   letter-spacing: 0.04em;
 }
@@ -77,7 +74,7 @@
 .message {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
-  color: #666;
+  color: #000000;
   margin: 0 0 2rem 0;
   letter-spacing: 0.04em;
 }
@@ -93,7 +90,7 @@
 .benefitsTitle {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.25rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 1rem 0;
   letter-spacing: 0.04em;
 }
@@ -110,7 +107,7 @@
 .benefit {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   text-align: left;
 }
@@ -138,7 +135,7 @@
   border-radius: 0.5rem;
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   text-decoration: none;
   cursor: pointer;
@@ -159,7 +156,7 @@
   border-radius: 0.5rem;
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   text-decoration: none;
   cursor: pointer;

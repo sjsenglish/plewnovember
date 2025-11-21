@@ -27,7 +27,7 @@ export default function PackMaker() {
             onClick={() => setActiveTab('completed')}
             className={`${styles.tabButton} ${activeTab === 'completed' ? styles.tabButtonActive : ''}`}
           >
-            완료된 팩
+            풀이 완료 문제
           </button>
         </div>
 

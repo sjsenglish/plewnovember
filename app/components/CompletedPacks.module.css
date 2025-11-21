@@ -22,7 +22,7 @@
 .sectionTitle {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.5rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 1rem 0;
   letter-spacing: 0.04em;
 }
@@ -44,7 +44,7 @@
 .statValue {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 2rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 0.5rem 0;
   letter-spacing: 0.04em;
 }
@@ -52,7 +52,7 @@
 .statLabel {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
-  color: #171717;
+  color: #000000;
   margin: 0;
   letter-spacing: 0.04em;
 }
@@ -67,7 +67,7 @@
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  background: var(--custom-white);
+  background: #E6E6FA;
   border-radius: 1.5rem;
   box-shadow: var(--shadow-container);
 }
@@ -79,16 +79,16 @@
 }
 
 .packCard {
-  background: var(--custom-white);
+  background: #E6E6FA;
   border-radius: 1.5rem;
   padding: 1.5rem;
-  box-shadow: var(--shadow-container);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
 }
 
 .packCard:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-container-lg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .packHeader {
@@ -105,22 +105,22 @@
 }
 
 .packSize {
-  font-family: var(--font-heading);
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.25rem;
   font-weight: bold;
-  color: var(--text-primary);
-  letter-spacing: var(--tracking-custom);
+  color: #000000;
+  letter-spacing: 0.04em;
 }
 
 .levelBadge {
   display: inline-block;
-  font-family: var(--font-body);
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.75rem;
   padding: 0.25rem 0.75rem;
-  background: var(--custom-purple);
-  color: var(--text-primary);
+  background: #D4D0FF;
+  color: #000000;
   border-radius: 1rem;
-  letter-spacing: var(--tracking-custom);
+  letter-spacing: 0.04em;
   width: fit-content;
 }
 
@@ -136,19 +136,19 @@
 }
 
 .packDateLabel {
-  font-family: var(--font-body);
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.625rem;
-  color: var(--text-secondary);
-  letter-spacing: var(--tracking-custom);
+  color: #000000;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   font-weight: 600;
 }
 
 .packDate {
-  font-family: var(--font-body);
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.75rem;
-  color: var(--text-primary);
-  letter-spacing: var(--tracking-custom);
+  color: #000000;
+  letter-spacing: 0.04em;
   font-weight: 500;
 }
 
@@ -166,7 +166,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--custom-purple) 0%, #9b87f5 100%);
+  background: linear-gradient(135deg, #D4D0FF 0%, #9b87f5 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,10 +174,10 @@
 }
 
 .scorePercentage {
-  font-family: var(--font-heading);
+  font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--text-primary);
+  color: #000000;
 }
 
 .scoreDetails {
@@ -185,18 +185,18 @@
 }
 
 .scoreText {
-  font-family: var(--font-body);
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  color: var(--text-primary);
+  color: #000000;
   margin-bottom: 0.25rem;
-  letter-spacing: var(--tracking-custom);
+  letter-spacing: 0.04em;
 }
 
 .timeText {
-  font-family: var(--font-body);
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
-  color: var(--text-secondary);
-  letter-spacing: var(--tracking-custom);
+  color: #000000;
+  letter-spacing: 0.04em;
 }
 
 .packActions {
@@ -204,21 +204,21 @@
   justify-content: flex-end;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .reviewButton {
-  font-family: var(--font-body);
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   padding: 0.5rem 1.5rem;
-  background: var(--custom-purple);
-  color: var(--text-primary);
+  background: #D4D0FF;
+  color: #000000;
   border: none;
   border-radius: 0.75rem;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  letter-spacing: var(--tracking-custom);
-  box-shadow: var(--shadow-container);
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .reviewButton:hover {

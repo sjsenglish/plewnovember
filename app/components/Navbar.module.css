@@ -1,6 +1,6 @@
 .navbar {
   width: 100%;
-  background-color: #E6E6FA;
+  background-color: #FFFFFF;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 50;
@@ -22,10 +22,11 @@
 .logo {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
-  font-weight: 400;
+  font-weight: 700;
   color: #000000;
   cursor: pointer;
   text-decoration: none;
+  margin-left: 1rem;
 }
 
 @media (min-width: 640px) {
@@ -73,7 +74,7 @@
 
 .userButton {
   background: #f3f4f6;
-  color: #1f2937;
+  color: #000000;
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -137,7 +138,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #E6E6FA;
+  background-color: #FFFFFF;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -150,7 +151,7 @@
 .menuItem {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   padding: 1rem 1.5rem;
   text-decoration: none;

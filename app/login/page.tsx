@@ -22,7 +22,7 @@ export default function LoginPage() {
     setIsLoading(true)
 
     if (!email || !password) {
-      setError('Please fill in all fields')
+      setError('모든 필드를 입력해주세요')
       setIsLoading(false)
       return
     }
@@ -34,7 +34,7 @@ export default function LoginPage() {
       const redirect = searchParams.get('redirect') || '/'
       router.push(redirect)
     } else {
-      setError('Invalid email or password')
+      setError('이메일 또는 비밀번호가 잘못되었습니다')
       setIsLoading(false)
     }
   }
@@ -43,14 +43,19 @@ export default function LoginPage() {
     <div className={styles.container}>
       <Navbar />
       <div className={styles.content}>
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGHOST.svg?alt=media&token=52bbf8ba-2537-4a06-8b00-ff62287a3894"
+          alt="Ghost"
+          className={styles.ghostIcon}
+        />
         <div className={styles.loginCard}>
-          <h1 className={styles.title}>Log In</h1>
-          <p className={styles.subtitle}>Welcome back to PLEW</p>
+          <h1 className={styles.title}>로그인</h1>
+          <p className={styles.subtitle}>PLEW에 다시 오신 것을 환영합니다</p>
 
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formGroup}>
               <label htmlFor="email" className={styles.label}>
-                Email
+                이메일
               </label>
               <input
                 type="email"
@@ -65,7 +70,7 @@ export default function LoginPage() {
 
             <div className={styles.formGroup}>
               <label htmlFor="password" className={styles.label}>
-                Password
+                비밀번호
               </label>
               <input
                 type="password"
@@ -85,15 +90,15 @@ export default function LoginPage() {
               className={styles.submitButton}
               disabled={isLoading}
             >
-              {isLoading ? 'Logging in...' : 'Log In'}
+              {isLoading ? '로그인 중...' : '로그인'}
             </button>
           </form>
 
           <div className={styles.footer}>
             <p className={styles.footerText}>
-              Don't have an account?{' '}
+              계정이 없으신가요?{' '}
               <Link href="/signup" className={styles.link}>
-                Sign up
+                회원가입
               </Link>
             </p>
           </div>
