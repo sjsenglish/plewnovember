@@ -10,26 +10,37 @@ export default function Home() {
       <div className={styles.content}>
         {/* Content layer */}
         <div className={styles.contentLayer}>
-          {/* Dino icon with bounce animation - clickable to pack-maker-level1 */}
-          <Link href="/pack-maker-level1" className={styles.linkGroup}>
-            <div className={styles.dinoContainer}>
-              <Image
-                src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-with-shadows-how-to-level-pages_option1.svg?alt=media&token=0191caff-8773-4fa2-b713-45d8495115ab"
-                alt="Dino"
-                width={200}
-                height={200}
-                className={styles.dinoImage}
-                priority
-              />
+          {/* Icons container - side by side */}
+          <div className={styles.iconsContainer}>
+            {/* Dino icon with text - replaces old dino and start button */}
+            <Link href="/pack-maker-level1" className={styles.iconCard}>
+              <div className={styles.hoverContainer}>
+                <Image
+                  src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino.svg?alt=media&token=ff09f837-afd6-4e0b-aca7-938ab1603f54"
+                  alt="Dino"
+                  width={200}
+                  height={200}
+                  className={styles.icon}
+                  priority
+                />
+              </div>
+              <p className={styles.iconLabel}>옥스포드 리딩 법</p>
+            </Link>
+
+            {/* Ghost icon with text - new, not connected yet */}
+            <div className={styles.iconCard}>
+              <div className={styles.hoverContainer}>
+                <Image
+                  src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGHOST.svg?alt=media&token=52bbf8ba-2537-4a06-8b00-ff62287a3894"
+                  alt="Ghost"
+                  width={200}
+                  height={200}
+                  className={styles.icon}
+                />
+              </div>
+              <p className={styles.iconLabel}>옥스포드 대학교 리딩 시험 공부</p>
             </div>
-            <Image
-              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fstart-button.svg?alt=media&token=30366dfb-d1b5-4d23-afa0-88a197884e65"
-              alt="Start"
-              width={150}
-              height={50}
-              className={styles.startButton}
-            />
-          </Link>
+          </div>
         </div>
       </div>
     </div>
