@@ -110,11 +110,11 @@ export async function POST(request: NextRequest) {
 
         if (session.customer_email && session.subscription) {
           // Get subscription details to find end date
-          const subscription = await stripe.subscriptions.retrieve(
+          const subscriptionData = await stripe.subscriptions.retrieve(
             session.subscription as string
-          )
+          ) as Stripe.Subscription
 
-          const endDate = new Date(subscription.current_period_end * 1000)
+          const endDate = new Date(subscriptionData.current_period_end * 1000)
 
           // Update user profile in database
           await upgradeUserToPremium(session.customer_email)
