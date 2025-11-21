@@ -59,7 +59,7 @@ export const SUBJECT_CONFIGS: SubjectConfig[] = [
   {
     id: 'bmat',
     name: 'BMAT',
-    indexName: 'bmat',
+    indexName: 'bmat_search_backup',
     available: true,
     filters: [
       {

@@ -22,12 +22,22 @@
   --color-secondary-light: #E9E5FF;
   --color-black: #000000;
 
+  /* Gray scale colors */
+  --color-gray-300: #9CA3AF;
+  --color-gray-400: #6B7280;
+  --color-gray-500: #4B5563;
+
   /* Typography */
   --font-primary: 'Madimi One', cursive;
   --font-secondary: 'Figtree', sans-serif;
+  --font-body: 'Figtree', sans-serif;
   --text-sm: 12px;
   --text-base: 14px;
   --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-5xl: 48px;
+  --text-6xl: 60px;
 
   /* Spacing */
   --space-xs: 4px;
@@ -35,16 +45,28 @@
   --space-md: 12px;
   --space-lg: 16px;
   --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
 
   /* Borders */
   --border-thin: 1px solid var(--color-black);
   --border-medium: 2px solid var(--color-black);
+  --border-thick: 3px solid var(--color-black);
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
   /* Shadows */
   --shadow-sm: 2px 0 0 0 var(--color-black), 0 2px 0 0 var(--color-black), 2px 2px 0 0 var(--color-black);
+  --shadow-md: 4px 0 0 0 var(--color-black), 0 4px 0 0 var(--color-black), 4px 4px 0 0 var(--color-black);
+  --shadow-lg: 6px 0 0 0 var(--color-black), 0 6px 0 0 var(--color-black), 6px 6px 0 0 var(--color-black);
+  --shadow-primary-lg: 4px 0 0 0 #00CED1, 0 4px 0 0 #00CED1, 4px 4px 0 0 #00CED1;
 
   /* Transitions */
   --transition-base: 0.2s ease;
+  --transition-fast: 0.15s ease;
 }
 
 @media (prefers-color-scheme: dark) {

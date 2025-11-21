@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import styles from './VideoModal.module.css';
 
 interface VideoModalProps {
@@ -7,83 +8,72 @@ interface VideoModalProps {
   videoUrl?: string;
 }
 
-// Convert various video URLs to embeddable format
-const getEmbedUrl = (url: string | undefined): string | null => {
-  if (!url) return null;
-
-  // YouTube
-  if (url.includes('youtube.com') || url.includes('youtu.be')) {
-    const videoId = url.includes('youtu.be')
-      ? url.split('youtu.be/')[1]?.split('?')[0]
-      : new URLSearchParams(new URL(url).search).get('v');
-
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-  }
-
-  // Loom
-  if (url.includes('loom.com')) {
-    const loomId = url.split('/share/')[1] || url.split('/embed/')[1];
-    if (loomId) {
-      return `https://www.loom.com/embed/${loomId}`;
-    }
-  }
-
-  // Vimeo
-  if (url.includes('vimeo.com')) {
-    const vimeoId = url.split('vimeo.com/')[1];
-    if (vimeoId) {
-      return `https://player.vimeo.com/video/${vimeoId}`;
-    }
-  }
-
-  // If already an embed URL or direct link, return as is
-  if (url.includes('embed') || url.includes('.mp4') || url.includes('.mov')) {
-    return url;
-  }
-
-  return null;
-};
-
 export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, videoUrl }) => {
-  if (!isOpen) return null;
+  const [isMounted, setIsMounted] = useState(false);
 
-  const embedUrl = getEmbedUrl(videoUrl);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  return (
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+      // Prevent body scroll when modal is open
+      if (document.body) {
+        document.body.style.overflow = 'hidden';
+      }
+    } else {
+      // Restore body scroll when modal is closed
+      if (document.body) {
+        document.body.style.overflow = 'unset';
+      }
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+      // Ensure we restore scroll on unmount
+      if (document.body) {
+        document.body.style.overflow = 'unset';
+      }
+    };
+  }, [isOpen, onClose]);
+
+  if (!isMounted || !isOpen) return null;
+
+  const modalContent = (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeButton} onClick={onClose}>
-          ✕
         </button>
-        <div className={styles.videoContainer}>
-          {embedUrl ? (
-            <iframe
-              src={embedUrl}
-              title="Video Solution"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className={styles.videoIframe}
-            />
-          ) : (
-            <div className={styles.errorMessage}>
-              <p>Unable to load video</p>
-              {videoUrl && (
-                <a
-                  href={videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.videoLink}
-                >
-                  Open video in new tab
-                </a>
-              )}
-            </div>
-          )}
-        </div>
+
+        {videoUrl ? (
+          <div className={styles.videoContainer}>
+            <video
+              src={videoUrl}
+              controls
+              controlsList="nodownload"
+              className={styles.videoFrame}
+              style={{ width: '100%', height: '100%', backgroundColor: '#000' }}
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        ) : (
+          <div className={styles.noVideoMessage}>
+            No video solution available
+          </div>
+        )}
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };
+
+export default VideoModal;
