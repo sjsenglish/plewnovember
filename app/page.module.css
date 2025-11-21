@@ -16,10 +16,12 @@
   justify-content: center;
   align-items: center;
   padding: 1rem 2rem;
+  background-color: #F5F0E8;
   background-image: url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-blend-mode: overlay;
 }
 
 .contentLayer {
@@ -36,7 +38,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 3rem;
+  gap: 5rem;
   flex-wrap: wrap;
 }
 
@@ -67,15 +69,15 @@
 
 /* Icon image styling */
 .icon {
-  width: 10rem;
-  height: 10rem;
+  width: 8rem;
+  height: 8rem;
   transition: transform 0.3s ease;
 }
 
 @media (min-width: 640px) {
   .icon {
-    width: 12rem;
-    height: 12rem;
+    width: 10rem;
+    height: 10rem;
   }
 }
 
@@ -86,12 +88,14 @@
 
 /* Korean text label styling */
 .iconLabel {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: #333;
   text-align: center;
   margin: 0;
   white-space: nowrap;
+  letter-spacing: 0.04em;
 }
 
 @media (min-width: 640px) {
@@ -102,7 +106,7 @@
 
 @media (max-width: 640px) {
   .iconsContainer {
-    gap: 2rem;
+    gap: 3rem;
   }
 
   .iconLabel {
