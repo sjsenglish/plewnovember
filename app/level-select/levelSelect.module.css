@@ -16,10 +16,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #FFFFFF;
 }
 
 .levelGrid {
