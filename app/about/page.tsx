@@ -83,6 +83,12 @@ export default function About() {
             </p>
           </div>
         </div>
+
+        <div className={styles.contactInfo}>
+          <p>이매일: team@examrizz.com</p>
+          <p>영국: www.examrizzsearch.com</p>
+          <p>주소: 164 Union Street, SE1 0LH</p>
+        </div>
       </div>
     </div>
   )

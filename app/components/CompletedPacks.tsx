@@ -127,19 +127,19 @@ export default function CompletedPacks() {
       {/* User Stats Summary */}
       {userStats && userStats.totalPacksCompleted > 0 && (
         <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Progress Stats</h2>
+          <h2 className={styles.sectionTitle}>진행 통계</h2>
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
               <p className={styles.statValue}>{userStats.totalPacksCompleted}</p>
-              <p className={styles.statLabel}>Packs Completed</p>
+              <p className={styles.statLabel}>완료한 팩</p>
             </div>
             <div className={styles.statCard}>
               <p className={styles.statValue}>{userStats.totalQuestionsAnswered}</p>
-              <p className={styles.statLabel}>Total Questions</p>
+              <p className={styles.statLabel}>총 문제 수</p>
             </div>
             <div className={styles.statCard}>
               <p className={styles.statValue}>{userStats.averageScore.toFixed(1)}%</p>
-              <p className={styles.statLabel}>Accuracy</p>
+              <p className={styles.statLabel}>정확도</p>
             </div>
           </div>
         </div>
@@ -170,7 +170,7 @@ export default function CompletedPacks() {
                     <span className={styles.levelBadge}>레벨 {pack.level}</span>
                   </div>
                   <div className={styles.packDateContainer}>
-                    <div className={styles.packDateLabel}>Date Test Taken</div>
+                    <div className={styles.packDateLabel}>시험 응시일</div>
                     <div className={styles.packDate}>
                       {formatDate(pack.completed_at)}
                     </div>

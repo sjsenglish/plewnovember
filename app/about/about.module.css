@@ -82,6 +82,22 @@
   margin-bottom: 0.5rem;
 }
 
+.contactInfo {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  color: #000000;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  z-index: 20;
+}
+
+.contactInfo p {
+  margin: 0.25rem 0;
+}
+
 @media (max-width: 768px) {
   .mainContent {
     padding: 1rem 0;
@@ -102,5 +118,11 @@
   .cloudIconLeft,
   .cloudIconRight {
     display: none;
+  }
+
+  .contactInfo {
+    position: static;
+    margin-top: 2rem;
+    text-align: center;
   }
 }
