@@ -27,7 +27,7 @@ export const SUBJECT_CONFIGS: SubjectConfig[] = [
   {
     id: 'tsa',
     name: 'TSA',
-    indexName: 'copy_tsa_questions',
+    indexName: process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME_TSA || 'copy_tsa_questions',
     available: true,
     filters: [
       {
@@ -59,7 +59,7 @@ export const SUBJECT_CONFIGS: SubjectConfig[] = [
   {
     id: 'bmat',
     name: 'BMAT',
-    indexName: 'bmat_search_backup',
+    indexName: process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME_BMAT || 'bmat_search_backup',
     available: true,
     filters: [
       {
