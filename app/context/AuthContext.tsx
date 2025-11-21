@@ -20,6 +20,7 @@ interface AuthContextType {
   logout: () => void
   refreshUser: () => Promise<void>
   isAuthenticated: boolean
+  isLoading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -208,10 +209,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  if (isLoading) {
-    return null
-  }
-
   return (
     <AuthContext.Provider
       value={{
@@ -221,6 +218,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         refreshUser,
         isAuthenticated: !!user,
+        isLoading,
       }}
     >
       {children}

@@ -10,14 +10,27 @@ import styles from './packMakerLevel1.module.css'
 
 export default function PackMakerLevel1() {
   const [activeTab, setActiveTab] = useState<'create' | 'completed'>('create')
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       router.push('/login?redirect=/pack-maker-level1')
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, isLoading, router])
+
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <Navbar />
+        <div className={styles.content}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+            <p>로딩 중...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={styles.container}>

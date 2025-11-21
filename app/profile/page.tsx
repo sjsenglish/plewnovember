@@ -8,21 +8,30 @@ import styles from './profile.module.css'
 
 export default function Profile() {
   const router = useRouter()
-  const { user, isAuthenticated, logout } = useAuth()
+  const { user, isAuthenticated, isLoading, logout } = useAuth()
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoading && !isAuthenticated) {
       router.push('/login')
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, isLoading, router])
 
   const handleLogout = () => {
     logout()
     router.push('/')
   }
 
-  if (!isAuthenticated || !user) {
-    return null
+  if (isLoading || !isAuthenticated || !user) {
+    return (
+      <div className={styles.container}>
+        <Navbar />
+        <div className={styles.content}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+            <p>로딩 중...</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
