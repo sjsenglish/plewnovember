@@ -4,7 +4,6 @@ import { useState } from 'react'
 import PackSizeSelector from '@/app/components/PackSizeSelector'
 import CompletedPacks from '@/app/components/CompletedPacks'
 import Navbar from '@/app/components/Navbar'
-import BackButton from '@/app/components/BackButton'
 import styles from './packMakerLevel2.module.css'
 
 export default function PackMakerLevel2() {
@@ -13,7 +12,6 @@ export default function PackMakerLevel2() {
   return (
     <div className={styles.container}>
       <Navbar />
-      <BackButton to="/" />
       <div className={styles.content}>
         {/* Tab Navigation */}
         <div className={styles.tabNavigation}>
@@ -27,7 +25,7 @@ export default function PackMakerLevel2() {
             onClick={() => setActiveTab('completed')}
             className={`${styles.tabButton} ${activeTab === 'completed' ? styles.tabButtonActive : ''}`}
           >
-            완료된 팩
+            풀이 완료 문제
           </button>
         </div>
 
