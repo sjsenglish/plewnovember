@@ -9,6 +9,10 @@ const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME || 'questions';
 
 const client = algoliasearch(appID, apiKey);
 
+// Export the search client for react-instantsearch
+export const searchClient = client;
+export const INDEX_NAME = indexName;
+
 export interface AlgoliaQuestion {
   objectID: string
   actualQuestion: string

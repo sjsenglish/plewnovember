@@ -27,8 +27,8 @@ export default function Home() {
               <p className={styles.iconLabel}>옥스포드 리딩 법</p>
             </Link>
 
-            {/* Ghost icon with text - new, not connected yet */}
-            <div className={styles.iconCard}>
+            {/* Ghost icon with text - linked to search page */}
+            <Link href="/search" className={styles.iconCard}>
               <div className={styles.hoverContainer}>
                 <Image
                   src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGHOST.svg?alt=media&token=52bbf8ba-2537-4a06-8b00-ff62287a3894"
@@ -39,7 +39,7 @@ export default function Home() {
                 />
               </div>
               <p className={styles.iconLabel}>옥스포드 대학교 리딩 시험 공부</p>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
