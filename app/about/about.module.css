@@ -1,7 +1,7 @@
 .container {
   min-height: 100vh;
   width: 100%;
-  background-color: white;
+  background-color: #FAF9F6;
   display: flex;
   flex-direction: column;
 }
@@ -12,7 +12,7 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: white;
+  background-color: #FAF9F6;
   position: relative;
 }
 
@@ -41,7 +41,7 @@
 .title {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 2.5rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 2rem 0;
   text-align: center;
   letter-spacing: 0.04em;
@@ -54,7 +54,7 @@
 .sectionTitle {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.5rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 1rem 0;
   letter-spacing: 0.04em;
 }
@@ -62,7 +62,7 @@
 .text {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
-  color: #171717;
+  color: #000000;
   line-height: 1.7;
   margin: 0;
   letter-spacing: 0.04em;
@@ -71,7 +71,7 @@
 .list {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
-  color: #171717;
+  color: #000000;
   line-height: 1.7;
   margin: 1rem 0;
   padding-left: 2rem;

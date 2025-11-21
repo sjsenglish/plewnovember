@@ -74,7 +74,7 @@
 
 .userButton {
   background: #f3f4f6;
-  color: #1f2937;
+  color: #000000;
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -151,7 +151,7 @@
 .menuItem {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   padding: 1rem 1.5rem;
   text-decoration: none;

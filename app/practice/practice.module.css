@@ -50,7 +50,7 @@
 .loadingText {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
-  color: #374151;
+  color: #000000;
   letter-spacing: 0.04em;
 }
 
@@ -125,7 +125,7 @@
 .progressCount {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
-  color: #374151;
+  color: #000000;
   letter-spacing: 0.04em;
 }
 

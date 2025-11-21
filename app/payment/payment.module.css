@@ -34,7 +34,7 @@
 .title {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.75rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 1.5rem 0;
   text-align: center;
   letter-spacing: 0.04em;
@@ -57,7 +57,7 @@
 .planName {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.75rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 0.5rem 0;
   letter-spacing: 0.04em;
 }
@@ -65,7 +65,7 @@
 .planDescription {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  color: #666;
+  color: #000000;
   margin: 0;
   letter-spacing: 0.04em;
 }
@@ -83,7 +83,7 @@
 .amount {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.5rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   font-weight: 400;
 }
@@ -100,7 +100,7 @@
 .feature {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   display: flex;
   align-items: center;
@@ -121,7 +121,7 @@
   border-radius: 0.5rem;
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.25rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -157,7 +157,7 @@
 .disclaimer {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
-  color: #666;
+  color: #000000;
   text-align: center;
   margin: 0;
   letter-spacing: 0.04em;
@@ -172,7 +172,7 @@
 .secureText {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
-  color: #666;
+  color: #000000;
   margin: 0;
   letter-spacing: 0.04em;
 }

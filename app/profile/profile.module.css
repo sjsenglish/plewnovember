@@ -34,7 +34,7 @@
 .title {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 2.5rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 2rem 0;
   text-align: center;
   letter-spacing: 0.04em;
@@ -47,7 +47,7 @@
 .sectionTitle {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 1.5rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 1rem 0;
   letter-spacing: 0.04em;
 }
@@ -76,7 +76,7 @@
 .value {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1.125rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   margin: 0;
 }
@@ -98,7 +98,7 @@
 .statValue {
   font-family: var(--font-madimi), system-ui, -apple-system, sans-serif;
   font-size: 2rem;
-  color: #171717;
+  color: #000000;
   margin: 0 0 0.5rem 0;
   letter-spacing: 0.04em;
 }
@@ -106,7 +106,7 @@
 .statLabel {
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
-  color: #171717;
+  color: #000000;
   margin: 0;
   letter-spacing: 0.04em;
 }
@@ -127,7 +127,7 @@
   padding: 1rem 1.5rem;
   font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  color: #171717;
+  color: #000000;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -150,7 +150,7 @@
 .logoutButton {
   width: 100%;
   background: var(--color-purple);
-  color: #171717;
+  color: #000000;
   padding: 1rem 1.5rem;
   border: none;
   border-radius: 0.75rem;
