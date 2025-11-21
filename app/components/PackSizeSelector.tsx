@@ -27,6 +27,7 @@ interface PackSizeSelectorProps {
 
 export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [isDemoCompleted, setIsDemoCompleted] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState({
     primarySubjectArea: '',
     passageType: '',
@@ -47,6 +48,12 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
   const router = useRouter()
   const { user } = useAuth()
   const { access, refresh: refreshAccess } = useUserAccess(user?.email || null)
+
+  // Check if demo is completed
+  useEffect(() => {
+    const demoCompleted = localStorage.getItem('demo-completed')
+    setIsDemoCompleted(demoCompleted === 'true')
+  }, [])
 
   // Get daily question ID based on current date
   useEffect(() => {
@@ -226,6 +233,30 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         questionsCompleted={access?.questionsCompleted || 0}
         onUpgrade={handleUpgrade}
       />
+
+      {/* Demo Button Row */}
+      {!isDemoCompleted ? (
+        <div className={styles.demoRow}>
+          <button
+            onClick={() => router.push('/demo')}
+            className={styles.demoButton}
+          >
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202801.svg?alt=media&token=1d860ca6-36fd-4975-aa64-9a5f05359b8d"
+              alt="데모 시작"
+              className={styles.demoImage}
+            />
+          </button>
+        </div>
+      ) : (
+        <div className={styles.demoRow}>
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2FGroup%202803.svg?alt=media&token=ba8ce115-ed4d-47d3-883b-c336b8b83381"
+            alt="데모 완료"
+            className={styles.demoImage}
+          />
+        </div>
+      )}
 
       {/* Quick Options Row - 1 Question and Sample Pack 2026 */}
       <div className={styles.quickOptionsRow}>

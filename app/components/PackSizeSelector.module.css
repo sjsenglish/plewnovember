@@ -454,3 +454,34 @@
     font-size: 1.125rem;
   }
 }
+
+/* Demo Row */
+.demoRow {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .demoRow {
+    margin-bottom: 2rem;
+  }
+}
+
+.demoButton {
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.demoButton:hover {
+  transform: translateY(-2px);
+}
+
+.demoImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
