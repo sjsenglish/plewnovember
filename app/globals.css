@@ -12,6 +12,39 @@
   --color-pink: #FADEE8;
   --color-white: #FAF9F6;
   --color-beige: #FAF9F6;
+
+  /* Search page color system */
+  --color-primary: #FFE5B4;
+  --color-primary-light: #FFF3D9;
+  --color-primary-lighter: #FFF9EB;
+  --color-primary-dark: #FFD699;
+  --color-secondary: #DDD6FE;
+  --color-secondary-light: #E9E5FF;
+  --color-black: #000000;
+
+  /* Typography */
+  --font-primary: 'Madimi One', cursive;
+  --font-secondary: 'Figtree', sans-serif;
+  --text-sm: 12px;
+  --text-base: 14px;
+  --text-lg: 16px;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+
+  /* Borders */
+  --border-thin: 1px solid var(--color-black);
+  --border-medium: 2px solid var(--color-black);
+
+  /* Shadows */
+  --shadow-sm: 2px 0 0 0 var(--color-black), 0 2px 0 0 var(--color-black), 2px 2px 0 0 var(--color-black);
+
+  /* Transitions */
+  --transition-base: 0.2s ease;
 }
 
 @media (prefers-color-scheme: dark) {
