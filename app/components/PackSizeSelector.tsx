@@ -175,7 +175,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
     // Check if pack is completed
     if (completedPacks[pack.id]) {
       // Navigate to review/results page
-      router.push(`/pack-review/${pack.id}`)
+      router.push(`/completed-pack/${pack.id}`)
       return
     }
 
