@@ -58,15 +58,24 @@ export default function Profile() {
               <div className={styles.infoItem}>
                 <label className={styles.label}>구독 상태</label>
                 <p className={styles.value}>
-                  {user.subscriptionStatus === 'Active' ? '활성' : user.subscriptionStatus || '무료'}
+                  {user.subscriptionStatus === 'Active' ? (
+                    <span style={{ backgroundColor: '#E5FAFA', padding: '4px 12px', borderRadius: '4px', fontWeight: 600 }}>PLEW Plus 활성</span>
+                  ) : user.subscriptionStatus === 'Cancelling' ? (
+                    <span style={{ backgroundColor: '#E5FAFA', padding: '4px 12px', borderRadius: '4px', fontWeight: 600 }}>해지 예정</span>
+                  ) : user.subscriptionStatus === 'Cancelled' ? (
+                    <span style={{ backgroundColor: '#E5FAFA', padding: '4px 12px', borderRadius: '4px' }}>해지됨</span>
+                  ) : (
+                    <span>무료</span>
+                  )}
                 </p>
               </div>
               {user.subscriptionEndDate && (
                 <div className={styles.infoItem}>
                   <label className={styles.label}>
-                    {user.subscriptionStatus === 'Active' ? '갱신일' : '만료일'}
+                    {user.subscriptionStatus === 'Active' ? '다음 결제일' :
+                     user.subscriptionStatus === 'Cancelling' ? '구독 종료일' : '만료일'}
                   </label>
-                  <p className={styles.value}>
+                  <p className={styles.value} style={{ fontWeight: 600 }}>
                     {new Date(user.subscriptionEndDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
                       month: 'long',

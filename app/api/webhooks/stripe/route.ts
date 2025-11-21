@@ -1,12 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { headers } from 'next/headers'
+import { createClient } from '@supabase/supabase-js'
+import { upgradeUserToPremium } from '@/lib/user-tracking'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-10-29.clover',
 })
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
+
+// Create admin client to update user metadata
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  { auth: { autoRefreshToken: false, persistSession: false } }
+)
+
+/**
+ * Update user subscription metadata in Supabase
+ */
+async function updateUserSubscriptionMetadata(
+  email: string,
+  status: string,
+  endDate: Date | null
+) {
+  // Find user by email
+  const { data: users, error: listError } = await supabaseAdmin.auth.admin.listUsers()
+
+  if (listError) {
+    console.error('Error listing users:', listError)
+    return
+  }
+
+  const user = users.users.find(u => u.email === email)
+  if (!user) {
+    console.error('User not found:', email)
+    return
+  }
+
+  // Update user metadata
+  const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+    user.id,
+    {
+      user_metadata: {
+        ...user.user_metadata,
+        subscription_status: status,
+        subscription_end_date: endDate ? endDate.toISOString() : null
+      }
+    }
+  )
+
+  if (updateError) {
+    console.error('Error updating user metadata:', updateError)
+  } else {
+    console.log(`Updated subscription for ${email}: status=${status}, endDate=${endDate?.toISOString()}`)
+  }
+}
 
 /**
  * Stripe Webhook Handler
@@ -58,31 +108,68 @@ export async function POST(request: NextRequest) {
         console.log('Customer email:', session.customer_email)
         console.log('Subscription ID:', session.subscription)
 
-        // TODO: Update user subscription status in your database
-        // Example:
-        // await updateUserSubscription({
-        //   email: session.customer_email,
-        //   subscriptionId: session.subscription,
-        //   status: 'active',
-        // })
+        if (session.customer_email && session.subscription) {
+          // Get subscription details to find end date
+          const subscriptionData = await stripe.subscriptions.retrieve(
+            session.subscription as string
+          ) as unknown as { current_period_end: number }
+
+          const endDate = new Date(subscriptionData.current_period_end * 1000)
+
+          // Update user profile in database
+          await upgradeUserToPremium(session.customer_email)
+
+          // Update user metadata for auth context
+          await updateUserSubscriptionMetadata(
+            session.customer_email,
+            'Active',
+            endDate
+          )
+        }
 
         break
       }
 
       case 'customer.subscription.updated': {
-        const subscription = event.data.object as Stripe.Subscription
+        const subscription = event.data.object as unknown as {
+          id: string
+          status: string
+          customer: string
+          current_period_end: number
+          cancel_at_period_end: boolean
+        }
         console.log('Subscription updated:', subscription.id)
         console.log('Status:', subscription.status)
 
-        // TODO: Update subscription status in database
+        // Get customer email
+        const customer = await stripe.customers.retrieve(
+          subscription.customer
+        ) as unknown as { email: string | null }
+        const email = customer.email
+
+        if (email) {
+          const endDate = new Date(subscription.current_period_end * 1000)
+          const status = subscription.status === 'active' ? 'Active' :
+                        subscription.cancel_at_period_end ? 'Cancelling' : subscription.status
+
+          await updateUserSubscriptionMetadata(email, status, endDate)
+        }
         break
       }
 
       case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription
+        const subscription = event.data.object as unknown as { id: string; customer: string }
         console.log('Subscription cancelled:', subscription.id)
 
-        // TODO: Update user subscription status to cancelled
+        // Get customer email
+        const customer = await stripe.customers.retrieve(
+          subscription.customer
+        ) as unknown as { email: string | null }
+        const email = customer.email
+
+        if (email) {
+          await updateUserSubscriptionMetadata(email, 'Cancelled', null)
+        }
         break
       }
 

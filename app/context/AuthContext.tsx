@@ -18,6 +18,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>
   signup: (email: string, password: string, name: string) => Promise<boolean>
   logout: () => void
+  refreshUser: () => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -183,6 +184,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const refreshUser = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (session?.user) {
+        // Force refresh the session to get latest metadata
+        const { data: { user: refreshedUser }, error } = await supabase.auth.getUser()
+
+        if (refreshedUser && !error) {
+          setUser({
+            email: refreshedUser.email!,
+            name: refreshedUser.user_metadata?.name || '',
+            id: refreshedUser.id,
+            createdAt: refreshedUser.created_at,
+            subscriptionStatus: refreshedUser.user_metadata?.subscription_status,
+            subscriptionEndDate: refreshedUser.user_metadata?.subscription_end_date
+          })
+        }
+      }
+    } catch (error) {
+      console.error('Error refreshing user:', error)
+    }
+  }
+
   if (isLoading) {
     return null
   }
@@ -194,6 +219,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         signup,
         logout,
+        refreshUser,
         isAuthenticated: !!user,
       }}
     >
