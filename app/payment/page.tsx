@@ -51,6 +51,11 @@ export default function Payment() {
     <div className={styles.container}>
       <Navbar />
       <div className={styles.content}>
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fkaraoke.svg?alt=media&token=23e1cfde-26f6-4c1c-bceb-38793dc5253d"
+          alt="Karaoke"
+          className={styles.karaokeIcon}
+        />
         <div className={styles.paymentCard}>
           <h1 className={styles.title}>옥스포드 PLEW</h1>
 

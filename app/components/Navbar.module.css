@@ -26,6 +26,7 @@
   color: #000000;
   cursor: pointer;
   text-decoration: none;
+  margin-left: 1rem;
 }
 
 @media (min-width: 640px) {

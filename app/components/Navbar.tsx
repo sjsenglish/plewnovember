@@ -12,20 +12,20 @@ export default function Navbar() {
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbarContainer}>
-        {/* PLEW Logo - Top Left */}
+        {/* Logo - Top Left */}
         <Link href="/" className={styles.logo}>
-          PLEW
+          옥스포드영어
         </Link>
 
         <div className={styles.rightSection}>
           {/* Login/Signup Button or User Info */}
           {!isAuthenticated ? (
             <Link href="/login" className={styles.authButton}>
-              Log In / Sign Up
+              로그인 / 회원가입
             </Link>
           ) : (
             <Link href="/profile" className={styles.userButton}>
-              {user?.name || 'Profile'}
+              {user?.name || '프로필'}
             </Link>
           )}
 
@@ -52,21 +52,21 @@ export default function Navbar() {
               className={styles.menuItem}
               onClick={() => setIsMenuOpen(false)}
             >
-              Profile
+              프로필
             </Link>
             <Link
               href="/payment"
               className={styles.menuItem}
               onClick={() => setIsMenuOpen(false)}
             >
-              Subscription
+              구독
             </Link>
             <Link
               href="/about"
               className={styles.menuItem}
               onClick={() => setIsMenuOpen(false)}
             >
-              Who We Are
+              소개
             </Link>
           </div>
         </div>

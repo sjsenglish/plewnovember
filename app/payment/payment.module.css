@@ -16,7 +16,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background-color: #FFFFFF;
+  background-color: #FAF9F6;
   overflow-y: auto;
 }
 
@@ -192,5 +192,31 @@
 
   .amount {
     font-size: 3rem;
+  }
+}
+
+.karaokeIcon {
+  position: absolute;
+  top: 20%;
+  right: -150px;
+  width: 140px;
+  height: 140px;
+  opacity: 0.9;
+  animation: floatKaraoke 3.5s ease-in-out infinite;
+  z-index: 5;
+}
+
+@keyframes floatKaraoke {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-25px) rotate(5deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .karaokeIcon {
+    display: none;
   }
 }

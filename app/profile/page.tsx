@@ -30,24 +30,24 @@ export default function Profile() {
       <Navbar />
       <div className={styles.content}>
         <div className={styles.profileCard}>
-          <h1 className={styles.title}>Profile</h1>
+          <h1 className={styles.title}>프로필</h1>
 
           <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Account Information</h2>
+            <h2 className={styles.sectionTitle}>계정 정보</h2>
             <div className={styles.infoGrid}>
               <div className={styles.infoItem}>
-                <label className={styles.label}>Name</label>
+                <label className={styles.label}>이름</label>
                 <p className={styles.value}>{user.name}</p>
               </div>
               <div className={styles.infoItem}>
-                <label className={styles.label}>Email</label>
+                <label className={styles.label}>이메일</label>
                 <p className={styles.value}>{user.email}</p>
               </div>
               <div className={styles.infoItem}>
-                <label className={styles.label}>Date Joined</label>
+                <label className={styles.label}>가입일</label>
                 <p className={styles.value}>
                   {user.createdAt
-                    ? new Date(user.createdAt).toLocaleDateString('en-US', {
+                    ? new Date(user.createdAt).toLocaleDateString('ko-KR', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
@@ -56,18 +56,18 @@ export default function Profile() {
                 </p>
               </div>
               <div className={styles.infoItem}>
-                <label className={styles.label}>Subscription Status</label>
+                <label className={styles.label}>구독 상태</label>
                 <p className={styles.value}>
-                  {user.subscriptionStatus || 'Free'}
+                  {user.subscriptionStatus === 'Active' ? '활성' : user.subscriptionStatus || '무료'}
                 </p>
               </div>
               {user.subscriptionEndDate && (
                 <div className={styles.infoItem}>
                   <label className={styles.label}>
-                    {user.subscriptionStatus === 'Active' ? 'Renews On' : 'Expires On'}
+                    {user.subscriptionStatus === 'Active' ? '갱신일' : '만료일'}
                   </label>
                   <p className={styles.value}>
-                    {new Date(user.subscriptionEndDate).toLocaleDateString('en-US', {
+                    {new Date(user.subscriptionEndDate).toLocaleDateString('ko-KR', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
@@ -79,7 +79,7 @@ export default function Profile() {
           </div>
 
           <button onClick={handleLogout} className={styles.logoutButton}>
-            Log Out
+            로그아웃
           </button>
         </div>
       </div>
