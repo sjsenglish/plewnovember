@@ -16,10 +16,7 @@
   justify-content: center;
   align-items: center;
   padding: 1rem 2rem;
-  background-image: url('https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbackground.svg?alt=media&token=85f36310-0af9-49f9-9453-8e4064cad41e');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: #F5F0E8;
 }
 
 .contentLayer {
@@ -30,49 +27,84 @@
   align-items: center;
 }
 
-.linkGroup {
+/* Icons container - displays icons side by side */
+.iconsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+  flex-wrap: wrap;
+}
+
+/* Individual icon card with label */
+.iconCard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-.dinoContainer {
-  animation: bounce-slow 2s ease-in-out infinite;
+/* Gentle hovering animation container */
+.hoverContainer {
+  animation: gentle-float 3s ease-in-out infinite;
 }
 
-@keyframes bounce-slow {
+/* Gentle floating animation - slower and more subtle */
+@keyframes gentle-float {
   0%, 100% {
     transform: translateY(0);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
   50% {
-    transform: translateY(-15px);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    transform: translateY(-12px);
   }
 }
 
-.dinoImage {
-  width: 10rem;
-  height: 10rem;
-  transition: transform 0.3s;
+/* Icon image styling */
+.icon {
+  width: 8rem;
+  height: 8rem;
+  transition: transform 0.3s ease;
 }
 
 @media (min-width: 640px) {
-  .dinoImage {
-    width: 12rem;
-    height: 12rem;
+  .icon {
+    width: 10rem;
+    height: 10rem;
   }
 }
 
-.linkGroup:hover .dinoImage {
+/* Hover effect on icon cards */
+.iconCard:hover .icon {
   transform: scale(1.1);
 }
 
-.startButton {
-  transition: transform 0.3s;
+/* Korean text label styling */
+.iconLabel {
+  font-family: var(--font-figtree), system-ui, -apple-system, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin: 0;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
 }
 
-.linkGroup:hover .startButton {
-  transform: scale(1.05);
+@media (min-width: 640px) {
+  .iconLabel {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .iconsContainer {
+    gap: 3rem;
+  }
+
+  .iconLabel {
+    font-size: 1rem;
+  }
 }
