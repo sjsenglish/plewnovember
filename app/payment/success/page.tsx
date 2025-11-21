@@ -4,16 +4,29 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/app/components/Navbar'
+import { useAuth } from '@/app/context/AuthContext'
 import styles from './success.module.css'
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams()
+  const { refreshUser } = useAuth()
   const [sessionId, setSessionId] = useState<string | null>(null)
 
   useEffect(() => {
     const id = searchParams.get('session_id')
     setSessionId(id)
-  }, [searchParams])
+
+    // Refresh user data to get updated subscription status
+    // Poll a few times since webhook may take a moment to process
+    const refreshWithRetry = async () => {
+      for (let i = 0; i < 5; i++) {
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        await refreshUser()
+      }
+    }
+
+    refreshWithRetry()
+  }, [searchParams, refreshUser])
 
   return (
     <div className={styles.container}>
