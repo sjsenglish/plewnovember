@@ -14,7 +14,7 @@ export default function Navbar() {
       <div className={styles.navbarContainer}>
         {/* Logo - Top Left */}
         <Link href="/" className={styles.logo}>
-          옥스포드영어
+          옥스포드 PLEW
         </Link>
 
         <div className={styles.rightSection}>
