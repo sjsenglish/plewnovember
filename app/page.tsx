@@ -24,7 +24,7 @@ export default function Home() {
                   priority
                 />
               </div>
-              <p className={styles.iconLabel}>옥스포드 로직 리딩</p>
+              <p className={styles.iconLabel}>옥스포드 로직리딩</p>
             </Link>
 
             {/* Ghost icon with text - linked to search page */}
@@ -38,7 +38,7 @@ export default function Home() {
                   className={styles.icon}
                 />
               </div>
-              <p className={styles.iconLabel}>Oxford University 입시문제 은행</p>
+              <p className={styles.iconLabel}>옥스포드 입시 문제은행</p>
             </Link>
           </div>
         </div>

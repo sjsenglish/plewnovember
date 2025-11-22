@@ -298,7 +298,7 @@ export default function PackSizeSelector({ level }: PackSizeSelectorProps) {
         <h2 className={styles.filterTitle}>필터</h2>
         <div className={styles.filterGrid}>
           <div className={styles.filterGroup}>
-            <label className={styles.filterLabel}>과목</label>
+            <label className={styles.filterLabel}>주제</label>
             <select
               value={selectedFilters.primarySubjectArea}
               onChange={(e) => setSelectedFilters(prev => ({ ...prev, primarySubjectArea: e.target.value }))}
